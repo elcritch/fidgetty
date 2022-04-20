@@ -1,8 +1,8 @@
 import macros, tables, strutils, strformat
-import bumpy, fidget
-import fidget/common
+import bumpy
+import fidget
 
-export common, fidget, fidgets
+export fidget
 
 type
   WidgetProc* = proc()
