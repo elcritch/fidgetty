@@ -1,7 +1,9 @@
 import macros, tables, strutils, strformat
+import bumpy, math, random
 import bumpy
 import fidget
 
+export bumpy, math, random
 export fidget
 
 type
@@ -212,7 +214,7 @@ proc makeStatefulWidget*(blk: NimNode, hasState: bool, defaultState: bool): NimN
       echo "FIDGETS:EVENTS:NAME: ", evtName 
       let code = code[1]
       echo "FIDGETS:EVENTS: ", evtName, " code: ", code.treeRepr
-      preBody.add nnkCommand.newTree(ident "variant", evtIdent, code)
+      preBody.add nnkCommand.newTree(ident "variantp", evtIdent, code)
     of "onEvents":
       echo "FIDGETS:ONEVENTS: ", " code: ", code.treeRepr
       onEventsImpl = code
