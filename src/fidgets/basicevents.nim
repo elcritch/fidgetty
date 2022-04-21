@@ -1,5 +1,5 @@
 
-import bumpy, fidget, math, random
+import bumpy, fidget, math
 import std/strformat, std/hashes
 import asyncdispatch # This is what provides us with async and the dispatcher
 import times, strutils # This is to provide the timing output
@@ -7,6 +7,8 @@ import tables
 import variant
 import patty
 
+import fidget
+import fidgets
 import button
 import progressbar
 

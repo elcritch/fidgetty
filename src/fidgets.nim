@@ -157,11 +157,12 @@ proc eventsMacro*(tp: string, blk: NimNode): NimNode =
   var matchBody = nnkCommand.newTree(ident "match", name, blk)
   echo "ON EVENTS: ", blk.treeRepr
   result.add quote do:
-    var v {.inject.}: Variant
+    var evts {.inject.}: seq[Variant]
     if not current.hookEvents.data.isNil and
-          current.hookEvents.data.pop(current.code, v):
-      let `name` = v.get(`tn`)
-      `matchBody`
+           current.hookEvents.data.pop(current.code, evts):
+      for evt in evts:
+        let `name` = evt.get(`tn`)
+        `matchBody`
 
 proc makeStatefulWidget*(blk: NimNode, hasState: bool, defaultState: bool): NimNode =
   var
@@ -312,7 +313,7 @@ template useState*[T](tp: typedesc[T]) =
 
 template useEvents*(): GeneralEvents =
   if current.hookEvents.data.isNil:
-    current.hookEvents.data = newTable[string, Variant]()
+    current.hookEvents.data = newTable[string, seq[Variant]]()
   current.hookEvents
 
 macro statefulFidget*(blk: untyped) =
@@ -347,5 +348,3 @@ template Vertical*(child: untyped) =
 
     `child`
 
-proc `||`*(x, y: int | float32 | float64): auto =
-  if x == 0: y else: x

@@ -1,8 +1,6 @@
 import bumpy, fidget
 import fidgets
 
-export fidget, fidgets
-
 proc button*(
     message {.property: text.}: string,
     clicker {.property: onClick.}: WidgetProc = proc () = discard
