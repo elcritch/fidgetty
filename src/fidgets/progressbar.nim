@@ -1,7 +1,7 @@
 import bumpy, fidget
 import std/strformat
 
-import fidgets
+import ../fidgets
 
 type
   UnitRange* = range[0.0'f32..1.0'f32]

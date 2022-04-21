@@ -1,11 +1,11 @@
-import macros, tables, strutils, strformat
-import bumpy, math, random
-import bumpy
+import macros, tables, strutils, strformat, math, random
+import bumpy, variant, patty
 import fidget
 
 export tables, strutils, strformat
 export bumpy, math, random
 export fidget
+export bumpy, variant, patty
 
 type
   WidgetProc* = proc()
@@ -332,7 +332,7 @@ macro reverseStmts(body: untyped) =
   result.add stmts
 
 template horizontal*(text, child: untyped) =
-  group text:
+  component text:
     layout lmHorizontal
     counterAxisSizingMode csAuto
     constraints cMin, cStretch
@@ -343,7 +343,7 @@ template horizontal*(child: untyped) =
   horizontal("", child)
 
 template vertical*(text, child: untyped) =
-  group text:
+  component text:
     layout lmVertical
     counterAxisSizingMode csAuto
     constraints cMin, cStretch

@@ -1,14 +1,6 @@
-
-import bumpy, fidget, math, random
-import std/strformat, std/hashes
 import asyncdispatch # This is what provides us with async and the dispatcher
-import times, strutils # This is to provide the timing output
-import tables
-import variant
-import patty
 
 import ../fidgets
-import button
 import progressbar
 
 loadFont("IBM Plex Sans", "IBMPlexSans-Regular.ttf")
@@ -70,9 +62,7 @@ proc animatedProgress*(
   render:
     self.value = self.value + delta
 
-    group "anim":
+    progressbar(self.value) do:
       boxOf parent
-      progressbar(self.value) do:
-        boxOf parent
 
     self.value = self.value mod 1.0
