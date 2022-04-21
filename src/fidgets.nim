@@ -97,7 +97,7 @@ proc makeType(name: string, body: NimNode): NimNode =
 
 var widgetArgsTable* {.compileTime.} = initTable[string, seq[(string, string, NimNode, )]]()
 
-macro Widget*(widget, body: untyped): untyped =
+macro widget*(widget, body: untyped): untyped =
   # echo "WITH: ", widget.repr
   # echo "WITH: ", body.repr
   let procName = widget.strVal
@@ -331,8 +331,8 @@ macro reverseStmts(body: untyped) =
     stmts.insert(ln, 0)
   result.add stmts
 
-template Horizontal*(child: untyped) =
-  frame "autoFrame":
+template horizontal*(child: untyped) =
+  group "autoFrame":
     layout lmHorizontal
     counterAxisSizingMode csAuto
     constraints cMin, cStretch
@@ -340,8 +340,8 @@ template Horizontal*(child: untyped) =
 
     `child`
 
-template Vertical*(child: untyped) =
-  frame "autoFrame":
+template vertical*(child: untyped) =
+  group "autoFrame":
     layout lmVertical
     counterAxisSizingMode csAuto
     constraints cMin, cStretch
