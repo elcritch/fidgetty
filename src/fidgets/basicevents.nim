@@ -41,7 +41,9 @@ proc animatedProgress*(
       refresh()
     CancelJump():
       echo "cancel jump "
-      self.cancelTicks = true
+      self.cancelTicks = true and
+                          not self.ticks.isNil and
+                          not self.ticks.finished
     JumpToValue(target):
       echo "jump where? ", $target
 
