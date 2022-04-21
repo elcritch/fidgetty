@@ -331,21 +331,26 @@ macro reverseStmts(body: untyped) =
     stmts.insert(ln, 0)
   result.add stmts
 
-template horizontal*(child: untyped) =
-  group "autoFrame":
+template horizontal*(text, child: untyped) =
+  group text:
     layout lmHorizontal
     counterAxisSizingMode csAuto
     constraints cMin, cStretch
     itemSpacing 2.Em
-
     `child`
 
-template vertical*(child: untyped) =
-  group "autoFrame":
+template horizontal*(child: untyped) =
+  horizontal("", child)
+
+template vertical*(text, child: untyped) =
+  group text:
     layout lmVertical
     counterAxisSizingMode csAuto
     constraints cMin, cStretch
     itemSpacing 2.Em
-
     `child`
+
+template vertical*(child: untyped) =
+  vertical("", child)
+
 
