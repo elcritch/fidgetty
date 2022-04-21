@@ -3,6 +3,7 @@ import bumpy, math, random
 import bumpy
 import fidget
 
+export tables, strutils, strformat
 export bumpy, math, random
 export fidget
 
