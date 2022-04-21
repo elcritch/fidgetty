@@ -7,7 +7,7 @@ import tables
 import variant
 import patty
 
-import fidgets
+import ../fidgets
 import button
 import progressbar
 
