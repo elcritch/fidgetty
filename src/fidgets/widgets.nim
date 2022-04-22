@@ -137,9 +137,7 @@ macro widget*(widget, body: untyped): untyped =
   result.add newCall(`procName`, args)
 
 proc makeWidgetPropertyMacro(procName, typeName: string): NimNode =
-  let
-    labelMacroName = ident typeName
-    wargsTable = ident "widgetArgsTable"
+  let labelMacroName = ident typeName
 
   var labelMacroDef = quote do:
     template `labelMacroName`*(body: untyped) =
@@ -189,7 +187,6 @@ proc makeStatefulWidget*(blk: NimNode, hasState: bool, defaultState: bool): NimN
     typeName =
       if hasEmptyReturnType: procName.capitalizeAscii()
       else: params[0].strVal
-    groupName = newLit(procName)
     preName = ident("setup")
     postName = ident("post")
 
