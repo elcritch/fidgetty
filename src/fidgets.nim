@@ -340,7 +340,6 @@ template horizontal*(text, child: untyped) =
     layout lmHorizontal
     counterAxisSizingMode csAuto
     constraints cMin, cStretch
-    itemSpacing 2.Em
     `child`
 
 template horizontal*(child: untyped) =
@@ -351,7 +350,6 @@ template vertical*(text, child: untyped) =
     layout lmVertical
     counterAxisSizingMode csAuto
     constraints cMin, cStretch
-    itemSpacing 2.Em
     `child`
 
 template vertical*(child: untyped) =
