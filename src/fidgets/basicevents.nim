@@ -43,8 +43,8 @@ proc animatedProgress*(
         ## This simple procedure will "tick" ten times delayed 1,000ms each.
         ## Every tick will increment the progress bar 10% until its done. 
         let
-          n = 70
-          duration = 2*600
+          n = 100
+          duration = 3*600
           curr = self.value
         for i in 1..n:
           await sleepAsync(duration / n)
@@ -65,4 +65,4 @@ proc animatedProgress*(
     progressbar(self.value) do:
       boxOf parent
 
-    self.value = self.value mod 1.0
+    self.value = clamp(self.value mod 1.0, 0, 1.0)
