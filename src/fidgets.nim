@@ -216,7 +216,11 @@ proc makeStatefulWidget*(blk: NimNode, hasState: bool, defaultState: bool): NimN
       echo "FIDGETS:EVENTS:NAME: ", evtName 
       let code = code[1]
       echo "FIDGETS:EVENTS: ", evtName, " code: ", code.treeRepr
-      preBody.add nnkCommand.newTree(ident "variantp", evtIdent, code)
+      let vp = nnkCommand.newTree(ident "variantp", evtIdent, code)
+      preBody.add quote do:
+        {.push hint[Name]: off.}
+        `vp`
+        {.pop.}
     of "onEvents":
       echo "FIDGETS:ONEVENTS: ", " code: ", code.treeRepr
       onEventsImpl = code
