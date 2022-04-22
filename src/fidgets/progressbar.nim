@@ -1,4 +1,3 @@
-import bumpy, fidget
 import std/strformat
 
 import ../fidgets

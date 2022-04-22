@@ -336,7 +336,7 @@ macro reverseStmts(body: untyped) =
   result.add stmts
 
 template horizontal*(text, child: untyped) =
-  component text:
+  group text:
     layout lmHorizontal
     counterAxisSizingMode csAuto
     constraints cMin, cStretch
@@ -346,7 +346,7 @@ template horizontal*(child: untyped) =
   horizontal("", child)
 
 template vertical*(text, child: untyped) =
-  component text:
+  group text:
     layout lmVertical
     counterAxisSizingMode csAuto
     constraints cMin, cStretch
