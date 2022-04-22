@@ -1,4 +1,4 @@
-import macros, tables, strutils, strformat, math, random
+import tables, strutils, strformat, math, random
 import bumpy, variant, patty
 import fidget
 import fidgets/widgets
