@@ -352,5 +352,3 @@ template vertical*(text, child: untyped) =
 
 template vertical*(child: untyped) =
   vertical("", child)
-
-
