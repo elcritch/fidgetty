@@ -1,9 +1,6 @@
 import std/strformat
 
-import ../fidgets
-
-type
-  UnitRange* = range[0.0'f32..1.0'f32]
+import widgets
 
 proc progressbar*(value: var float) {.basicFidget.} =
   ## Draw a progress bars 

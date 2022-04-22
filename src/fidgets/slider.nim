@@ -1,6 +1,6 @@
 import std/strformat
 
-import ../fidgets
+import widgets
 
 proc slider*(value: var float) {.basicFidget.} =
   ## Draw a progress bars 
