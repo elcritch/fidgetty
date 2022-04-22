@@ -45,7 +45,6 @@ proc animatedProgress*(
         let
           n = 100
           duration = 3*600
-          curr = self.value
         for i in 1..n:
           await sleepAsync(duration / n)
           if self.cancelTicks:
