@@ -3,7 +3,7 @@ import widgets
 
 proc button*(
     message {.property: text.}: string,
-    clicker {.property: onClick.}: WidgetProc = proc () = discard
+    clicker {.property: onClick.}: WidgetProc = proc () = discard,
 ): bool {.basicFidget, discardable.} =
   # Draw a progress bars 
   init:

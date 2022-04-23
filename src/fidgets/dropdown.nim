@@ -51,6 +51,12 @@ proc dropdown*(
     widget button:
       setup:
         box 0, 0, bw, bh
+        text "icon":
+          box tw, 0, 1'em, bh
+          fill "#000000"
+          if self.dropDownOpen: rotation -90
+          else: rotation 0
+          characters ">"
       text:
         if dropSelected < 0: "Dropdown"
         else: dropItems[dropSelected]
@@ -60,18 +66,9 @@ proc dropdown*(
         self.dropDownOpen = true
         self.itemsVisible = -1
       post:
-        text "text":
-          box 0, 0, bw, bh
-          fill "#ffffff"
-          strokeWeight 1
-        text "text":
-          box tw, 0, 1'em, bh
-          fill "#ffffff"
-          if self.dropDownOpen:
-            rotation -90
-          else:
-            rotation 0
-          characters ">"
+        echo "post btn"
+        if self.dropDownOpen:
+          fill "#5C8F9C"
 
     # rectangle "button":
     #   cornerRadius 5
