@@ -7,10 +7,10 @@ loadFont("IBM Plex Sans", "IBMPlexSans-Regular.ttf")
 proc drawMain() =
   frame "main":
     font "IBM Plex Sans", 16, 200, 0, hCenter, vCenter
-    Widget button:
+    widget button:
       text: "click me!"
-      click:
+      onClick:
         echo "hi!"
 
 
-startFidget(drawMain, uiScale=2.0)
+startFidget(drawMain, w=680, h=400, uiScale=2.0)

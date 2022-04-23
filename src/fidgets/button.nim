@@ -44,7 +44,8 @@ proc button*(
         fill "#87E3FF", 0.77
       onClick:
         fill "#87E3FF", 0.99
-        clicker()
+        if not clicker.isNil:
+          clicker()
         result = true
 
       
