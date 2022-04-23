@@ -249,7 +249,7 @@ proc makeStatefulWidget*(blk: NimNode, hasState: bool, defaultState: bool): NimN
     else:
       if defaultState:
         quote do:
-          useState(`typeNameSym`)
+          useStateOverride(`typeNameSym`, self)
       else:
         quote do:
           if self == nil:
@@ -316,14 +316,16 @@ macro basicFidget*(blk: untyped) =
 template useState*[T](tp: typedesc[T], name: untyped) =
   if current.hookStates.isEmpty():
     current.hookStates = newVariant(tp())
+  var `name` {.inject.} = current.hookStates.get(tp)
+
+template useStateOverride*[T](tp: typedesc[T], name: untyped) =
+  if current.hookStates.isEmpty():
+    current.hookStates = newVariant(tp())
   var `name` {.inject.} =
-    if self.isNil:
+    if `name`.isNil:
       current.hookStates.get(tp)
     else:
-      self
-
-template useState*[T](tp: typedesc[T]) =
-  useState(tp, self)
+      `name`
 
 template useEvents*(): GeneralEvents =
   if current.hookEvents.data.isNil:
