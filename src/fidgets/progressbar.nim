@@ -9,6 +9,8 @@ proc progressbar*(value: var float, label = "") {.basicFidget.} =
     ## called before `setup` and used for setting defaults like
     ## the default box size
     box 0, 0, 100.WPerc, 2.Em
+    textAutoResize tsHeight
+    layoutAlign laStretch
 
   render:
     let
@@ -26,9 +28,6 @@ proc progressbar*(value: var float, label = "") {.basicFidget.} =
         box 0, 0, bw, bh
         fill "#565555"
         characters label
-        textAutoResize tsHeight
-        layoutAlign laCenter
-
 
     # Draw the bar itself.
     group "bar":
