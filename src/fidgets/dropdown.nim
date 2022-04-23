@@ -25,7 +25,7 @@ proc dropdown*(
   properties:
     dropDownOpen: bool
     dropUp: bool
-    itemsHidden: int
+    itemsVisible: int
 
   render:
     let
@@ -35,10 +35,24 @@ proc dropdown*(
       bih = bh * 1.0
       tw = bw - 1'em
 
+    echo fmt"pre: {self.itemsVisible=}"
     let
-      itemsVis = dropItems.len() - self.itemsHidden
-      itemCount = max(4, 0).min(dropItems.len())
+      visItems =
+        if self.dropUp: 4
+        elif self.dropDownOpen: self.itemsVisible
+        else: dropItems.len()
+      itemCount = max(1, visItems).min(dropItems.len())
       bdh = min(bih * itemCount.float32, windowLogicalSize.y/2)
+
+    if itemCount <= 2:
+      self.dropUp = true
+      self.itemsVisible = dropItems.len()
+      refresh()
+
+    proc resetState() = 
+      self.dropDownOpen = false
+      self.dropUp = false
+      self.itemsVisible = -1
 
     box cb.x, cb.y, bw, bh
     font "IBM Plex Sans", 12, 200, 0, hCenter, vCenter
@@ -53,7 +67,7 @@ proc dropdown*(
         fill "#5C8F9C"
       onClick:
         self.dropDownOpen = true
-        self.dropUp = current.dropUpY(bdh)
+        self.itemsVisible = -1
 
       text "text":
         box 0, 0, bw, bh
@@ -109,17 +123,16 @@ proc dropdown*(
           clipContent true
 
           onClickOutside:
-            self.dropDownOpen = false
-            self.dropUp = false
+            resetState()
 
-          self.itemsHidden = 1
+          var itemsVisible = -1 + (if self.dropUp: -1 else: 0)
           for idx, buttonName in pairs(dropItems):
             group "itembtn":
               fill "#7CAFBC"
               box 0, 0, bw, 1.4*spad
             group "itembtn":
-              if not current.screenBox.overlaps(scrollBox):
-                self.itemsHidden.inc()
+              if current.screenBox.overlaps(scrollBox):
+                itemsVisible.inc()
               box 0, 0, bw, bih
               layoutAlign laCenter
               fill "#72bdd0"
@@ -132,7 +145,7 @@ proc dropdown*(
                 fill "#5C8F9C"
                 self.dropDownOpen = true
               onClick:
-                self.dropDownOpen = false
+                resetState()
                 echo "dropdown selected: ", buttonName
                 dropSelected = idx
           group "itembtn":
@@ -140,3 +153,9 @@ proc dropdown*(
             box 0, 0, bw, 1.4*spad
           group "itempost":
             box 0, 0, bw, 12.5*spad
+          
+          echo fmt"post: {self.itemsVisible=}"
+          if self.itemsVisible >= 0:
+            self.itemsVisible = min(itemsVisible, self.itemsVisible)
+          else:
+            self.itemsVisible = itemsVisible
