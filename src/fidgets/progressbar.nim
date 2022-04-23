@@ -2,7 +2,7 @@ import std/strformat
 
 import widgets
 
-proc progressbar*(value: var float) {.basicFidget.} =
+proc progressbar*(value: var float, label = "") {.basicFidget.} =
   ## Draw a progress bars 
 
   init:
@@ -21,13 +21,14 @@ proc progressbar*(value: var float) {.basicFidget.} =
       barW = wcalc.clamp(0.0, bw-sb*sw)
       barH = bh - sb*sw
 
-    # echo fmt"progressbar-pb-widget: {current.box()=}"
-
-    group "progress":
+    if label.len() > 0:
       text "text":
         box 0, 0, bw, bh
         fill "#565555"
-        characters fmt"progress: {float(value):4.2f}"
+        characters label
+        textAutoResize tsHeight
+        layoutAlign laCenter
+
 
     # Draw the bar itself.
     group "bar":

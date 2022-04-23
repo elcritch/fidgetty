@@ -257,7 +257,7 @@ proc makeStatefulWidget*(blk: NimNode, hasState: bool, defaultState: bool): NimN
 
   procDef.body = newStmtList()
   procDef.body.add quote do:
-    group `typeName`:
+    component `typeName`:
       `initImpl`
       `stateSetup`
       if `preName` != nil:
@@ -307,8 +307,8 @@ proc makeStatefulWidget*(blk: NimNode, hasState: bool, defaultState: bool): NimN
   result.add procDef
   if not hasState:
     result.add makeWidgetPropertyMacro(procName, typeName) 
-  echo "\n=== StatefulWidget === "
-  echo result.repr
+  # echo "\n=== StatefulWidget === "
+  # echo result.repr
 
 macro basicFidget*(blk: untyped) =
   result = makeStatefulWidget(blk, hasState=false, defaultState=false)
