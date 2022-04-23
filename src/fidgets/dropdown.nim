@@ -25,17 +25,21 @@ proc dropdown*(
   properties:
     dropDownOpen: bool
     dropUp: bool
+    itemsHidden: int
 
   render:
-    var
+    let
       cb = current.box()
       bw = cb.w
       bh = cb.h
-      bth = bh
       bih = bh * 1.0
-      bdh = min(bih * min(4, dropItems.len()).float32, windowLogicalSize.y/2)
       tw = bw - 1'em
-    
+
+    let
+      itemsVis = dropItems.len() - self.itemsHidden
+      itemCount = max(4, 0).min(dropItems.len())
+      bdh = min(bih * itemCount.float32, windowLogicalSize.y/2)
+
     box cb.x, cb.y, bw, bh
     font "IBM Plex Sans", 12, 200, 0, hCenter, vCenter
 
@@ -52,7 +56,7 @@ proc dropdown*(
         self.dropUp = current.dropUpY(bdh)
 
       text "text":
-        box 0, 0, bw, bth
+        box 0, 0, bw, bh
         fill "#ffffff"
         strokeWeight 1
         if dropSelected < 0:
@@ -60,7 +64,7 @@ proc dropdown*(
         else:
           characters dropItems[dropSelected]
       text "text":
-        box tw, 0, 1'em, bth
+        box tw, 0, 1'em, bh
         fill "#ffffff"
         if self.dropDownOpen:
           rotation -90
@@ -70,9 +74,10 @@ proc dropdown*(
 
     let spad = 1.0'f32
     if self.dropDownOpen:
+
       group "dropDownScroller":
         if self.dropUp:
-          box 0, bh-bdh-bth, bw, bdh
+          box 0, bh-bdh-bh, bw, bdh
         else:
           box 0, bh, bw, bdh
 
@@ -107,11 +112,14 @@ proc dropdown*(
             self.dropDownOpen = false
             self.dropUp = false
 
+          self.itemsHidden = 1
           for idx, buttonName in pairs(dropItems):
             group "itembtn":
               fill "#7CAFBC"
               box 0, 0, bw, 1.4*spad
             group "itembtn":
+              if not current.screenBox.overlaps(scrollBox):
+                self.itemsHidden.inc()
               box 0, 0, bw, bih
               layoutAlign laCenter
               fill "#72bdd0"
