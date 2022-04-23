@@ -18,29 +18,25 @@ proc dropdown*(
     dropItems {.property: items.}: seq[string],
     dropSelected: var int,
 ): DropdownState {.statefulFidget.} =
-  ## dropdown widget with internal state using `useState`
+  ## dropdown widget 
   init:
     size 8'em, 1.5'em
   
   properties:
     dropDownOpen: bool
     dropUp: bool
-    # dropDownToClose: bool
 
   render:
     var
       cb = current.box()
       bw = cb.w
       bh = cb.h
-      # bh = 1.8.Em
       bth = bh
-      bih = bh * 1.0 # 1.4.Em
-      # bdh = 100.Vh - 3*bth
+      bih = bh * 1.0
       bdh = min(bih * min(6, dropItems.len()).float32, windowLogicalSize.y/2)
       tw = bw - 1'em
     
     box cb.x, cb.y, bw, bh
-
     font "IBM Plex Sans", 12, 200, 0, hCenter, vCenter
 
     rectangle "button":
@@ -82,8 +78,8 @@ proc dropdown*(
 
         clipContent true
         zlevel ZLevelRaised
+
         cornerRadius 3
-        # dropShadow 5, -3, -3, "#000000", 0.06
 
         group "dropDownOutside":
           box 0, 0, bw, bdh
@@ -99,7 +95,6 @@ proc dropdown*(
 
         group "dropDown":
           box spad, 6*spad, bw, bdh-6*spad
-          # cornerRadius 3.3
           layout lmVertical
           counterAxisSizingMode csAuto
           horizontalPadding 0
@@ -120,7 +115,6 @@ proc dropdown*(
               box 0, 0, bw, bih
               layoutAlign laCenter
               fill "#72bdd0"
-              # strokeLine 1.4, "#000000", 0.2
               text "text":
                 box 0, 0, bw, bih
                 fill "#ffffff"
