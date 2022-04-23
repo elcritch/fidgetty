@@ -364,3 +364,10 @@ template vertical*(text, child: untyped) =
 
 template vertical*(child: untyped) =
   vertical("", child)
+
+template wrapApp*(fidgetName: typed, fidgetType: typedesc): proc() =
+  proc `fidgetName Main`() =
+    useState(`fidgetType`, state)
+    fidgetName(state)
+  
+  `fidgetName Main`
