@@ -1,5 +1,5 @@
 import bumpy, fidget
-import fidgets
+import widgets
 
 proc button*(
     message {.property: text.}: string,
@@ -35,7 +35,7 @@ proc button*(
         image "shadow-button-middle.png"
         current.imageColor = color(1,1,1,0.37)
 
-    rectangle "button":
+    rectangle "buttonAction":
       box 0, 0, bw, bh
       dropShadow 4, 0, 0, "#000000", 0.05
       cornerRadius 3
