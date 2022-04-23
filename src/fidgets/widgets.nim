@@ -313,15 +313,17 @@ proc makeStatefulWidget*(blk: NimNode, hasState: bool, defaultState: bool): NimN
 macro basicFidget*(blk: untyped) =
   result = makeStatefulWidget(blk, hasState=false, defaultState=false)
 
-template useState*[T](tp: typedesc[T]) =
+template useState*[T](tp: typedesc[T], name: untyped) =
   if current.hookStates.isEmpty():
-    var self = tp()
-    current.hookStates = newVariant(self)
-  var self {.inject.} =
+    current.hookStates = newVariant(tp())
+  var `name` {.inject.} =
     if self.isNil:
       current.hookStates.get(tp)
     else:
       self
+
+template useState*[T](tp: typedesc[T]) =
+  useState(tp, self)
 
 template useEvents*(): GeneralEvents =
   if current.hookEvents.data.isNil:

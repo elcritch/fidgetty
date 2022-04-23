@@ -61,7 +61,7 @@ proc animatedProgress*(
   render:
     self.value = self.value + delta
 
-    progressbar(self.value) do:
+    progressbar(self.value, fmt"{self.value:4.2}") do:
       boxOf parent
 
     self.value = clamp(self.value mod 1.0, 0, 1.0)
