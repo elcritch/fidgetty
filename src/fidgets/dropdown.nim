@@ -33,7 +33,6 @@ proc dropdown*(
       bih = bh * 1.0
       tw = bw - 1'em
 
-    echo fmt"pre: {self.itemsVisible=}"
     let
       visItems =
         if self.dropUp: 4
@@ -97,19 +96,18 @@ proc dropdown*(
 
         cornerRadius 3
 
-        group "dropDownOutside":
+        group "dropDownBorder":
           box 0, 0, bw, bdh
           cornerRadius 3
           strokeLine spad, "#000000", 0.33
-
-        group "dropDownOutside":
+        group "dropDownBorderTop":
           fill "#82cde0"
           box 0, 0, bw, 6*spad
-        group "dropDownOutside":
+        group "dropDownBoarderBottom":
           fill "#82cde0"
           box 0, bdh-6*spad, bw, 6*spad
 
-        group "dropDown":
+        group "menu":
           box spad, 6*spad, bw, bdh-6*spad
           layout lmVertical
           counterAxisSizingMode csAuto
@@ -122,16 +120,16 @@ proc dropdown*(
 
           var itemsVisible = -1 + (if self.dropUp: -1 else: 0)
           for idx, buttonName in pairs(dropItems):
-            group "itembtn":
+            group "menuSpacer":
               fill "#7CAFBC"
               box 0, 0, bw, 1.4*spad
-            group "itembtn":
+            group "menuBtn":
               if current.screenBox.overlaps(scrollBox):
                 itemsVisible.inc()
               box 0, 0, bw, bih
               layoutAlign laCenter
               fill "#72bdd0"
-              text "text":
+              text "menuText":
                 box 0, 0, bw, bih
                 fill "#ffffff"
                 characters buttonName
@@ -143,13 +141,12 @@ proc dropdown*(
                 resetState()
                 echo "dropdown selected: ", buttonName
                 dropSelected = idx
-          group "itembtn":
+          group "menuBtnBlankBorderBottom":
             fill "#7CAFBC"
             box 0, 0, bw, 1.4*spad
-          group "itempost":
+          group "menuBtnBlankSpacer":
             box 0, 0, bw, 12.5*spad
           
-          echo fmt"post: {self.itemsVisible=}"
           if self.itemsVisible >= 0:
             self.itemsVisible = min(itemsVisible, self.itemsVisible)
           else:
