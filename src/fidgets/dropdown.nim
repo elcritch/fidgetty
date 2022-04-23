@@ -1,11 +1,6 @@
 
-import bumpy, fidget, math, random
-import std/strformat
-import asyncdispatch # This is what provides us with async and the dispatcher
-import times, strutils # This is to provide the timing output
-import macros
-
 import widgets
+import button
 
 template dropUpY(n: Node, height: float32 = 0): bool =
   let a = n.descaled(screenBox)
@@ -53,34 +48,44 @@ proc dropdown*(
 
     box cb.x, cb.y, bw, bh
 
-    rectangle "button":
-      cornerRadius 5
-      strokeWeight 1
-      size bw, bh
-      fill "#72bdd0"
-      dropShadow 3, 0, 0, "#000000", 0.03
+    widget button:
+      setup:
+        box 0, 0, bw, bh
+      text:
+        if dropSelected < 0: "Dropdown"
+        else: dropItems[dropSelected]
       onHover:
         fill "#5C8F9C"
       onClick:
         self.dropDownOpen = true
         self.itemsVisible = -1
 
-      text "text":
-        box 0, 0, bw, bh
-        fill "#ffffff"
-        strokeWeight 1
-        if dropSelected < 0:
-          characters "Dropdown"
-        else:
-          characters dropItems[dropSelected]
-      text "text":
-        box tw, 0, 1'em, bh
-        fill "#ffffff"
-        if self.dropDownOpen:
-          rotation -90
-        else:
-          rotation 0
-        characters ">"
+    # rectangle "button":
+    #   cornerRadius 5
+    #   strokeWeight 1
+    #   size bw, bh
+    #   fill "#72bdd0"
+
+    #   dropShadow 3, 0, 0, "#000000", 0.03
+
+    #   onHover:
+    #     fill "#5C8F9C"
+    #   onClick:
+    #     self.dropDownOpen = true
+    #     self.itemsVisible = -1
+
+    #   text "text":
+    #     box 0, 0, bw, bh
+    #     fill "#ffffff"
+    #     strokeWeight 1
+    #   text "text":
+    #     box tw, 0, 1'em, bh
+    #     fill "#ffffff"
+    #     if self.dropDownOpen:
+    #       rotation -90
+    #     else:
+    #       rotation 0
+    #     characters ">"
 
     let spad = 1.0'f32
     if self.dropDownOpen:
