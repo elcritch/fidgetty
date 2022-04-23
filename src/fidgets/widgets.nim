@@ -336,7 +336,7 @@ macro statefulFidget*(blk: untyped) =
   result = makeStatefulWidget(blk, hasState=true, defaultState=true)
 
 macro appFidget*(blk: untyped) =
-  result = makeStatefulWidget(blk, hasState=true, defaultState=false)
+  result = makeStatefulWidget(blk, hasState=true, defaultState=true)
 
 macro reverseStmts*(body: untyped) =
   result = newStmtList()
