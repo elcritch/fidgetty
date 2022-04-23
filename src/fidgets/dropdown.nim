@@ -7,8 +7,6 @@ import macros
 
 import widgets
 
-loadFont("IBM Plex Sans", "IBMPlexSans-Regular.ttf")
-
 template dropUpY(n: Node, height: float32 = 0): bool =
   let a = n.descaled(screenBox)
   let b = root.descaled(screenBox)
@@ -55,7 +53,6 @@ proc dropdown*(
       self.itemsVisible = -1
 
     box cb.x, cb.y, bw, bh
-    font "IBM Plex Sans", 12, 200, 0, hCenter, vCenter
 
     rectangle "button":
       cornerRadius 5
@@ -116,8 +113,6 @@ proc dropdown*(
           box spad, 6*spad, bw, bdh-6*spad
           layout lmVertical
           counterAxisSizingMode csAuto
-          horizontalPadding 0
-          verticalPadding 0
           itemSpacing -1
           scrollBars true
           clipContent true
