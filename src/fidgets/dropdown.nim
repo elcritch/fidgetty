@@ -16,7 +16,7 @@ template dropUpY(n: Node, height: float32 = 0): bool =
 
 proc dropdown*(
     dropItems {.property: items.}: seq[string],
-    dropSelected: var int,
+    dropSelected {.property: selected.}: var int,
 ): DropdownState {.statefulFidget.} =
   ## dropdown widget 
   init:
@@ -33,7 +33,7 @@ proc dropdown*(
       bh = cb.h
       bth = bh
       bih = bh * 1.0
-      bdh = min(bih * min(6, dropItems.len()).float32, windowLogicalSize.y/2)
+      bdh = min(bih * min(4, dropItems.len()).float32, windowLogicalSize.y/2)
       tw = bw - 1'em
     
     box cb.x, cb.y, bw, bh
