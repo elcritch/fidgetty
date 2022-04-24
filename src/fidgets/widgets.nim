@@ -112,8 +112,8 @@ macro widget*(widget, body: untyped): untyped =
   
   result = newStmtList()
   for (argname, propname, argtype) in widgetArgs:
-    # echo "ARGNAME: ", argname
-    # echo "PROPNAME: ", propname
+    echo "ARGNAME: ", argname
+    echo "PROPNAME: ", propname
     if argtype.repr == "WidgetProc" and attrs.hasKey(propname):
       let pargname = genSym(nskLet, argname & "Arg")
       let code =
@@ -128,10 +128,12 @@ macro widget*(widget, body: untyped): untyped =
       args.add newNimNode(nnkExprEqExpr).
         add(ident(argname)).add(newNilLit())
     else:
+      if not attrs.hasKey(propname):
+        continue
       let code =
         if attrs.hasKey(propname): attrs[propname]
         else: newNilLit()
-      # echo "CODE: ", code.repr
+      echo "CODE: ", code.repr
       args.add newNimNode(nnkExprEqExpr).
         add(ident(argname)).add(code)
   result.add newCall(`procName`, args)
