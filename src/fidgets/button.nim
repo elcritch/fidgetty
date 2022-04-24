@@ -10,39 +10,35 @@ proc button*(
   # Draw a progress bars 
   init:
     box 0, 0, 8.Em, 2.Em
+    cornerRadius 3
 
   render:
     let
       bw = current.box().w
       bh = current.box().h
 
-    cornerRadius 2
-
-    rectangle "button":
-      box 0, 0, bw, bh
-      cornerRadius 3
+    element "button":
+      cornerRadius parent
       strokeLine 2, "#707070", 2.0
       text "text":
         box 0, 0, bw, bh
         fill "#565555"
         characters message
 
-    rectangle "barFg":
-      box 0, 0, 100'pw, 100'ph
-      cornerRadius 2.2
+    element "barGloss":
+      cornerRadius parent
       clipContent true
       rectangle "barFg":
-        cornerRadius 2.2
+        cornerRadius parent
         box 0, 0, 100'pw, 100'ph
         image "shadow-button-middle.png"
         current.imageColor = color(1,1,1,0.37)
         if disabled:
           current.imageColor = color(0,0,0,0.11)
 
-    rectangle "buttonAction":
-      box 0, 0, bw, bh
+    element "buttonHover":
       dropShadow 4, 0, 0, "#000000", 0.05
-      cornerRadius 3
+      cornerRadius parent
       fill "#BDBDBD"
       if disabled:
         fill "#9D9D9D"

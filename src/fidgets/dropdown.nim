@@ -86,12 +86,12 @@ proc dropdown*(
         group "dropDownBorder":
           box 0, 0, bw, bdh
           cornerRadius 3
-          strokeLine spad, "#000000", 0.33
+          strokeLine 2, "#707070", 2.0
         group "dropDownBorderTop":
-          fill "#82cde0"
+          fill "#BDBDBD"
           box 0, 0, bw, 6*spad
         group "dropDownBoarderBottom":
-          fill "#82cde0"
+          fill "#BDBDBD"
           box 0, bdh-6*spad, bw, 6*spad
 
         group "menu":
@@ -108,28 +108,38 @@ proc dropdown*(
           var itemsVisible = -1 + (if self.dropUp: -1 else: 0)
           for idx, buttonName in pairs(dropItems):
             group "menuSpacer":
-              fill "#7CAFBC"
+              fill "#BDBDBD"
               box 0, 0, bw, 1.4*spad
             group "menuBtn":
               if current.screenBox.overlaps(scrollBox):
                 itemsVisible.inc()
               box 0, 0, bw, bih
               layoutAlign laCenter
-              fill "#72bdd0"
+
               text "menuText":
                 box 0, 0, bw, bih
-                fill "#ffffff"
+                fill "#000000"
                 characters buttonName
+              element "barFg":
+                fill "#BDBDBD"
+                cornerRadius 2.2
+              element "barGloss":
+                cornerRadius 2.2
+                image "shadow-button-middle.png"
+                current.imageColor = color(1,1,1,0.17)
+              element "barHover":
+                fill "#BDBDBD"
+                onHover:
+                  fill "#87E3FF", 0.37
+                  self.dropDownOpen = true
+                onClick:
+                  resetState()
+                  echo "dropdown selected: ", buttonName
+                  dropSelected = idx
 
-              onHover:
-                fill "#5C8F9C"
-                self.dropDownOpen = true
-              onClick:
-                resetState()
-                echo "dropdown selected: ", buttonName
-                dropSelected = idx
+
           group "menuBtnBlankBorderBottom":
-            fill "#7CAFBC"
+            fill "#BDBDBD"
             box 0, 0, bw, 1.4*spad
           group "menuBtnBlankSpacer":
             box 0, 0, bw, 12.5*spad
