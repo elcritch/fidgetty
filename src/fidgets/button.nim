@@ -13,7 +13,7 @@ proc button*(
     cornerRadius 3
     dropShadow 4, 0, 0, "#000000", 0.05
     strokeLine 2, "#707070", 1.0
-    current.imageColor = color(1,1,1,0.37)
+    imageColor color(1,1,1,0.37)
 
   render:
     let

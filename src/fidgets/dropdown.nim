@@ -14,6 +14,10 @@ proc dropdown*(
   ## dropdown widget 
   init:
     size 8'em, 1.5'em
+    cornerRadius 3
+    dropShadow 4, 0, 0, "#000000", 0.05
+    strokeLine 2, "#707070", 1.0
+    imageColor color(1,1,1,0.37)
   
   properties:
     dropDownOpen: bool
@@ -26,7 +30,7 @@ proc dropdown*(
       bw = cb.w
       bh = cb.h
       bih = bh * 1.0
-      tw = bw - 1'em
+      tw = bw - 1.5'em
 
     let
       visItems =
@@ -48,9 +52,14 @@ proc dropdown*(
 
     box cb.x, cb.y, bw, bh
 
+    let this = current
     widget button:
       setup:
         box 0, 0, bw, bh
+        cornerRadius this
+        strokeLine this
+        shadows this
+        imageColor this
         text "icon":
           box tw, 0, 1'em, bh
           fill "#000000"
