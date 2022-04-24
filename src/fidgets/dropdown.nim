@@ -66,36 +66,8 @@ proc dropdown*(
         self.dropDownOpen = true
         self.itemsVisible = -1
       post:
-        echo "post btn"
         if self.dropDownOpen:
           fill "#5C8F9C"
-
-    # rectangle "button":
-    #   cornerRadius 5
-    #   strokeWeight 1
-    #   size bw, bh
-    #   fill "#72bdd0"
-
-    #   dropShadow 3, 0, 0, "#000000", 0.03
-
-    #   onHover:
-    #     fill "#5C8F9C"
-    #   onClick:
-    #     self.dropDownOpen = true
-    #     self.itemsVisible = -1
-
-    #   text "text":
-    #     box 0, 0, bw, bh
-    #     fill "#ffffff"
-    #     strokeWeight 1
-    #   text "text":
-    #     box tw, 0, 1'em, bh
-    #     fill "#ffffff"
-    #     if self.dropDownOpen:
-    #       rotation -90
-    #     else:
-    #       rotation 0
-    #     characters ">"
 
     let spad = 1.0'f32
     if self.dropDownOpen:
