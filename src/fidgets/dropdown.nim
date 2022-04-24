@@ -107,35 +107,21 @@ proc dropdown*(
 
           var itemsVisible = -1 + (if self.dropUp: -1 else: 0)
           for idx, buttonName in pairs(dropItems):
-            group "menuSpacer":
-              fill "#BDBDBD"
-              box 0, 0, bw, 1.4*spad
             group "menuBtn":
               if current.screenBox.overlaps(scrollBox):
                 itemsVisible.inc()
               box 0, 0, bw, bih
               layoutAlign laCenter
 
-              text "menuText":
-                box 0, 0, bw, bih
-                fill "#000000"
-                characters buttonName
-              element "barFg":
-                fill "#BDBDBD"
-                cornerRadius 2.2
-              element "barGloss":
-                cornerRadius 2.2
-                image "shadow-button-middle.png"
-                current.imageColor = color(1,1,1,0.17)
-              element "barHover":
-                fill "#BDBDBD"
-                onHover:
-                  fill "#87E3FF", 0.37
-                  self.dropDownOpen = true
-                onClick:
-                  resetState()
-                  echo "dropdown selected: ", buttonName
-                  dropSelected = idx
+              let btnSetup = proc() =
+                current.shadows.setLen 0
+                current.imageColor = color(0,0,0,0.03)
+                boxOf parent
+                cornerRadius 0
+                strokeLine 0, "#707070", 0.0
+              if button(buttonName, setup=btnSetup):
+                resetState()
+                dropSelected = idx
 
 
           group "menuBtnBlankBorderBottom":
