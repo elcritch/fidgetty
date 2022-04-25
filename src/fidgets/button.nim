@@ -14,6 +14,7 @@ proc button*(
     shadows theme
     strokeLine theme
     imageColor theme
+    fill theme
 
   render:
     let
@@ -25,29 +26,18 @@ proc button*(
       fill textTheme
       characters message
 
-    element "barGloss":
-      strokeLine parent
-      clipContent true
-      cornerRadius parent
-      image "shadow-button-middle.png"
-      imageColor this.imageColor
-      if disabled:
-        imageColor color(0, 0, 0, 0.11)
-
-      cornerRadius parent
-      # fill "#BDBDBD"
-      fill theme.fill
-      if disabled:
-        # fill "#9D9D9D"
-        fill theme.fill
-      else:
-        onHover:
-          highlight theme
-        if isActive:
-          fill theme.highlightColor
-        onClick:
-          fill theme.highlightColor
-          if not clicker.isNil:
-            clicker()
-          result = true
+    clipContent true
+    image "shadow-button-middle.png"
+    if disabled:
+      imageColor color(0, 0, 0, 0.11)
+    else:
+      onHover:
+        highlight theme
+      if isActive:
+        highlight theme
+      onClick:
+        highlight theme
+        if not clicker.isNil:
+          clicker()
+        result = true
 
