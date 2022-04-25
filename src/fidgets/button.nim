@@ -37,9 +37,11 @@ proc button*(
 
     element "buttonHover":
       cornerRadius parent
-      fill "#BDBDBD"
+      # fill "#BDBDBD"
+      fill theme.fill
       if disabled:
-        fill "#9D9D9D"
+        # fill "#9D9D9D"
+        fill theme.fill
       else:
         onHover: 
           fill theme.highlightColor
