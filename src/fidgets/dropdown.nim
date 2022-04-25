@@ -14,10 +14,11 @@ proc dropdown*(
   ## dropdown widget 
   init:
     size 8'em, 1.5'em
-    cornerRadius 3
-    dropShadow 4, 0, 0, "#000000", 0.05
-    strokeLine 2, "#707070", 1.0
-    imageColor color(1,1,1,0.37)
+    cornerRadius theme
+    # shadows theme
+    strokeLine theme
+    imageColor theme
+
   
   properties:
     dropDownOpen: bool
@@ -58,7 +59,7 @@ proc dropdown*(
         box 0, 0, bw, bh
         cornerRadius this
         strokeLine this
-        shadows this
+        shadows theme
         imageColor this
         text "icon":
           box tw, 0, 1'em, bh
@@ -95,7 +96,7 @@ proc dropdown*(
         group "dropDownBorder":
           box 0, 0, bw, bdh
           cornerRadius 3
-          strokeLine 2, "#707070", 2.0
+          strokeLine this
         group "dropDownBorderTop":
           fill "#BDBDBD"
           box 0, 0, bw, 6*spad
@@ -130,7 +131,7 @@ proc dropdown*(
                   current.imageColor = color(0,0,0,0.03)
                   boxOf parent
                   cornerRadius 0
-                  strokeLine 0, "#707070", 0.0
+                  strokeLine this
               if clicked:
                 resetState()
                 dropSelected = idx

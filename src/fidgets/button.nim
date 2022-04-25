@@ -10,10 +10,10 @@ proc button*(
   # Draw a progress bars 
   init:
     box 0, 0, 8.Em, 2.Em
-    cornerRadius 3
-    dropShadow 4, 0, 0, "#000000", 0.05
-    strokeLine 2, "#707070", 1.0
-    imageColor color(1,1,1,0.37)
+    cornerRadius theme
+    shadows theme
+    strokeLine theme
+    imageColor theme
 
   render:
     let
