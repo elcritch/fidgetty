@@ -42,11 +42,11 @@ proc button*(
         fill "#9D9D9D"
       else:
         onHover: 
-          fill "#87E3FF", 0.97
+          fill theme.highlightColor
         if isActive:
-          fill "#87E3FF", 0.77
+          fill theme.highlightColor
         onClick:
-          fill "#77D3EF", 0.99
+          fill theme.highlightColor
           if not clicker.isNil:
             clicker()
           result = true
