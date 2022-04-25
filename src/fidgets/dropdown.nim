@@ -117,7 +117,7 @@ proc dropdown*(
 
           var itemsVisible = -1 + (if self.dropUp: -1 else: 0)
           for idx, buttonName in pairs(dropItems):
-            itemSpacing 0.1'em
+            # itemSpacing 0.1'em
             group "menuBtn":
               if current.screenBox.overlaps(scrollBox):
                 itemsVisible.inc()
@@ -127,8 +127,7 @@ proc dropdown*(
               let clicked = widget button:
                 text: buttonName
                 setup:
-                  current.shadows.setLen 0
-                  current.imageColor = color(0,0,0,0.03)
+                  clearShadows()
                   boxOf parent
                   cornerRadius 0
                   strokeLine this
