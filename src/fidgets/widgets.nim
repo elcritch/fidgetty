@@ -191,6 +191,7 @@ proc makeStatefulWidget*(blk: NimNode, hasState: bool, defaultState: bool): NimN
       else: params[0].strVal
     preName = ident("setup")
     postName = ident("post")
+    identName = ident("id")
 
   if hasState and hasEmptyReturnType:
     warning("Fidgets with state should generally name their state typename using the return type. ", procDef)
@@ -259,7 +260,7 @@ proc makeStatefulWidget*(blk: NimNode, hasState: bool, defaultState: bool): NimN
 
   procDef.body = newStmtList()
   procDef.body.add quote do:
-    component `typeName`:
+    component `identName`:
       `initImpl`
       `stateSetup`
       if `preName` != nil:
@@ -288,11 +289,13 @@ proc makeStatefulWidget*(blk: NimNode, hasState: bool, defaultState: bool): NimN
       else:            newIdentDefs(ident("self"), ident(typeName))
     preArg = newIdentDefs(preName, bindSym"WidgetProc", nilValue)
     postArg = newIdentDefs(ident("post"), bindSym"WidgetProc", nilValue)
+    identArg = newIdentDefs(identName, bindSym"string",  newStrLitNode(typeName))
   
   if hasState and hasProperty:
     params.add stateArg
   params.add preArg
   params.add postArg 
+  params.add identArg 
   # echo "procTp:return type match: ", hasStateReturnType
   # echo "procTp:params: ", params.treeRepr
   # echo "params: ", treeRepr params

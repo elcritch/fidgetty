@@ -11,6 +11,7 @@ proc progressbar*(value: var float, label = "") {.basicFidget.} =
     box 0, 0, 100.WPerc, 2.Em
     textAutoResize tsHeight
     layoutAlign laStretch
+    strokeLine theme
 
   render:
     let
@@ -33,7 +34,7 @@ proc progressbar*(value: var float, label = "") {.basicFidget.} =
     group "bar":
       box 0, 0, bw, bh
       fill "#BDBDBD", 0.33
-      strokeLine sw, "#707070", 1.0
+      strokeLine parent
       cornerRadius 3
       clipContent true
       rectangle "bezel":
