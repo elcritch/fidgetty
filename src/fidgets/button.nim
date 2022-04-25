@@ -23,7 +23,7 @@ proc button*(
 
     text "text":
       box 0, 0, bw, bh
-      fill "#565555"
+      fill "#FFFFFF"
       characters message
 
     element "barGloss":
