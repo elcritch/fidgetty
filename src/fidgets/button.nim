@@ -23,7 +23,7 @@ proc button*(
 
     text "text":
       box 0, 0, bw, bh
-      fill "#FFFFFF"
+      fill textTheme
       characters message
 
     element "barGloss":
@@ -31,9 +31,9 @@ proc button*(
       clipContent true
       cornerRadius parent
       image "shadow-button-middle.png"
-      current.imageColor = this.imageColor
+      imageColor this.imageColor
       if disabled:
-        current.imageColor = color(0,0,0,0.11)
+        imageColor color(0,0,0,0.11)
 
     element "buttonHover":
       cornerRadius parent
