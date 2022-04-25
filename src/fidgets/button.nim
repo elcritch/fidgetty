@@ -7,7 +7,7 @@ proc button*(
     isActive {.property: isActive.}: bool = false,
     disabled {.property: disabled.}: bool = false
 ): bool {.basicFidget, discardable.} =
-  # Draw a progress bars 
+  # Draw a progress bars
   init:
     box 0, 0, 8.Em, 2.Em
     cornerRadius theme
@@ -22,7 +22,6 @@ proc button*(
       this = current
 
     text "text":
-      box 0, 0, bw, bh
       fill textTheme
       characters message
 
@@ -33,9 +32,8 @@ proc button*(
       image "shadow-button-middle.png"
       imageColor this.imageColor
       if disabled:
-        imageColor color(0,0,0,0.11)
+        imageColor color(0, 0, 0, 0.11)
 
-    element "buttonHover":
       cornerRadius parent
       # fill "#BDBDBD"
       fill theme.fill
@@ -43,8 +41,8 @@ proc button*(
         # fill "#9D9D9D"
         fill theme.fill
       else:
-        onHover: 
-          fill theme.highlightColor
+        onHover:
+          highlight theme
         if isActive:
           fill theme.highlightColor
         onClick:
@@ -53,4 +51,3 @@ proc button*(
             clicker()
           result = true
 
-      
