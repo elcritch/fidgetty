@@ -12,7 +12,6 @@ proc checkbox*(
   init:
     box 0, 0, 8.Em, 2.Em
     # cornerRadius theme
-    # shadows theme
     # strokeLine theme
     # fill theme
     imageColor theme
@@ -29,6 +28,9 @@ proc checkbox*(
     rectangle "square":
       box 0, 0, 2'em, 2'em
       fill theme
+      clipContent true
+      image "shadow-button-middle.png"
+      imageColor theme
       if checked:
         highlight theme
         text "checkfil":

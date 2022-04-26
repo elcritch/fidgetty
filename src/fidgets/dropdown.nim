@@ -91,7 +91,8 @@ proc dropdown*(
 
         group "menu":
           # box spad, 6*spad, bw, bdh-6*spad
-          box 0, this.cornerRadius[0]/2, bw, bdh+2*this.cornerRadius[0]
+          # box 0, this.cornerRadius[0]/2, bw, bdh+2*this.cornerRadius[0]
+          box 0, 0, bw, bdh
           layout lmVertical
           counterAxisSizingMode csAuto
           itemSpacing -1
@@ -124,8 +125,8 @@ proc dropdown*(
                 dropSelected = idx
 
 
-          group "menuBtnBlankSpacer":
-            box 0, 0, bw, this.cornerRadius[0]
+          # group "menuBtnBlankSpacer":
+            # box 0, 0, bw, this.cornerRadius[0]
           
           if self.itemsVisible >= 0:
             self.itemsVisible = min(itemsVisible, self.itemsVisible)
