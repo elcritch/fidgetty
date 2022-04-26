@@ -22,6 +22,7 @@ proc checkbox*(
       checked = not checked
 
     text "label":
+      box 2'em, 0, parent.box().w - 2'em, parent.box().h
       fill textTheme
       characters message
 
