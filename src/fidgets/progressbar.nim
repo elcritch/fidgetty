@@ -35,25 +35,25 @@ proc progressbar*(value: var float, label = "") {.basicFidget.} =
       box 0, 0, bw, bh
       fill "#BDBDBD", 0.33
       strokeLine parent
-      cornerRadius 3
+      cornerRadius 1.0 * theme.cornerRadius[0]
       clipContent true
       rectangle "bezel":
-        cornerRadius 2.2
+        cornerRadius 0.80 * theme.cornerRadius[0]
         box 0, 0, 100'pw, 100'ph
         image "shadow-button-middle.png"
         rotation 180
-        current.imageColor = color(1,1,1,0.47)
+        imageColor theme
 
     rectangle "barFgTexture":
       box sb, sb, barW, barH
-      cornerRadius 2.2
+      cornerRadius 0.80 * theme.cornerRadius[0]
       clipContent true
       strokeLine 1.0, "#707070", 0.87
 
     rectangle "barFgColor":
       box sb, sb, barW, barH
       fill "#87E3FF"
-      cornerRadius 2.2
+      cornerRadius 0.80 * theme.cornerRadius[0]
 
-    cornerRadius 3
+    cornerRadius 1.0 * theme.cornerRadius[0]
     # dropShadow 4, 0, 0, "#000000", 0.05

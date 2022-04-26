@@ -26,10 +26,10 @@ proc slider*(value: var float) {.basicFidget.} =
     rectangle "fill":
       box 0, 3, pipPos, 4
       fill "#70bdcf"
-      cornerRadius 2
-      strokeWeight 1
+      cornerRadius theme
+      strokeLine theme
     rectangle "bg":
       box 0, 3, 250, 4
       fill "#c2e3eb"
-      cornerRadius 2
-      strokeWeight 1
+      cornerRadius theme
+      strokeLine theme
