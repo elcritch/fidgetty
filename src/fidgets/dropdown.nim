@@ -89,6 +89,11 @@ proc dropdown*(
         cornerRadius this
         strokeLine this
 
+        group "menuoutline":
+          box 0, 0, bw, bdh
+          cornerRadius this
+          strokeLine theme
+
         group "menu":
           # box spad, 6*spad, bw, bdh-6*spad
           # box 0, this.cornerRadius[0]/2, bw, bdh+2*this.cornerRadius[0]
