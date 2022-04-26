@@ -15,11 +15,9 @@ proc dropdown*(
   init:
     size 8'em, 1.5'em
     cornerRadius theme
-    # shadows theme
     strokeLine theme
     imageColor theme
 
-  
   properties:
     dropDownOpen: bool
     dropUp: bool
@@ -50,8 +48,6 @@ proc dropdown*(
       self.dropDownOpen = false
       self.dropUp = false
       self.itemsVisible = -1
-
-    box cb.x, cb.y, bw, bh
 
     let this = current
     widget button:
@@ -90,27 +86,17 @@ proc dropdown*(
 
         clipContent true
         zlevel ZLevelRaised
-
-        cornerRadius 3
-
-        group "dropDownBorder":
-          box 0, 0, bw, bdh
-          cornerRadius 3
-          strokeLine this
-        group "dropDownBorderTop":
-          fill "#BDBDBD"
-          box 0, 0, bw, 6*spad
-        group "dropDownBoarderBottom":
-          fill "#BDBDBD"
-          box 0, bdh-6*spad, bw, 6*spad
+        cornerRadius this
+        strokeLine this
 
         group "menu":
-          box spad, 6*spad, bw, bdh-6*spad
+          # box spad, 6*spad, bw, bdh-6*spad
+          box 0, this.cornerRadius[0]/2, bw, bdh+2*this.cornerRadius[0]
           layout lmVertical
           counterAxisSizingMode csAuto
           itemSpacing -1
           scrollBars true
-          clipContent true
+          # clipContent true
 
           onClickOutside:
             resetState()
@@ -128,6 +114,8 @@ proc dropdown*(
                 text: buttonName
                 setup:
                   clearShadows()
+                  let ic = this.imageColor
+                  imageColor Color(r: 0, g: 0, b: 0, a: 0.20 * ic.a)
                   boxOf parent
                   cornerRadius 0
                   strokeLine this
@@ -136,11 +124,8 @@ proc dropdown*(
                 dropSelected = idx
 
 
-          group "menuBtnBlankBorderBottom":
-            fill "#BDBDBD"
-            box 0, 0, bw, 1.4*spad
           group "menuBtnBlankSpacer":
-            box 0, 0, bw, 12.5*spad
+            box 0, 0, bw, this.cornerRadius[0]
           
           if self.itemsVisible >= 0:
             self.itemsVisible = min(itemsVisible, self.itemsVisible)
