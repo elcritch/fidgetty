@@ -2,7 +2,7 @@ import bumpy, fidget
 import widgets
 
 proc checkbox*(
-    checked {.property: checked.}: bool,
+    checked {.property: value.}: var bool,
     message {.property: text.}: string,
     clicker {.property: onClick.}: WidgetProc = proc () = discard,
     isActive {.property: isActive.}: bool = false,
@@ -11,41 +11,32 @@ proc checkbox*(
   # Draw a progress bars
   init:
     box 0, 0, 8.Em, 2.Em
-    cornerRadius theme
-    shadows theme
-    strokeLine theme
+    # cornerRadius theme
+    # shadows theme
+    # strokeLine theme
+    # fill theme
     imageColor theme
-    fill theme
 
   render:
+
+    onClick:
+      checked = not checked
+
     text "label":
       fill textTheme
       characters message
 
-    clipContent true
-    image "shadow-button-middle.png"
-    if disabled:
-      imageColor color(0, 0, 0, 0.11)
-    else:
-      onHover:
-        highlight theme
-      if isActive:
-        highlight theme
-      onClick:
-        highlight theme
-        if not clicker.isNil:
-          clicker()
-        result = true
-
     rectangle "square":
-      box 0, 0, 1.4'em, 1.4'em
+      box 0, 0, 2'em, 2'em
       fill theme
       if checked:
         highlight theme
         text "checkfil":
-          box 0, 0, 1.4'em, 1.4'em
+          textStyle textTheme.textStyle
+          fontSize 1.4 * fontSize()
+          box 0.15'em, 0.40'em, 1'em, 1'em
           fill textTheme.fill
           characters "✓"
       stroke theme.stroke
-      cornerRadius 5
-      strokeWeight 1
+      cornerRadius theme
+      strokeLine theme
