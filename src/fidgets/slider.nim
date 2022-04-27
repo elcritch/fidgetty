@@ -12,7 +12,7 @@ proc slider*(
     box 0, 0, 100.WPerc, 2.Em
     textAutoResize tsHeight
     layoutAlign laStretch
-    stroke theme.outerStroke
+    cornerRadius theme
 
   properties:
     pipDrag: bool
@@ -45,14 +45,14 @@ proc slider*(
     rectangle "pip":
       box sb+pipPos, sb, bh-2*sb, bh-2*sb
       fill "#72bdd0"
-      cornerRadius current
-      strokeLine current
+      cornerRadius theme
+      stroke theme.outerStroke
     rectangle "fill":
       box sb, sb, pipWidth, bh-2*sb
       fill "#70bdcf"
-      cornerRadius current
+      cornerRadius theme
     rectangle "bg":
       box 0, 0, bw, bh
       fill "#c2e3eb"
-      cornerRadius current
-      strokeLine current
+      cornerRadius theme
+      stroke theme.outerStroke
