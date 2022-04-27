@@ -9,9 +9,10 @@ proc slider*(
   ## Draw a progress bars 
 
   init:
-    ## called before `setup` and used for setting defaults like
-    ## the default box size
     box 0, 0, 100.WPerc, 2.Em
+    textAutoResize tsHeight
+    layoutAlign laStretch
+    stroke theme.outerStroke
 
   properties:
     pipDrag: bool
@@ -44,14 +45,14 @@ proc slider*(
     rectangle "pip":
       box sb+pipPos, sb, bh-2*sb, bh-2*sb
       fill "#72bdd0"
-      cornerRadius theme
-      strokeLine theme
+      cornerRadius current
+      strokeLine current
     rectangle "fill":
       box sb, sb, pipWidth, bh-2*sb
       fill "#70bdcf"
-      cornerRadius theme
+      cornerRadius current
     rectangle "bg":
       box 0, 0, bw, bh
       fill "#c2e3eb"
-      cornerRadius theme
-      strokeLine theme
+      cornerRadius current
+      strokeLine current

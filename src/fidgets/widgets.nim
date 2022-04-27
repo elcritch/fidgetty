@@ -261,6 +261,7 @@ proc makeStatefulWidget*(blk: NimNode, hasState: bool, defaultState: bool): NimN
   procDef.body = newStmtList()
   procDef.body.add quote do:
     component `identName`:
+      let local {.inject.} = current
       `initImpl`
       `stateSetup`
       if `preName` != nil:

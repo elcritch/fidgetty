@@ -12,7 +12,7 @@ proc button*(
     box 0, 0, 8.Em, 2.Em
     cornerRadius theme
     shadows theme
-    strokeLine theme
+    stroke theme.outerStroke
     imageColor theme
     fill theme
 
@@ -23,7 +23,7 @@ proc button*(
       this = current
 
     text "text":
-      fill textTheme
+      fill theme.textFill
       characters message
 
     clipContent true

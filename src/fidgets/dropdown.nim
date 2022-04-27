@@ -15,7 +15,7 @@ proc dropdown*(
   init:
     size 8'em, 1.5'em
     cornerRadius theme
-    strokeLine theme
+    stroke theme.outerStroke
     imageColor theme
 
   properties:
@@ -92,7 +92,7 @@ proc dropdown*(
         group "menuoutline":
           box 0, 0, bw, bdh
           cornerRadius this
-          strokeLine theme
+          stroke theme.outerStroke
 
         group "menu":
           # box spad, 6*spad, bw, bdh-6*spad

@@ -23,7 +23,7 @@ proc checkbox*(
 
     text "label":
       box 2'em, 0, parent.box().w - 2'em, parent.box().h
-      fill textTheme
+      fill theme.textFill
       characters message
 
     rectangle "square":
@@ -35,11 +35,10 @@ proc checkbox*(
       if checked:
         highlight theme
         text "checkfil":
-          textStyle textTheme.textStyle
+          # textStyle theme.text.textStyle
           fontSize 1.4 * fontSize()
           box 0.15'em, 0.40'em, 1'em, 1'em
-          fill textTheme.fill
+          fill theme.textFill
           characters "✓"
-      stroke theme.stroke
+      stroke theme.outerStroke
       cornerRadius theme
-      strokeLine theme

@@ -9,12 +9,10 @@ proc progressbar*(
   ## Draw a progress bars 
 
   init:
-    ## called before `setup` and used for setting defaults like
-    ## the default box size
     box 0, 0, 100.WPerc, 2.Em
     textAutoResize tsHeight
     layoutAlign laStretch
-    strokeLine theme
+    stroke theme.outerStroke
 
   render:
     let
@@ -36,7 +34,6 @@ proc progressbar*(
     # Draw the bar itself.
     group "bar":
       box 0, 0, bw, bh
-      fill "#BDBDBD", 0.33
       strokeLine parent
       cornerRadius 1.0 * theme.cornerRadius[0]
       clipContent true
@@ -55,8 +52,7 @@ proc progressbar*(
 
     rectangle "barFgColor":
       box sb, sb, barW, barH
-      fill "#87E3FF"
+      fill "#87E3FF", 0.77
       cornerRadius 0.80 * theme.cornerRadius[0]
 
     cornerRadius 1.0 * theme.cornerRadius[0]
-    # dropShadow 4, 0, 0, "#000000", 0.05
