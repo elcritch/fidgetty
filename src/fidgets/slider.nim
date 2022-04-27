@@ -18,7 +18,7 @@ proc slider*(
   render:
     let
       # some basic calcs
-      sb = 0.3'em
+      sb = 0.1'em
       bwOrig = current.box().w
       bh = current.box().h
       bw = current.box().w - bh/2 - 2*sb
@@ -33,12 +33,11 @@ proc slider*(
     let
       wcalc = bw * float(value) + 0.001
       pipPos = wcalc.clamp(0.0, bw)
-      wcalcBtn = (bw-sb) * float(value) + 0.001
+      wcalcBtn = (bw-bh/2+2*sb) * float(value) + 0.001
       pipPosBtn = wcalcBtn.clamp(0.0, bw)
       # barH = bh - sb*sw
 
     rectangle "pip":
-      # box pipPos-(bh/2-sb)/2+2*sb, sb, bh-2*sb, bh-2*sb
       box pipPosBtn+sb, sb, bh-2*sb, bh-2*sb
       fill "#72bdd0"
       cornerRadius theme
