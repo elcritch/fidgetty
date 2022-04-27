@@ -2,7 +2,10 @@ import std/strformat
 
 import widgets
 
-proc progressbar*(value: var float, label = "") {.basicFidget.} =
+proc progressbar*(
+    value {.property: value.}: var float,
+    label {.property: label.} = ""
+) {.basicFidget.} =
   ## Draw a progress bars 
 
   init:

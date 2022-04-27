@@ -4,6 +4,7 @@ import widgets
 
 proc slider*(
     value {.property: value.}: var float,
+    label {.property: label.} = ""
 ): SliderState {.statefulFidget.} =
   ## Draw a progress bars 
 
@@ -18,36 +19,39 @@ proc slider*(
   render:
     let
       # some basic calcs
-      sb = 0.1'em
-      bwOrig = current.box().w
+      sb = 0.4'em
+      sbb = 2*sb
       bh = current.box().h
-      bw = current.box().w - bh/2 - 2*sb
+      bw = current.box().w
+      bww = bw - bh
 
     onClick:
       self.pipDrag = true
+
     if self.pipDrag:
-      value = (mouse.descaled(pos).x - current.descaled(screenBox).x)/bw
+      value = 1/bww*(mouse.descaled(pos).x - current.descaled(screenBox).x - bh/2)
       value = clamp(value, 0'f32, 1.0'f32)
       self.pipDrag = buttonDown[MOUSE_LEFT]
 
     let
-      wcalc = bw * float(value) + 0.001
-      pipPos = wcalc.clamp(0.0, bw)
-      wcalcBtn = (bw-bh/2+2*sb) * float(value) + 0.001
-      pipPosBtn = wcalcBtn.clamp(0.0, bw)
-      # barH = bh - sb*sw
+      pipPos = bww*float(value)
+      pipWidth = (bww)*float(value) + bh - sbb
 
+    text "text":
+      box 0, 0, bw, bh
+      fill "#565555"
+      characters fmt"value: {value:4.2}"
     rectangle "pip":
-      box pipPosBtn+sb, sb, bh-2*sb, bh-2*sb
+      box sb+pipPos, sb, bh-2*sb, bh-2*sb
       fill "#72bdd0"
       cornerRadius theme
       strokeLine theme
     rectangle "fill":
-      box sb, sb, pipPos+bh/2, bh-2*sb
+      box sb, sb, pipWidth, bh-2*sb
       fill "#70bdcf"
       cornerRadius theme
     rectangle "bg":
-      box 0, 0, bwOrig, bh
+      box 0, 0, bw, bh
       fill "#c2e3eb"
       cornerRadius theme
       strokeLine theme
