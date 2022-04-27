@@ -40,7 +40,7 @@ proc slider*(
     text "text":
       box 0, 0, bw, bh
       fill "#565555"
-      characters fmt"value: {value:4.2}"
+      characters label
     rectangle "pip":
       box sb+pipPos, sb, bh-2*sb, bh-2*sb
       fill "#72bdd0"
