@@ -14,7 +14,7 @@ proc checkbox*(
     # cornerRadius theme
     # strokeLine theme
     # fill theme
-    imageColor theme
+    imageOf theme.gloss
 
   render:
 
@@ -30,8 +30,7 @@ proc checkbox*(
       box 0, 0, 2'em, 2'em
       fill theme
       clipContent true
-      image "shadow-button-middle.png"
-      imageColor theme
+      imageOf theme.gloss
       if checked:
         highlight theme
         text "checkfil":

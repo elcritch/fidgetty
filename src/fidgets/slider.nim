@@ -48,10 +48,13 @@ proc slider*(
       fill theme.cursor
       cornerRadius theme
       stroke theme.outerStroke
+      clipContent true
+      imageOf theme.gloss
     rectangle "fg-bar":
       box sbb-barOuter/2, barOuter, pipPos+sb, bh-2*barOuter 
       fill theme.foreground
       cornerRadius theme
+      imageOf theme.gloss
     rectangle "bg":
       box 0, 0, bw, bh
       fill theme.fill

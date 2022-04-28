@@ -17,7 +17,7 @@ proc dropdown*(
     size 8'em, 1.5'em
     cornerRadius theme
     stroke theme.outerStroke
-    imageColor theme
+    imageOf theme.gloss
 
   properties:
     dropDownOpen: bool
@@ -57,7 +57,7 @@ proc dropdown*(
         cornerRadius this
         strokeLine this
         shadows theme
-        imageColor this
+        imageOf this
         text "icon":
           box tw, 0, 1'em, bh
           fill theme.textFill
@@ -66,7 +66,7 @@ proc dropdown*(
           characters ">"
       text:
         fill theme.textFill
-        if dropSelected < 0: "Dropdown"
+        if dropSelected < 0: defaultLabel
         else: dropItems[dropSelected]
       onHover:
         # fill "#5C8F9C"
@@ -123,7 +123,7 @@ proc dropdown*(
                 text: buttonName
                 setup:
                   clearShadows()
-                  let ic = this.imageColor
+                  let ic = this.image.color
                   imageColor Color(r: 0, g: 0, b: 0, a: 0.20 * ic.a)
                   boxOf parent
                   cornerRadius 0

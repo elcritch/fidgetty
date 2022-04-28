@@ -40,9 +40,8 @@ proc progressbar*(
       rectangle "bezel":
         cornerRadius 0.80 * theme.cornerRadius[0]
         box 0, 0, 100'pw, 100'ph
-        image "shadow-button-middle.png"
         rotation 180
-        imageColor theme
+        imageOf theme.gloss
 
     rectangle "barFgTexture":
       box sb, sb, barW, barH

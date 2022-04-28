@@ -13,7 +13,7 @@ proc button*(
     cornerRadius theme
     shadows theme
     stroke theme.outerStroke
-    imageColor theme
+    imageOf theme.gloss
     fill theme
 
   render:
