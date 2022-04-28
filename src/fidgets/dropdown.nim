@@ -10,6 +10,7 @@ template dropUpY(n: Node, height: float32 = 0): bool =
 proc dropdown*(
     dropItems {.property: items.}: seq[string],
     dropSelected {.property: selected.}: var int,
+    defaultLabel {.property: label.}: string = "Dropdown",
 ): DropdownState {.statefulFidget.} =
   ## dropdown widget 
   init:
