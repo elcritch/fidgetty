@@ -14,7 +14,7 @@ proc checkbox*(
     # cornerRadius theme
     # strokeLine theme
     # fill theme
-    imageOf theme.gloss
+    # imageOf theme.gloss
 
   render:
 

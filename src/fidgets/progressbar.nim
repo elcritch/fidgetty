@@ -28,7 +28,7 @@ proc progressbar*(
     if label.len() > 0:
       text "text":
         box 0, 0, bw, bh
-        fill "#565555"
+        fill theme.textFill
         characters label
 
     # Draw the bar itself.
@@ -53,5 +53,6 @@ proc progressbar*(
       box sb, sb, barW, barH
       fill theme.foreground
       cornerRadius 0.80 * theme.cornerRadius[0]
+      imageOf theme.gloss, 0.67
 
     cornerRadius 1.0 * theme.cornerRadius[0]

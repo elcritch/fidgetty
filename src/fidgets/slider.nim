@@ -20,9 +20,9 @@ proc slider*(
   render:
     let
       # some basic calcs
-      sb = 0.4'em
+      sb = 0.3'em
       sbb = 2*sb
-      barOuter = 0.6'em
+      barOuter = 0.5'em
       bh = current.box().h
       bw = current.box().w
       bww = bw - bh
@@ -51,10 +51,10 @@ proc slider*(
       clipContent true
       imageOf theme.gloss
     rectangle "fg-bar":
-      box sbb-barOuter/2, barOuter, pipPos+sb, bh-2*barOuter 
+      box barOuter, barOuter, pipPos+bh/2, bh-2*barOuter 
       fill theme.foreground
       cornerRadius theme
-      imageOf theme.gloss
+      imageOf theme.gloss, 0.77
     rectangle "bg":
       box 0, 0, bw, bh
       fill theme.fill
