@@ -22,6 +22,7 @@ proc slider*(
       # some basic calcs
       sb = 0.4'em
       sbb = 2*sb
+      barOuter = 0.6'em
       bh = current.box().h
       bw = current.box().w
       bww = bw - bh
@@ -47,8 +48,8 @@ proc slider*(
       fill theme.cursor
       cornerRadius theme
       stroke theme.outerStroke
-    rectangle "fill":
-      box sb, sb, pipWidth, bh-2*sb
+    rectangle "fg-bar":
+      box sbb-barOuter/2, barOuter, pipPos+sb, bh-2*barOuter 
       fill theme.foreground
       cornerRadius theme
     rectangle "bg":
