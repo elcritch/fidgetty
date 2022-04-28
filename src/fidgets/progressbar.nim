@@ -52,7 +52,7 @@ proc progressbar*(
 
     rectangle "barFgColor":
       box sb, sb, barW, barH
-      fill "#87E3FF", 0.77
+      fill theme.foreground
       cornerRadius 0.80 * theme.cornerRadius[0]
 
     cornerRadius 1.0 * theme.cornerRadius[0]

@@ -40,19 +40,19 @@ proc slider*(
 
     text "text":
       box 0, 0, bw, bh
-      fill "#565555"
+      fill theme.textFill
       characters label
     rectangle "pip":
       box sb+pipPos, sb, bh-2*sb, bh-2*sb
-      fill "#72bdd0"
+      fill theme.cursor
       cornerRadius theme
       stroke theme.outerStroke
     rectangle "fill":
       box sb, sb, pipWidth, bh-2*sb
-      fill "#70bdcf"
+      fill theme.foreground
       cornerRadius theme
     rectangle "bg":
       box 0, 0, bw, bh
-      fill "#c2e3eb"
+      fill theme.fill
       cornerRadius theme
       stroke theme.outerStroke
