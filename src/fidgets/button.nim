@@ -22,7 +22,7 @@ proc button*(
 
     clipContent true
     if disabled:
-      imageColor color(0, 0, 0, 0.11)
+      imageColor theme.disabled
     else:
       onHover:
         highlight theme
