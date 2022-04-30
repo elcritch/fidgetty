@@ -97,21 +97,17 @@ proc dropdown*(
           stroke theme.outerStroke
 
         group "menu":
-          # box spad, 6*spad, bw, bdh-6*spad
-          # box 0, this.cornerRadius[0]/2, bw, bdh+2*this.cornerRadius[0]
           box 0, 0, bw, bdh
           layout lmVertical
           counterAxisSizingMode csAuto
-          itemSpacing -1
+          itemSpacing theme.itemSpacing
           scrollBars true
-          # clipContent true
 
           onClickOutside:
             resetState()
 
           var itemsVisible = -1 + (if self.dropUp: -1 else: 0)
           for idx, buttonName in pairs(dropItems):
-            # itemSpacing 0.1'em
             group "menuBtn":
               if current.screenBox.overlaps(scrollBox):
                 itemsVisible.inc()
@@ -126,7 +122,7 @@ proc dropdown*(
                   imageColor Color(r: 0, g: 0, b: 0, a: 0.20 * ic.a)
                   boxOf parent
                   cornerRadius 0
-                  strokeLine this
+                  stroke theme.innerStroke
               if clicked:
                 resetState()
                 dropSelected = idx

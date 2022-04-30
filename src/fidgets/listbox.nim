@@ -39,7 +39,7 @@ proc listbox*(
       box 0, 0, bw, bdh
       layout lmVertical
       counterAxisSizingMode csAuto
-      itemSpacing -1
+      itemSpacing theme.itemSpacing
       scrollBars true
 
       for idx, buttonName in pairs(items):
@@ -53,7 +53,7 @@ proc listbox*(
             setup:
               clearShadows()
               let ic = local.image.color
-              imageColor Color(r: 0, g: 0, b: 0, a: 0.20 * ic.a)
+              imageTransparency 0.1
               boxOf parent
               cornerRadius 0
               stroke theme.innerStroke
