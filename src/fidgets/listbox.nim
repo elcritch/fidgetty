@@ -38,55 +38,46 @@ proc listbox*(
 
     let spad = 1.0'f32
 
-    group "dropDownScroller":
-      box 0, bh, bw, bdh
+    box 0, bh, bw, bdh
+    clipContent true
 
-      clipContent true
-      zlevel ZLevelRaised
-      cornerRadius theme.cornerRadius
-      stroke theme.innerStroke
+    group "menuoutline":
+      box 0, 0, bw, bdh
+      cornerRadius local
+      stroke theme.outerStroke
 
-      group "menuoutline":
-        box 0, 0, bw, bdh
-        cornerRadius local
-        stroke theme.outerStroke
+    group "menu":
+      box 0, 0, bw, bdh
+      layout lmVertical
+      counterAxisSizingMode csAuto
+      itemSpacing -1
+      scrollBars true
 
-      group "menu":
-        # box spad, 6*spad, bw, bdh-6*spad
-        # box 0, this.cornerRadius[0]/2, bw, bdh+2*this.cornerRadius[0]
-        box 0, 0, bw, bdh
-        layout lmVertical
-        counterAxisSizingMode csAuto
-        itemSpacing -1
-        scrollBars true
-        # clipContent true
+      onClickOutside:
+        resetState()
 
-        onClickOutside:
-          resetState()
+      var itemsVisible = -1
+      for idx, buttonName in pairs(items):
+        group "menuBtn":
+          if current.screenBox.overlaps(scrollBox):
+            itemsVisible.inc()
+          box 0, 0, bw, bih
+          layoutAlign laCenter
 
-        var itemsVisible = -1
-        for idx, buttonName in pairs(items):
-          # itemSpacing 0.1'em
-          group "menuBtn":
-            if current.screenBox.overlaps(scrollBox):
-              itemsVisible.inc()
-            box 0, 0, bw, bih
-            layoutAlign laCenter
+          let clicked = widget button:
+            text: buttonName
+            setup:
+              clearShadows()
+              let ic = local.image.color
+              imageColor Color(r: 0, g: 0, b: 0, a: 0.20 * ic.a)
+              boxOf parent
+              cornerRadius 0
+              stroke theme.innerStroke
+          if clicked:
+            resetState()
+            selected = idx
 
-            let clicked = widget button:
-              text: buttonName
-              setup:
-                clearShadows()
-                let ic = local.image.color
-                imageColor Color(r: 0, g: 0, b: 0, a: 0.20 * ic.a)
-                boxOf parent
-                cornerRadius 0
-                stroke theme.innerStroke
-            if clicked:
-              resetState()
-              selected = idx
-
-        if self.itemsVisible >= 0:
-          self.itemsVisible = min(itemsVisible, self.itemsVisible)
-        else:
-          self.itemsVisible = itemsVisible
+      if self.itemsVisible >= 0:
+        self.itemsVisible = min(itemsVisible, self.itemsVisible)
+      else:
+        self.itemsVisible = itemsVisible
