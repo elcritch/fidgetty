@@ -21,7 +21,7 @@ proc progressbar*(
       bh = current.box().h
       sw = 2.0'f32
       sb = 4.0'f32
-      wcalc = bw * float(value) - sb*sw + 0.001
+      wcalc = bw * value.clamp(0, 1.0) - sb*sw + 0.001
       barW = wcalc.clamp(0.0, bw-sb*sw)
       barH = bh - sb*sw
 
@@ -47,7 +47,7 @@ proc progressbar*(
       box sb, sb, barW, barH
       cornerRadius 0.80 * theme.cornerRadius[0]
       clipContent true
-      strokeLine 1.0, "#707070", 0.87
+      # strokeLine 1.0, "#707070", 0.87
 
     rectangle "barFgColor":
       box sb, sb, barW, barH

@@ -51,6 +51,8 @@ proc animatedProgress*(
             self.cancelTicks = false
             return
           self.value += 0.01
+          self.value = clamp(self.value mod 1.0, 0, 1.0)
+
           refresh()
       
       if self.ticks.isNil or self.ticks.finished:
@@ -64,4 +66,3 @@ proc animatedProgress*(
     progressbar(self.value, fmt"{self.value:4.2}") do:
       boxOf parent
 
-    self.value = clamp(self.value mod 1.0, 0, 1.0)

@@ -31,13 +31,14 @@ proc slider*(
       self.pipDrag = true
 
     if self.pipDrag:
-      value = 1/bww*(mouse.descaled(pos).x - current.descaled(screenBox).x - bh/2)
-      value = clamp(value, 0'f32, 1.0'f32)
+      let mpx = mouse.descaled(pos).x 
+      let sbx = current.descaled(screenBox).x 
+      value = ((mpx - sbx - bh/2)/bww).clamp(0'f32, 1.0'f32)
       self.pipDrag = buttonDown[MOUSE_LEFT]
 
     let
-      pipPos = bww*float(value)
-      pipWidth = (bww)*float(value) + bh - sbb
+      pipPos = bww*clamp(value, 0, 1.0)
+      pipWidth = (bww)*clamp(value, 0, 1.0) + bh - sbb
 
     text "text":
       box 0, 0, bw, bh
