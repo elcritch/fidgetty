@@ -1,4 +1,3 @@
-import bumpy, fidget
 import widgets
 
 proc button*(
