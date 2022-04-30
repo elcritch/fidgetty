@@ -17,11 +17,6 @@ proc button*(
     fill theme
 
   render:
-    let
-      bw = current.box().w
-      bh = current.box().h
-      this = current
-
     text "text":
       fill theme.textFill
       characters message
