@@ -21,7 +21,6 @@ proc button*(
       characters message
 
     clipContent true
-    image "shadow-button-middle.png"
     if disabled:
       imageColor color(0, 0, 0, 0.11)
     else:
