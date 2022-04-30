@@ -1,11 +1,11 @@
-
 import widgets
 import button
 
 proc listbox*(
     items {.property: items.}: seq[string],
     selected {.property: selected.}: var int,
-): DropdownState {.statefulFidget.} =
+    itemsVisible {.property: itemsVisible.}: int
+): ListBoxState {.statefulFidget.} =
   ## dropdown widget 
   init:
     size 8'em, 1.5'em
@@ -14,7 +14,7 @@ proc listbox*(
     imageOf theme.gloss
 
   properties:
-    itemsVisible: int
+    showScrollBars: bool
 
   render:
     let
@@ -25,15 +25,7 @@ proc listbox*(
 
     let
       visItems = items.len()
-      itemCount = max(1, visItems).min(items.len())
-      bdh = min(bih * itemCount.float32, windowLogicalSize.y/2)
-
-    if itemCount <= 2:
-      self.itemsVisible = items.len()
-      refresh()
-
-    proc resetState() = 
-      self.itemsVisible = -1
+      bdh = min(bih * itemsVisible.float32, windowLogicalSize.y/2)
 
     box 0, bh, bw, bdh
     clipContent true
@@ -50,14 +42,8 @@ proc listbox*(
       itemSpacing -1
       scrollBars true
 
-      onClickOutside:
-        resetState()
-
-      var itemsVisible = -1
       for idx, buttonName in pairs(items):
         group "menuBtn":
-          if current.screenBox.overlaps(scrollBox):
-            itemsVisible.inc()
           box 0, 0, bw, bih
           layoutAlign laCenter
 
@@ -71,10 +57,4 @@ proc listbox*(
               cornerRadius 0
               stroke theme.innerStroke
           if clicked:
-            resetState()
             selected = idx
-
-      if self.itemsVisible >= 0:
-        self.itemsVisible = min(itemsVisible, self.itemsVisible)
-      else:
-        self.itemsVisible = itemsVisible
