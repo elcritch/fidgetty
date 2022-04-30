@@ -125,6 +125,7 @@ proc dropdown*(
                   stroke theme.innerStroke
               if clicked:
                 resetState()
+                echo fmt"dropdwon: set {dropSelected=}"
                 dropSelected = idx
 
 

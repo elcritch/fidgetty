@@ -56,4 +56,5 @@ proc listbox*(
               cornerRadius 0
               stroke theme.innerStroke
           if clicked:
+            echo fmt"listbox: set {selected=}"
             selected = idx
