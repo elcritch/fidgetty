@@ -24,7 +24,6 @@ proc listbox*(
       bih = bh * 1.0
 
     let
-      visItems = items.len()
       bdh = min(bih * itemsVisible.float32, windowLogicalSize.y/2)
 
     box 0, bh, bw, bdh
@@ -52,7 +51,6 @@ proc listbox*(
             isActive: idx == selected
             setup:
               clearShadows()
-              let ic = local.image.color
               imageTransparency 0.1
               boxOf parent
               cornerRadius 0
