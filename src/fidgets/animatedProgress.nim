@@ -43,14 +43,15 @@ proc animatedProgress*(
         ## This simple procedure will "tick" ten times delayed 1,000ms each.
         ## Every tick will increment the progress bar 10% until its done. 
         let
-          n = 100
-          duration = 3*600
+          frameDelay = 16
+          duration = 3_000
+          n = duration div frameDelay
         for i in 1..n:
-          await sleepAsync(duration / n)
+          await sleepAsync(frameDelay)
           if self.cancelTicks:
             self.cancelTicks = false
             return
-          self.value += 0.01
+          self.value += target
           self.value = clamp(self.value mod 1.0, 0, 1.0)
 
           refresh()
