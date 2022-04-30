@@ -49,6 +49,7 @@ proc listbox*(
 
           let clicked = widget button:
             text: buttonName
+            isActive: idx == selected
             setup:
               clearShadows()
               let ic = local.image.color
