@@ -22,7 +22,6 @@ proc listbox*(
       bw = cb.w
       bh = cb.h
       bih = bh * 1.0
-      tw = bw - 1.5'em
 
     let
       visItems = items.len()
@@ -35,8 +34,6 @@ proc listbox*(
 
     proc resetState() = 
       self.itemsVisible = -1
-
-    let spad = 1.0'f32
 
     box 0, bh, bw, bdh
     clipContent true
