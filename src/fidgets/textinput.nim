@@ -12,6 +12,7 @@ proc textInput*(
     cornerRadius theme
     shadows theme
     imageOf theme.gloss
+    rotation 0
     fill theme
 
   render:
@@ -26,9 +27,12 @@ proc textInput*(
       imageColor theme.disabled
     else:
       onHover:
-        stroke theme.highlight
+        # imageTransparency 0.0
+        rotation 180
+        stroke theme.highlight * 0.40
         strokeWeight 0.2'em
       if isActive:
         highlight theme
+
 
 

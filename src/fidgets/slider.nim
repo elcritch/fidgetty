@@ -54,9 +54,14 @@ proc slider*(
       box barOuter, barOuter, pipPos+bh/2, bh-2*barOuter 
       fill theme.foreground
       cornerRadius theme
+      clipContent true
       imageOf theme.gloss, 0.77
+
     rectangle "bg":
+      imageOf theme.gloss
+      rotation 180
       box 0, 0, bw, bh
       fill theme.fill
       cornerRadius theme
+      clipContent true
       stroke theme.outerStroke

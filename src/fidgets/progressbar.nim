@@ -40,6 +40,7 @@ proc progressbar*(
       fill theme.foreground
       cornerRadius 0.80 * theme.cornerRadius[0]
       imageOf theme.gloss, 0.67
+      clipContent true
       stroke theme.innerStroke
 
     # Draw the bar itself.
