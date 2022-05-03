@@ -11,11 +11,12 @@ proc textInput*(
     box 0, 0, 8.Em, 2.Em
     cornerRadius theme
     shadows theme
-    stroke theme.outerStroke
     imageOf theme.gloss
     fill theme
 
   render:
+    stroke theme.outerStroke
+
     text "text":
       fill theme.textFill
       binding value
@@ -25,7 +26,8 @@ proc textInput*(
       imageColor theme.disabled
     else:
       onHover:
-        highlight theme
+        stroke theme.highlight
+        strokeWeight 0.2'em
       if isActive:
         highlight theme
 

@@ -38,7 +38,6 @@ proc slider*(
 
     let
       pipPos = bww*clamp(value, 0, 1.0)
-      pipWidth = (bww)*clamp(value, 0, 1.0) + bh - sbb
 
     text "text":
       box 0, 0, bw, bh

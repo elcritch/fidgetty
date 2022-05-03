@@ -1,6 +1,8 @@
 import widgets
 import button
 
+# var framecount = 0
+
 proc listbox*(
     items {.property: items.}: seq[string],
     selected {.property: selected.}: var int,
@@ -34,6 +36,10 @@ proc listbox*(
       cornerRadius local
       stroke theme.outerStroke
 
+    inPopup = true
+    defer: inPopup = false
+    popupBox = current.screenBox
+
     group "menu":
       box 0, 0, bw, bdh
       layout lmVertical
@@ -41,10 +47,15 @@ proc listbox*(
       itemSpacing theme.itemSpacing
       scrollBars true
 
+      # inc framecount 
+      # echo "\n\n====== lists {framecount} \n\n".fmt
+
       for idx, buttonName in pairs(items):
         group "menuBtn":
           box 0, 0, bw, bih
+          offset idx*5, 0
           layoutAlign laCenter
+          # echo fmt"{idx=} => {isCovered(popupBox)=}"
 
           let clicked = widget button:
             text: buttonName

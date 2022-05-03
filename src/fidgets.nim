@@ -6,7 +6,6 @@ export widgets
 
 proc grayTheme*() =
   setupWidgetTheme:
-    echo "GREY THEME"
     let fs = 16'f32
     theme.font("IBM Plex Sans", fs, 200, 0, hCenter, vCenter)
     theme.corners(5)
