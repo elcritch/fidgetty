@@ -9,9 +9,10 @@ proc textInput*(
   # Draw a progress bars
   init:
     box 0, 0, 8.Em, 2.Em
-    cornerRadius theme
+    cornerRadius theme.textCorner
     shadows theme
     imageOf theme.gloss
+    imageTransparency 0.33
     rotation 0
     fill theme
 
@@ -22,6 +23,7 @@ proc textInput*(
       fill theme.textFill
       binding value
 
+    fill theme.textBg
     clipContent true
     if disabled:
       imageColor theme.disabled

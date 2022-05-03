@@ -12,6 +12,8 @@ proc grayTheme*() =
     theme.dropShadow(4, 0, 0, "#000000", 0.05)
     theme.fill = parseHtml("#CDCDCD")
     theme.textFill = parseHtml("#565555")
+    theme.textCorner = common.uiScale * 1.2'f32
+    theme.textBg = parseHtml("#DFDFE0", 1.0)
     theme.foreground = parseHtml("#87E3FF", 0.77)
     # theme.highlight = parseHtml("#77D3FF", 0.77)
     theme.highlight = parseHtml("#87E3FF", 0.77)
