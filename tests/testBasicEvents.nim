@@ -84,4 +84,4 @@ proc drawMain() =
     exampleApp("basic widgets", state)
 
 
-startFidget(drawMain, w=640, h=400, uiScale=2.0)
+startFidget(drawMain, theme=grayTheme, w=640, h=400, uiScale=2.0)
