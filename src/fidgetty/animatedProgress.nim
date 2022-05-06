@@ -1,6 +1,6 @@
 import asyncdispatch # This is what provides us with async and the dispatcher
 
-import ../fidgets
+import ../fidgetty
 import progressbar
 
 loadFont("IBM Plex Sans", "IBMPlexSans-Regular.ttf")

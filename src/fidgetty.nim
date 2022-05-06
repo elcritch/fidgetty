@@ -1,5 +1,5 @@
 import fidget
-import fidgets/widgets
+import fidgetty/widgets
 
 export fidget
 export widgets

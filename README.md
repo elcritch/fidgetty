@@ -1,6 +1,6 @@
-# fidgets
+# Fidgetty
 
-Widget library built on Fidget written in pure Nim and OpenGL rendered.
+Widget library built on [Fidget](git@github.com:elcritch/fidget.git) written in pure Nim and OpenGL rendered.
 
 ![Demo](https://i.postimg.cc/ydxbyjJ4/Kapture-2022-05-04-at-01-07-14.gif)
 

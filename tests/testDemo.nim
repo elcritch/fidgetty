@@ -1,10 +1,10 @@
 import std/strformat, std/hashes, std/sequtils
 
-import fidgets
-import fidgets/[button, dropdown, checkbox]
-import fidgets/[slider, progressbar, animatedProgress]
-import fidgets/[listbox]
-import fidgets/[textinput]
+import fidgetty
+import fidgetty/[button, dropdown, checkbox]
+import fidgetty/[slider, progressbar, animatedProgress]
+import fidgetty/[listbox]
+import fidgetty/[textinput]
 
 loadFont("IBM Plex Sans", "IBMPlexSans-Regular.ttf")
 
