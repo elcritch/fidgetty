@@ -10,7 +10,7 @@ var
 
 proc animatedProgress*(
     delta: float32 = 0.1,
-  ): AnimatedProgress {.statefulFidget.} =
+  ): AnimatedProgressState {.statefulFidget.} =
 
   init:
     box 0, 0, 100.WPerc, 2.Em
@@ -39,7 +39,7 @@ proc animatedProgress*(
     JumpToValue(target):
       echo "jump where? ", $target
 
-      proc ticker(self: AnimatedProgress) {.async.} =
+      proc ticker(self: AnimatedProgressState) {.async.} =
         ## This simple procedure will "tick" ten times delayed 1,000ms each.
         ## Every tick will increment the progress bar 10% until its done. 
         let

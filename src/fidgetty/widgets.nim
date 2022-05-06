@@ -187,8 +187,9 @@ proc makeStatefulWidget*(blk: NimNode, hasState: bool, defaultState: bool): NimN
   let
     hasEmptyReturnType = params[0].kind == nnkEmpty
     procName = procDef.name().strVal
+    procNameCap = procName.capitalizeAscii()
     typeName =
-      if hasEmptyReturnType: procName.capitalizeAscii()
+      if hasEmptyReturnType: procNameCap & "Type"
       else: params[0].strVal
     preName = ident("setup")
     postName = ident("post")
@@ -312,10 +313,20 @@ proc makeStatefulWidget*(blk: NimNode, hasState: bool, defaultState: bool): NimN
   result = newStmtList()
   result.add preBody 
   result.add procDef
+
+  if typeName != procNameCap:
+    let pn = procName
+    let pu = ident procNameCap
+    result.add quote do:
+      macro `pu`*(blk: untyped) =
+        echo "BLK: ", treerepr(blk)
+        result = newCall("widget", ident `pn`, blk)
+
+  
   if not hasState:
     result.add makeWidgetPropertyMacro(procName, typeName) 
-  # echo "\n=== StatefulWidget === "
-  # echo result.repr
+  echo "\n=== StatefulWidget === "
+  echo result.repr
 
 macro basicFidget*(blk: untyped) =
   result = makeStatefulWidget(blk, hasState=false, defaultState=false)
