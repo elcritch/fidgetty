@@ -12,6 +12,7 @@ type
 
 template property*(name: untyped) {.pragma.}
 
+
 proc makeLambdaDecl*(
     pargname: NimNode,
     argtype: NimNode,
