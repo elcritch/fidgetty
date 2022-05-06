@@ -373,6 +373,16 @@ template horizontal*(text, child: untyped) =
 template horizontal*(child: untyped) =
   horizontal("", child)
 
+template Horizontal*(text, child: untyped) =
+  group text:
+    layout lmHorizontal
+    counterAxisSizingMode csAuto
+    constraints cMin, cStretch
+    `child`
+
+template Horizontal*(child: untyped) =
+  horizontal("", child)
+
 template vertical*(text, child: untyped) =
   group text:
     layout lmVertical
@@ -381,6 +391,16 @@ template vertical*(text, child: untyped) =
     `child`
 
 template vertical*(child: untyped) =
+  vertical("", child)
+
+template Vertical*(text, child: untyped) =
+  group text:
+    layout lmVertical
+    counterAxisSizingMode csAuto
+    constraints cMin, cStretch
+    `child`
+
+template Vertical*(child: untyped) =
   vertical("", child)
 
 template wrapApp*(fidgetName: typed, fidgetType: typedesc): proc() =
