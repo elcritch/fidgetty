@@ -1,11 +1,10 @@
 import widgets
 
 proc textInput*(
-    value {.property: value.}: var string,
-    clicker {.property: onClick.}: WidgetProc = proc () = discard,
+    value {.property: value.}: string,
     isActive {.property: isActive.}: bool = false,
     disabled {.property: disabled.}: bool = false
-): bool {.basicFidget, discardable.} =
+): Option[string] {.basicFidget, discardable.} =
   # Draw a progress bars
   init:
     box 0, 0, 8.Em, 2.Em
@@ -21,7 +20,9 @@ proc textInput*(
 
     text "text":
       fill theme.textFill
-      binding value
+      binding(value):
+        if value != keyboard.input:
+          result = some keyboard.input
 
     fill theme.textBg
     clipContent true
@@ -36,5 +37,20 @@ proc textInput*(
       if isActive:
         highlight theme
 
+proc textInputBind*(
+    value {.property: value.}: var string,
+    isActive {.property: isActive.}: bool = false,
+    disabled {.property: disabled.}: bool = false,
+    setup: WidgetProc = nil,
+    post: WidgetProc = nil,
+    id: string = "textInputBind",
+): bool {.discardable.} =
+  # Draw a progress bars
+  let curr = value
+  let res = textInput(curr, isActive, disabled, setup, post, id)
+  if res.isSome:
+    value = res.get()
 
+template `TextInputBind`*(blk: untyped) =
+  widget(textInputBind, blk)
 

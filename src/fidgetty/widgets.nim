@@ -1,8 +1,8 @@
-import macros, tables, strutils, strformat, math, random
+import macros, tables, strutils, strformat, math, random, options
 import bumpy, variant, patty
 import fidget
 
-export tables, strutils, strformat
+export tables, strutils, strformat, options
 export bumpy, math, random
 export fidget
 export bumpy, variant, patty
@@ -189,7 +189,8 @@ proc makeStatefulWidget*(blk: NimNode, hasState: bool, defaultState: bool): NimN
     procName = procDef.name().strVal
     procNameCap = procName.capitalizeAscii()
     typeName =
-      if hasEmptyReturnType: procNameCap & "Type"
+      if not hasState: procNameCap & "Type"
+      elif hasEmptyReturnType: procNameCap & "Type"
       else: params[0].strVal
     preName = ident("setup")
     postName = ident("post")
@@ -287,14 +288,14 @@ proc makeStatefulWidget*(blk: NimNode, hasState: bool, defaultState: bool): NimN
   # adjust Fidgets parameters, particularly add self, pre, post args. 
   let
     nilValue = quote do: nil
-    stateArg =
-      if defaultState: newIdentDefs(ident("self"), ident(typeName), newNilLit())
-      else:            newIdentDefs(ident("self"), ident(typeName))
     preArg = newIdentDefs(preName, bindSym"WidgetProc", nilValue)
     postArg = newIdentDefs(ident("post"), bindSym"WidgetProc", nilValue)
-    identArg = newIdentDefs(identName, bindSym"string",  newStrLitNode(typeName))
+    identArg = newIdentDefs(identName, bindSym"string",  newStrLitNode(procName))
   
   if hasState and hasProperty:
+    let stateArg =
+      if defaultState: newIdentDefs(ident("self"), ident(typeName), newNilLit())
+      else:            newIdentDefs(ident("self"), ident(typeName))
     params.add stateArg
   params.add preArg
   params.add postArg 
@@ -319,7 +320,6 @@ proc makeStatefulWidget*(blk: NimNode, hasState: bool, defaultState: bool): NimN
     let pu = ident procNameCap
     result.add quote do:
       macro `pu`*(blk: untyped) =
-        echo "BLK: ", treerepr(blk)
         result = newCall("widget", ident `pn`, blk)
 
   

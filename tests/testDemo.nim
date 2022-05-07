@@ -28,7 +28,7 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
     textStyle theme
     fill "#F7F7F9"
 
-    widget button:
+    Button:
       text: "Dump"
       setup:
         fill "#DFDFF0"
@@ -45,51 +45,51 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
       self.value = (self.count1.toFloat * 0.10) mod 1.0
       var delta = 0.0
 
-      vertical:
+      Vertical:
         blank: size(0, 0)
         itemSpacing 1.5'em
 
-        vertical:
+        Vertical:
           itemSpacing 1.5'em
           # Trigger an animation on animatedProgress below
-          widget button:
+          Button:
             text: fmt"Arg Incr {self.count1:4d}"
             onClick:
               self.count1.inc()
               delta = 0.02
 
-          horizontal:
+          Horizontal:
             itemSpacing 4'em
 
-            widget button:
+            Button:
               text: fmt"Evt Incr {self.count2:4d}"
               onClick:
                 self.count2.inc()
                 currEvents["pbc1"] = IncrementBar(increment = 0.02)
 
-            widget checkbox:
+            Checkbox:
               value: self.myCheck
               text: fmt"Click {self.myCheck}"
 
-        let ap1 = widget animatedProgress:
+        let ap1 = AnimatedProgress:
           delta: delta
           setup:
             bindEvents "pbc1", currEvents
             width 100'pw - 8'em
 
-        horizontal:
-          widget button:
+        Horizontal:
+          Button:
             text: fmt"Animate"
             onClick:
               self.count2.inc()
               currEvents["pbc1"] = JumpToValue(target = 0.01)
 
-          widget button:
+          Button:
             text: fmt"Cancel"
             onClick:
               currEvents["pbc1"] = CancelJump()
 
-          widget dropdown:
+          Dropdown:
             items: dropItems
             selected: self.dropIndexes
             label: "Menu"
@@ -102,24 +102,24 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
           # characters: fmt"AnimatedProgress value: {ap1.value:>6.2f}"
           characters: fmt"selected: {self.dropIndexes}"
 
-        widget slider:
+        Slider:
           value: ap1.value
           setup:
             size 60'vw, 2'em
 
-        widget listbox:
+        Listbox:
           items: dropItems
           selected: self.dropIndexes
           itemsVisible: 4
           setup:
             size 60'vw, 2'em
 
-        widget textInput:
+        TextInputBind:
           value: self.textInput
           setup:
             size 60'vw, 2'em
 
-        widget button:
+        Button:
           text: fmt"{self.textInput}"
           disabled: true
           setup:
