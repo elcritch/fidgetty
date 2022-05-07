@@ -51,6 +51,6 @@ proc textInputBind*(
   if res.isSome:
     value = res.get()
 
-template `TextInputBind`*(blk: untyped) =
+template TextInputBind*(blk: untyped) =
   widget(textInputBind, blk)
 
