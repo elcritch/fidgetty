@@ -12,104 +12,140 @@ nim c -r tests/testDemo.nim
 Example application: 
 
 ```nim
-proc exampleApp*(
-    myName {.property: name.}: string,
-): ExampleApp {.appFidget.} =
+import std/strformat, std/hashes, std/sequtils
+
+import fidgetty
+import fidgetty/[button, dropdown, checkbox]
+import fidgetty/[slider, progressbar, animatedProgress]
+import fidgetty/[listbox]
+import fidgetty/[textinput]
+
+loadFont("IBM Plex Sans", "IBMPlexSans-Regular.ttf")
+
+proc exampleApp*(): ExampleApp {.appFidget.} =
   ## defines a stateful app widget
-  ## 
-  ## `exampleApp` will be transformed to also take the basic
-  ## widget parameters:
-  ##  - self: ExampleApp
-  ##  - setup: proc()
-  ##  - post: proc()
-  ## 
-  ## These parameters support using the widget with the properties
-  ## syntax. See the `button` examples below. The property name is
-  ## either the argument name or can be set using the `property` pragma
-  ## like show with `myName` that will provide a property of `name`.
-  ## 
-  
   properties:
-    ## this creates a new ref object type name using the
-    ## capitalized proc name which is `ExampleApp` in this example. 
-    ## This will be customizable in the future. 
-    count: int
+    count1: int
+    count2: int
     value: float
+    myCheck: bool
+    mySlider: float
+    dropIndexes: int = -1
+    textInput: string
 
   render:
-    setTitle(fmt"Fidget Animated Progress Example - {myName}")
-    font "IBM Plex Sans", 16, 200, 0, hCenter, vCenter
+    let currEvents = useEvents()
+    let dropItems = @["Nim", "UI", "in", "100%", "Nim", "to",
+                      "OpenGL", "Immediate", "mode"]
+
+    setTitle(fmt"Fidget Animated Progress Example")
+    textStyle theme
     fill "#F7F7F9"
 
+    Button:
+      text: "Dump"
+      setup:
+        fill "#DFDFF0"
+      onClick:
+        echo "dump: "
+        dumpTree(root)
+
     group "center":
-      box 50, 0, 100.Vw - 100, 100.Vh
-      orgBox 50, 0, 100.Vw, 100.Vw
+      box 50, 0, 100'vw - 100, 100'vh
+      orgBox 50, 0, 100'vw, 100'vw
       fill "#DFDFE0"
       strokeWeight 1
 
-      self.value = (self.count.toFloat * 0.10) mod 1.0001
-      progressbar(self.value, fmt"Progress: {self.value:4.2}") do:
-        box 10.WPerc, 20, 80.WPerc, 2.Em
+      self.value = (self.count1.toFloat * 0.10) mod 1.0
+      var delta = 0.0
 
-      horizontal:
-        # creates an horizontal spacing box
+      Vertical:
+        blank: size(0, 0)
+        itemSpacing 1.5'em
 
-        box 90.WPerc - 16.Em, 100, 8.Em, 2.Em
-        itemSpacing 0.Em
+        Vertical:
+          itemSpacing 1.5'em
+          # Trigger an animation on animatedProgress below
+          Button:
+            text: fmt"Arg Incr {self.count1:4d}"
+            onClick:
+              self.count1.inc()
+              delta = 0.02
 
-        # Click to make the bar increase
-        # basic syntax just calling a proc
-        if button(fmt"Clicked1: {self.count:4d}"):
-          self.count.inc()
+          Horizontal:
+            itemSpacing 4'em
 
-        # Alternate format using `Widget` macro that enables
-        # a YAML like syntax using property labels
-        # (see parameters on `button` widget proc)
-        widget button:
-          text: fmt"Clicked2: {self.count:4d}"
-          onClick: self.count.inc()
+            Button:
+              text: fmt"Evt Incr {self.count2:4d}"
+              onClick:
+                self.count2.inc()
+                currEvents["pbc1"] = IncrementBar(increment = 0.02)
 
-        # current limit on Widget macros is that all args
-        # must be called as properties, no mix and match
-        #
-        # i.e. this doesn't work (yet):
-        #     Widget button(fmt"Clicked2: {self.count:4d}"):
-        #       onClick: self.count.inc()
+            Checkbox:
+              value: self.myCheck
+              text: fmt"Click {self.myCheck}"
 
-      vertical:
-        # creates a vertical spacing box
+        let ap1 = AnimatedProgress:
+          delta: delta
+          setup:
+            bindEvents "pbc1", currEvents
+            width 100'pw - 8'em
 
-        box 10.WPerc, 160, 8.Em, 2.Em
-        itemSpacing 1.Em
+        Horizontal:
+          Button:
+            text: fmt"Animate"
+            onClick:
+              self.count2.inc()
+              currEvents["pbc1"] = JumpToValue(target = 0.01)
 
-        # Button:
-        #   # default alias of `Widget button`
-        #   # only created for non-stateful widgets
-        #   text: fmt"Clicked3: {self.count:4d}"
-        #   setup: size 8.Em, 2.Em
-        #   onClick: self.count.inc()
+          Button:
+            text: fmt"Cancel"
+            onClick:
+              currEvents["pbc1"] = CancelJump()
 
-        widget button:
-          text: fmt"Clicked4: {self.count:4d}"
-          setup: size 8.Em, 2.Em
-          onClick: self.count.inc()
+          Dropdown:
+            items: dropItems
+            selected: self.dropIndexes
+            label: "Menu"
+            setup:
+              size 12'em, 2'em
 
-var state = ExampleApp(count: 2, value: 0.33)
+        text "data":
+          size 60'vw, 2'em
+          fill "#000000"
+          # characters: fmt"AnimatedProgress value: {ap1.value:>6.2f}"
+          characters: fmt"selected: {self.dropIndexes}"
 
-const callform {.intdefine.} = 2
+        Slider:
+          value: ap1.value
+          setup:
+            size 60'vw, 2'em
 
-proc drawMain() =
-  frame "main":
-    # we call exampleApp with a pre-made state
-    # the `statefulWidget` always takes a `self` paramter
-    # that that widgets state reference 
-    # alternatively:
-    #   exampleApp("basic widgets", state)
-    widget exampleApp:
-      name: "basic widgets"
-      self: state
+        Listbox:
+          items: dropItems
+          selected: self.dropIndexes
+          itemsVisible: 4
+          setup:
+            size 60'vw, 2'em
 
-startFidget(drawMain, w=640, h=400, uiScale=2.0)
+        TextInputBind:
+          value: self.textInput
+          setup:
+            size 60'vw, 2'em
+
+        Button:
+          text: fmt"{self.textInput}"
+          disabled: true
+          setup:
+            size 60'vw, 2'em
+
+startFidget(
+  wrapApp(exampleApp, ExampleApp),
+  theme = grayTheme,
+  w = 640,
+  h = 700,
+  uiScale = 2.0
+)
 ```
 
 Example stateful widget: 
