@@ -125,9 +125,6 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
           setup:
             size 60'vw, 2'em
 
-
-
-
 startFidget(
   wrapApp(exampleApp, ExampleApp),
   theme = grayTheme,
