@@ -57,16 +57,13 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
             onClick:
               self.count1.inc()
               delta = 0.02
-
           Horizontal:
             itemSpacing 4'em
-
             Button:
               text: fmt"Evt Incr {self.count2:4d}"
               onClick:
                 self.count2.inc()
                 currEvents["pbc1"] = IncrementBar(increment = 0.02)
-
             Checkbox:
               value: self.myCheck
               text: fmt"Click {self.myCheck}"
@@ -83,12 +80,10 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
             onClick:
               self.count2.inc()
               currEvents["pbc1"] = JumpToValue(target = 0.01)
-
           Button:
             text: fmt"Cancel"
             onClick:
               currEvents["pbc1"] = CancelJump()
-
           Dropdown:
             items: dropItems
             selected: self.dropIndexes
@@ -101,24 +96,20 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
           fill "#000000"
           # characters: fmt"AnimatedProgress value: {ap1.value:>6.2f}"
           characters: fmt"selected: {self.dropIndexes}"
-
         Slider:
           value: ap1.value
           setup:
             size 60'vw, 2'em
-
         Listbox:
           items: dropItems
           selected: self.dropIndexes
           itemsVisible: 4
           setup:
             size 60'vw, 2'em
-
         TextInputBind:
           value: self.textInput
           setup:
             size 60'vw, 2'em
-
         Button:
           text: fmt"{self.textInput}"
           disabled: true
