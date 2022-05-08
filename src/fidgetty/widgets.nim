@@ -99,8 +99,6 @@ proc makeType(name: string, body: NimNode): NimNode =
 var widgetArgsTable* {.compileTime.} = initTable[string, seq[(string, string, NimNode, )]]()
 
 macro widget*(widget, body: untyped): untyped =
-  # echo "WITH: ", widget.repr
-  # echo "WITH: ", body.repr
   let procName = widget.strVal
 
   result = newStmtList()
@@ -176,7 +174,7 @@ proc eventsMacro*(tp: string, blk: NimNode): NimNode =
 ## 
 
 
-proc makeStatefulWidget*(blk: NimNode, hasState: bool, defaultState: bool): NimNode =
+proc makeStatefulWidget*(blk: NimNode, hasState, defaultState, wrapper: bool): NimNode =
   var
     procDef = blk
     body = procDef.body()
@@ -198,8 +196,6 @@ proc makeStatefulWidget*(blk: NimNode, hasState: bool, defaultState: bool): NimN
 
   if hasState and hasEmptyReturnType:
     warning("Fidgets with state should generally name their state typename using the return type. ", procDef)
-  # echo "typeName: ", typeName
-  # echo "widget: ", treeRepr blk
   var
     initImpl: NimNode = newStmtList()
     renderImpl: NimNode
@@ -210,7 +206,6 @@ proc makeStatefulWidget*(blk: NimNode, hasState: bool, defaultState: bool): NimN
   for idx, name, code in body.attributes():
     echo fmt"{idx=} {name=}"
     body[idx] = newStmtList()
-    # echo "widget:property: ", name
     case name:
     of "init":
       initImpl = code
@@ -235,16 +230,14 @@ proc makeStatefulWidget*(blk: NimNode, hasState: bool, defaultState: bool): NimN
         `vp`
         {.pop.}
     of "onEvents":
-      echo "FIDGETS:ONEVENTS: ", " code: ", code.treeRepr
       onEventsImpl = code
 
-  echo "FIDGETS:eventsMacroName: ", evtName
   if not onEventsImpl.isNil:
     onEventsImpl = eventsMacro(evtName, onEventsImpl)
   else:
     onEventsImpl = newStmtList()
 
-  if renderImpl.isNil:
+  if not wrapper and renderImpl.isNil:
     error("fidgets must provide a render body!", procDef)
 
   var typeNameSym = ident(typeName)
@@ -262,17 +255,21 @@ proc makeStatefulWidget*(blk: NimNode, hasState: bool, defaultState: bool): NimN
             raise newException(ValueError, "app widget state can't be nil")
 
   procDef.body = newStmtList()
-  procDef.body.add quote do:
-    component `identName`:
-      let local {.inject, used.} = current
-      `initImpl`
-      `stateSetup`
-      if `preName` != nil:
-        `preName`()
-      `onEventsImpl`
-      `renderImpl`
-      if `postName` != nil:
-        `postName`()
+  if wrapper:
+    echo "BODY: ", treeRepr body
+    procDef.body.add body
+  else:
+    procDef.body.add quote do:
+      component `identName`:
+        let local {.inject, used.} = current
+        `initImpl`
+        `stateSetup`
+        if `preName` != nil:
+          `preName`()
+        `onEventsImpl`
+        `renderImpl`
+        if `postName` != nil:
+          `postName`()
 
   # handle return the Fidgets self state variables
   # echo "procTp:def: ", procDef.pragma.treeRepr
@@ -300,9 +297,6 @@ proc makeStatefulWidget*(blk: NimNode, hasState: bool, defaultState: bool): NimN
   params.add preArg
   params.add postArg 
   params.add identArg 
-  # echo "procTp:return type match: ", hasStateReturnType
-  # echo "procTp:params: ", params.treeRepr
-  # echo "params: ", treeRepr params
 
   var widgetArgs = newSeq[(string, string, NimNode)]()
   for idx, argname, propname, argtype in params.propertyNames():
@@ -329,7 +323,7 @@ proc makeStatefulWidget*(blk: NimNode, hasState: bool, defaultState: bool): NimN
   echo result.repr
 
 macro basicFidget*(blk: untyped) =
-  result = makeStatefulWidget(blk, hasState=false, defaultState=false)
+  result = makeStatefulWidget(blk, hasState=false, defaultState=false, wrapper=false)
 
 template useState*[T](tp: typedesc[T], name: untyped) =
   if current.hookStates.isEmpty():
@@ -351,10 +345,13 @@ template useEvents*(): GeneralEvents =
   current.hookEvents
 
 macro statefulFidget*(blk: untyped) =
-  result = makeStatefulWidget(blk, hasState=true, defaultState=true)
+  result = makeStatefulWidget(blk, hasState=true, defaultState=true, wrapper=false)
+
+macro wrapperFidget*(blk: untyped) =
+  result = makeStatefulWidget(blk, hasState=false, defaultState=false, wrapper=true)
 
 macro appFidget*(blk: untyped) =
-  result = makeStatefulWidget(blk, hasState=true, defaultState=true)
+  result = makeStatefulWidget(blk, hasState=true, defaultState=true, wrapper=false)
 
 macro reverseStmts*(body: untyped) =
   result = newStmtList()
