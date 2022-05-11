@@ -1,7 +1,7 @@
 switch("styleCheck", "hint")
 
 --gc:arc
---define:release
+# --define:release
 
 if not defined(emscripten):
   --threads:on
