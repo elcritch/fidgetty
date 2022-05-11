@@ -1,10 +1,8 @@
 import std/strformat, std/hashes, std/sequtils
+import parseutils, memo
 
 import fidgetty
-import fidgetty/[button, textinput]
-
-import parseutils
-import memo
+import fidgetty/[textinput]
 
 loadFont("IBM Plex Sans", "IBMPlexSans-Regular.ttf")
 
@@ -30,52 +28,32 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
     temp: Celsius
 
   render:
-    let currEvents = useEvents()
     setTitle(fmt"Fidget Animated Progress Example")
     textStyle theme
     fill theme
     box 0, 0, 100'vw, 100'vh
-
     frame "test":
       box 1'em, 1'em, 100'vw, 100'vh
       Horizontal:
-        box 1'em, 1'em, 100'vw, 100'vh
-        autoOrg
-        counterAxisSizingMode csAuto
-        constraints cMin, cStretch
         blank: size(0, 0)
-
         let cValStr = TextInput:
           value: fmt"{toC(self.temp).float:5.1f}".strip()
-          setup:
-            size 5'em, 2'em
-            constraints cScale, cMin
-
+          setup: size 5'em, 2'em
         text "data":
-          size 4'em, 2'em
+          size 6'em, 2'em
           fill theme.textFill
-          characters: fmt"Celsius"
-          constraints cScale, cMin
-
-        text "data":
-          size 3'em, 2'em
-          fill theme.textFill
-          characters: fmt" = "
-          constraints cScale, cScale
-
+          characters: fmt"Celsius = "
         let fValStr = TextInput:
           value: fmt"{toF(self.temp).float:5.1f}".strip()
-          setup:
-            size 5'em, 2'em
-            constraints cScale, cMin
-
+          setup: size 5'em, 2'em
         text "data":
           size 6'em, 2'em
           fill theme.textFill
           characters: fmt" Fahrenheit"
+
         cValStr.parseTemp(Celsius)
         fValStr.parseTemp(Fahrenheit)
 
 
 startFidget(wrapApp(exampleApp, ExampleApp),
-            theme = grayTheme, w = 600, h = 100, uiScale = 2.0)
+            theme = grayTheme, w = 440, h = 140, uiScale = 2.0)
