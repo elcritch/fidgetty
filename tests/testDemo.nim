@@ -116,6 +116,10 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
           setup:
             size 60'vw, 2'em
 
+let testTheme* = proc(): Theme =
+  result = grayTheme()
+  result.fill = parseHtml "#72bdd0"
+
 startFidget(
   wrapApp(exampleApp, ExampleApp),
   theme = grayTheme,
