@@ -400,6 +400,12 @@ template Vertical*(text, child: untyped) =
 template Vertical*(child: untyped) =
   vertical("", child)
 
+template spacer*(w, h: float32) =
+  blank: size(w, h)
+
+template spacer*(s: float32) =
+  spacer(s, s)
+
 template wrapApp*(fidgetName: typed, fidgetType: typedesc): proc() =
   proc `fidgetName Main`() =
     useState(`fidgetType`, state)

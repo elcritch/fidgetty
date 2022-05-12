@@ -32,17 +32,22 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
     textStyle theme
     fill theme
     box 0, 0, 100'vw, 100'vh
-    frame "test":
+    Vertical:
       box 1'em, 1'em, 100'vw, 100'vh
+      spacer 0, 50'ph - 2'em
       Horizontal:
-        blank: size(0, 0)
+        spacer 1'em
         let cValStr = TextInput:
           value: fmt"{toC(self.temp).float:5.1f}".strip()
           setup: size 5'em, 2'em
         text "data":
           size 6'em, 2'em
           fill theme.textFill
-          characters: fmt"Celsius = "
+          characters: fmt"Celsius"
+        text "data":
+          size 3'em, 2'em
+          fill theme.textFill
+          characters: fmt" = "
         let fValStr = TextInput:
           value: fmt"{toF(self.temp).float:5.1f}".strip()
           setup: size 5'em, 2'em
