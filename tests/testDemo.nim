@@ -67,6 +67,13 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
             Checkbox:
               value: self.myCheck
               text: fmt"Click {self.myCheck}"
+              setup:
+                # themeWith(fill = pallete.warning)
+                var th = theme
+                th.highlight = pallete.warning
+                setTheme th
+              post:
+                popTheme()
 
         let ap1 = AnimatedProgress:
           delta: delta
@@ -116,13 +123,9 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
           setup:
             size 60'vw, 2'em
 
-let testTheme* = proc(): Theme =
-  result = grayTheme()
-  result.fill = parseHtml "#72bdd0"
-
 startFidget(
   wrapApp(exampleApp, ExampleApp),
-  setup = setup(grayTheme),
+  setup = setup(bulmaTheme),
   w = 640,
   h = 700,
   uiScale = 2.0

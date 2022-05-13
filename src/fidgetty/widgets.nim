@@ -340,11 +340,6 @@ template useStateOverride*[T](tp: typedesc[T], name: untyped) =
     else:
       `name`
 
-template useEvents*(): GeneralEvents =
-  if current.hookEvents.data.isNil:
-    current.hookEvents.data = newTable[string, seq[Variant]]()
-  current.hookEvents
-
 macro statefulFidget*(blk: untyped) =
   result = makeStatefulWidget(blk, hasState=true, defaultState=true, wrapper=false)
 

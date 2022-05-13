@@ -150,3 +150,13 @@ proc setups*(args: varargs[proc()]): proc() =
   result = proc() =
     for fn in args:
       fn()
+
+proc themeWith*(
+    # th: Theme
+    fill: Color = clearColor,
+) =
+  var th = theme
+  if fill != clearColor:
+    th.fill = fill
+  setTheme th
+  defer: popTheme()

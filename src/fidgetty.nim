@@ -23,6 +23,13 @@ proc grayTheme*(): Theme =
   result.itemSpacing = 0.001 * fs
 
 proc bulmaTheme*(): Theme =
+  pallete.primary = hsl(171, 100/360, 41/360).to(Color)
+  pallete.link = hsl(217, 71/360, 53/360).to(Color)
+  pallete.info = hsl(204, 86/360, 53/360).to(Color)
+  pallete.success = hsl(141, 53/360, 53/360).to(Color)
+  pallete.warning = parseHtml("#ffdd57") # hsl(48, 100/360, 67/360).to(Color)
+  pallete.danger = hsl(348, 100/360, 61/360).to(Color)
+
   let fs = 16'f32
   result.font("IBM Plex Sans", fs, 200, 0, hCenter, vCenter)
   result.corners(5)
@@ -39,9 +46,3 @@ proc bulmaTheme*(): Theme =
   result.cursor = parseHtml("#77D3FF", 0.33)
   result.itemSpacing = 0.001 * fs
 
-  pallete.primary = hsl(171, 100/360, 41/360).to(Color)
-  pallete.link = hsl(217, 71/360, 53/360).to(Color)
-  pallete.info = hsl(204, 86/360, 53/360).to(Color)
-  pallete.success = hsl(141, 53/360, 53/360).to(Color)
-  pallete.warning = hsl(48, 100/360, 67/360).to(Color)
-  pallete.danger = hsl(348, 100/360, 61/360).to(Color)
