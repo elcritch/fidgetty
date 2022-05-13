@@ -2,14 +2,25 @@ import fidget
 
 type
   Themer = proc(): Theme
+
+  ThemePalette* = object
+    primary*: Color    #hsl(171, 100%, 41%)
+    link*: Color      #hsl(217, 71%, 53%)
+    info*: Color      #hsl(204, 86%, 53%)
+    success*: Color    #hsl(141, 53%, 53%)
+    warning*: Color    #hsl(48, 100%, 67%)
+    danger*: Color    #$hsl(348, 100%, 61%)
+
   Theme* = object
-    fill*: Color
     cursor*: Color
     highlight*: Color
     foreground*: Color
+    fill*: Color
+    background*: Color
     disabled*: Color
     textFill*: Color
     textBg*: Color
+
     textStyle*: TextStyle
     textCorner*: float32
     innerStroke*: Stroke
@@ -123,7 +134,7 @@ proc defaultEmptyTheme(): Theme =
   result.setFontStyle("IBM Plex Sans", fs, 200, 0, hCenter, vCenter)
   result.cornerRadius = (3'f32, 3'f32, 3'f32, 3'f32)
   result.textCorner = common.uiScale * 2'f32
-  result.fill = Color(r: 157/255, g: 157/255, b: 157/255, a: 1)
+  result.foreground = Color(r: 157/255, g: 157/255, b: 157/255, a: 1)
   result.cursor = Color(r: 114/255, g: 189/255, b: 208/255, a: 0.33)
   result.highlight = Color(r: 114/255, g: 189/255, b: 208/255, a: 0.77)
   result.itemSpacing = 0.001 * fs
