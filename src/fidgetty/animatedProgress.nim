@@ -5,6 +5,8 @@ import progressbar
 
 loadFont("IBM Plex Sans", "IBMPlexSans-Regular.ttf")
 
+import std/monotimes, std/times
+
 var
   frameCount = 0
 
@@ -46,6 +48,7 @@ proc animatedProgress*(
           frameDelay = 16
           duration = 3_000
           n = duration div frameDelay
+        var prev = getMonoTime()
         for i in 1..n:
           await sleepAsync(frameDelay)
           if self.cancelTicks:
@@ -53,7 +56,12 @@ proc animatedProgress*(
             return
           self.value += target
           self.value = clamp(self.value mod 1.0, 0, 1.0)
-
+          let ts = getMonoTime()
+          let dt = inMilliseconds(ts-prev)
+          if dt >= frameDelay + frameDelay div 2:
+            prev = ts
+            continue
+          prev = ts
           refresh()
       
       if self.ticks.isNil or self.ticks.finished:
