@@ -1,4 +1,5 @@
 import fidget
+import fidgetty/themes
 import fidgetty/widgets
 
 export fidget

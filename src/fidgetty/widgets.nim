@@ -1,11 +1,12 @@
 import macros, tables, strutils, strformat, math, random, options
 import bumpy, variant, patty
-import fidget
 
 export tables, strutils, strformat, options
 export bumpy, math, random
-export fidget
 export bumpy, variant, patty
+
+import fidget, themes
+export fidget, themes
 
 type
   WidgetProc* = proc()

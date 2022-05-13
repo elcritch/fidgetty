@@ -122,7 +122,7 @@ let testTheme* = proc(): Theme =
 
 startFidget(
   wrapApp(exampleApp, ExampleApp),
-  theme = grayTheme,
+  setup = setup(grayTheme),
   w = 640,
   h = 700,
   uiScale = 2.0
