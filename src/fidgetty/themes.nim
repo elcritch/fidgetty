@@ -38,6 +38,7 @@ type
 
 var
   themes*: seq[Theme] = @[]
+  pallete*: ThemePalette
 
 
 template setupWidgetTheme*(blk) =
