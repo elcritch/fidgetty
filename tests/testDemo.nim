@@ -1,6 +1,7 @@
 import std/strformat, std/hashes, std/sequtils
 
 import fidgetty
+import fidgetty/themes
 import fidgetty/[button, dropdown, checkbox]
 import fidgetty/[slider, progressbar, animatedProgress]
 import fidgetty/[listbox]
@@ -26,7 +27,7 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
 
     setTitle(fmt"Fidget Animated Progress Example")
     textStyle theme
-    fill "#F7F7F9"
+    fill theme.background.lighten(0.11)
 
     Button:
       text: "Dump"
@@ -39,7 +40,7 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
     group "center":
       box 50, 0, 100'vw - 100, 100'vh
       orgBox 50, 0, 100'vw, 100'vw
-      fill "#DFDFE0"
+      fill theme.background.darken(1'PP)
       strokeWeight 1
 
       self.value = (self.count1.toFloat * 0.10) mod 1.0

@@ -13,7 +13,7 @@ proc button*(
     shadows theme
     stroke theme.outerStroke
     imageOf theme.gloss
-    fill theme
+    fill theme.foreground
 
   render:
     text "text":

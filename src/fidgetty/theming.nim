@@ -160,3 +160,11 @@ proc themeWith*(
     th.fill = fill
   setTheme th
   defer: popTheme()
+
+proc `'PP`*(n: string): float32 =
+  ## numeric literal view height unit
+  result = parseFloat(n) / 100.0
+
+proc `'PHSL`*(n: string): float32 =
+  ## numeric literal view height unit
+  result = parseFloat(n) / 100.0 * 360.0
