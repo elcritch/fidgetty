@@ -14,9 +14,9 @@ proc dropdown*(
   ## dropdown widget 
   init:
     size 8'em, 1.5'em
-    cornerRadius generalTheme
-    stroke generalTheme.outerStroke
-    imageOf generalTheme.gloss
+    cornerRadius theme
+    stroke theme.outerStroke
+    imageOf theme.gloss
 
   properties:
     dropDownOpen: bool
@@ -53,9 +53,9 @@ proc dropdown*(
     widget button:
       setup:
         box 0, 0, bw, bh
-        cornerRadius generalTheme
+        cornerRadius theme
         strokeLine this
-        shadows generalTheme
+        shadows theme
         imageOf this
         text "icon":
           box tw, 0, 1'em, bh
@@ -88,19 +88,19 @@ proc dropdown*(
 
         clipContent true
         zlevel ZLevelRaised
-        cornerRadius generalTheme
+        cornerRadius theme
         strokeLine this
 
         group "menuoutline":
           box 0, 0, bw, bdh
-          cornerRadius generalTheme
-          stroke generalTheme.outerStroke
+          cornerRadius theme
+          stroke theme.outerStroke
 
         group "menu":
           box 0, 0, bw, bdh
           layout lmVertical
           counterAxisSizingMode csAuto
-          itemSpacing generalTheme.itemSpacing
+          itemSpacing theme.itemSpacing
           scrollBars true
 
           onClickOutside:
@@ -122,7 +122,7 @@ proc dropdown*(
                   imageColor Color(r: 0, g: 0, b: 0, a: 0.20 * ic.a)
                   boxOf parent
                   cornerRadius 0
-                  stroke generalTheme.innerStroke
+                  stroke theme.innerStroke
               if clicked:
                 resetState()
                 echo fmt"dropdwon: set {dropSelected=}"

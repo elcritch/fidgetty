@@ -10,7 +10,7 @@ proc progressbar*(
     box 0, 0, 100.WPerc, 2.Em
     textAutoResize tsHeight
     layoutAlign laStretch
-    stroke generalTheme.outerStroke
+    stroke theme.outerStroke
 
   render:
     let
@@ -31,28 +31,28 @@ proc progressbar*(
 
     rectangle "barFgTexture":
       box sb, sb, barW, barH-sb
-      cornerRadius 0.80 * generalTheme.cornerRadius[0]
+      cornerRadius 0.80 * theme.cornerRadius[0]
       clipContent true
       # strokeLine 1.0, "#707070", 0.87
 
     rectangle "barFgColor":
       box sb, sb, barW, barH-sb
       fill palette.accent
-      cornerRadius 0.80 * generalTheme.cornerRadius[0]
-      imageOf generalTheme.gloss, 0.67
+      cornerRadius 0.80 * theme.cornerRadius[0]
+      imageOf theme.gloss, 0.67
       clipContent true
-      stroke generalTheme.innerStroke
+      stroke theme.innerStroke
 
     # Draw the bar itself.
     box 0, 0, bw, bh
-    stroke generalTheme.outerStroke
+    stroke theme.outerStroke
     fill palette.foreground
-    cornerRadius 1.0 * generalTheme.cornerRadius[0]
+    cornerRadius 1.0 * theme.cornerRadius[0]
     clipContent true
     rectangle "bezel":
-      cornerRadius 0.80 * generalTheme.cornerRadius[0]
+      cornerRadius 0.80 * theme.cornerRadius[0]
       box 0, 0, 100'pw, 100'ph
       rotation 180
-      imageOf generalTheme.gloss
+      imageOf theme.gloss
 
-    cornerRadius 1.0 * generalTheme.cornerRadius[0]
+    cornerRadius 1.0 * theme.cornerRadius[0]

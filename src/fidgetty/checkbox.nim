@@ -31,7 +31,7 @@ proc checkbox*(
       # echo fmt"{palette.fill=}"
       fill palette.foreground
       clipContent true
-      imageOf generalTheme.gloss
+      imageOf theme.gloss
       if checked:
         highlight palette
         text "checkfil":
@@ -40,5 +40,5 @@ proc checkbox*(
           box 0.15'em, 0.40'em, 1'em, 1'em
           fill palette.text
           characters "✓"
-      stroke generalTheme.outerStroke
-      cornerRadius generalTheme
+      stroke theme.outerStroke
+      cornerRadius theme

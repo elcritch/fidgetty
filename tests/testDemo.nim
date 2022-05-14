@@ -26,7 +26,7 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
                       "OpenGL", "Immediate", "mode"]
 
     setTitle(fmt"Fidget Animated Progress Example")
-    textStyle generalTheme
+    textStyle theme
     fill palette.background.lighten(0.11)
 
     Button:

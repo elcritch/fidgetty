@@ -12,7 +12,7 @@ proc slider*(
     box 0, 0, 100.WPerc, 2.Em
     textAutoResize tsHeight
     layoutAlign laStretch
-    cornerRadius generalTheme
+    cornerRadius theme
 
   properties:
     pipDrag: bool
@@ -46,21 +46,21 @@ proc slider*(
     rectangle "pip":
       box sb+pipPos, sb, bh-2*sb, bh-2*sb
       fill palette.cursor
-      cornerRadius generalTheme
-      stroke generalTheme.outerStroke
+      cornerRadius theme
+      stroke theme.outerStroke
       clipContent true
-      imageOf generalTheme.gloss
+      imageOf theme.gloss
     rectangle "fg-bar":
       box barOuter, barOuter, pipPos+bh/2, bh-2*barOuter 
       fill palette.accent
-      cornerRadius generalTheme
+      cornerRadius theme
       clipContent true
-      imageOf generalTheme.gloss, 0.77
+      imageOf theme.gloss, 0.77
     rectangle "bg":
-      imageOf generalTheme.gloss
+      imageOf theme.gloss
       rotation 180
       box 0, 0, bw, bh
       fill palette.foreground
-      cornerRadius generalTheme
+      cornerRadius theme
       clipContent true
-      stroke generalTheme.outerStroke
+      stroke theme.outerStroke

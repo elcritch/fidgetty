@@ -9,10 +9,10 @@ proc button*(
   # Draw a progress bars
   init:
     box 0, 0, 8.Em, 2.Em
-    cornerRadius generalTheme
-    shadows generalTheme
-    stroke generalTheme.outerStroke
-    imageOf generalTheme.gloss
+    cornerRadius theme
+    shadows theme
+    stroke theme.outerStroke
+    imageOf theme.gloss
     fill palette.foreground
 
   render:

@@ -39,7 +39,7 @@ type
 
 var
   paletteStack*: seq[Palette] = @[]
-  generalThemeStack*: seq[GeneralTheme] = @[]
+  themeStack*: seq[GeneralTheme] = @[]
   themePalette*: ThemePalette
 
 
@@ -50,8 +50,8 @@ template setupWidgetTheme*(blk) =
 
 template palette*(): var Palette =
   common.paletteStack[^1]
-template generalTheme*(): var GeneralTheme =
-  common.generalThemeStack[^1]
+template theme*(): var GeneralTheme =
+  common.themeStack[^1]
 
 proc push*(th: Palette) =
   paletteStack.add th
@@ -59,9 +59,9 @@ proc pop*(tp: typedesc[Palette]): Palette {.discardable.} =
   paletteStack.pop()
 
 proc push*(th: GeneralTheme) =
-  generalThemeStack.add th
+  themeStack.add th
 proc pop*(tp: typedesc[GeneralTheme]): GeneralTheme {.discardable.} =
-  generalThemeStack.pop()
+  themeStack.pop()
 
 proc setFontStyle*(
   general: var GeneralTheme,
