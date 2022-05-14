@@ -1,7 +1,7 @@
 import fidget
 
 type
-  Themer = proc(): tuple[theme: Theme, general: GeneralTheme]
+  Themer = proc(): tuple[palette: Palette, general: GeneralTheme]
 
   ThemePalette* = object
     primary*: Color
@@ -11,8 +11,8 @@ type
     warning*: Color
     danger*: Color
 
-  Theme* = object
-    fill*: Color
+  Palette* = object
+    foreground*: Color
     accent*: Color
     highlight*: Color
     disabled*: Color
@@ -35,12 +35,12 @@ type
 
 
 # if common.themes.len() == 0:
-  # common.themes.add(if theme.isNil: emptyTheme() else: theme())
+  # common.themes.add(if palette.isNil: emptyTheme() else: theme())
 
 var
-  themeStack*: seq[Theme] = @[]
+  paletteStack*: seq[Palette] = @[]
   generalThemeStack*: seq[GeneralTheme] = @[]
-  pallete*: ThemePalette
+  themePalette*: ThemePalette
 
 
 template setupWidgetTheme*(blk) =
@@ -48,15 +48,15 @@ template setupWidgetTheme*(blk) =
     `blk`
   common.current = nil
 
-template theme*(): var Theme =
-  common.themeStack[^1]
+template palette*(): var Palette =
+  common.paletteStack[^1]
 template generalTheme*(): var GeneralTheme =
   common.generalThemeStack[^1]
 
-proc push*(th: Theme) =
-  themeStack.add th
-proc pop*(tp: typedesc[Theme]): Theme {.discardable.} =
-  themeStack.pop()
+proc push*(th: Palette) =
+  paletteStack.add th
+proc pop*(tp: typedesc[Palette]): Palette {.discardable.} =
+  paletteStack.pop()
 
 proc push*(th: GeneralTheme) =
   generalThemeStack.add th
@@ -82,13 +82,13 @@ proc setFontStyle*(
   general.textStyle.textAlignVertical = textAlignVertical
 
 proc font*(
-  theme: var GeneralTheme,
+  item: var GeneralTheme,
   fontFamily: string,
   fontSize, fontWeight, lineHeight: float32,
   textAlignHorizontal: HAlign,
   textAlignVertical: VAlign
 ) =
-  theme.setFontStyle(
+  item.setFontStyle(
     fontFamily,
     fontSize,
     fontWeight,
@@ -100,11 +100,11 @@ proc textStyle*(node: var GeneralTheme) =
   ## Sets the font size.
   common.current.textStyle = node.textStyle
 
-proc fill*(item: var Theme) =
+proc fill*(item: var Palette) =
   ## Sets background color.
-  current.fill = item.fill
+  current.fill = item.foreground
 
-proc strokeLine*(item: var Theme, weight: float32, color: string, alpha = 1.0) =
+proc strokeLine*(item: var Palette, weight: float32, color: string, alpha = 1.0) =
   ## Sets stroke/border color.
   current.stroke.color = parseHtmlColor(color)
   current.stroke.color.a = alpha
@@ -123,7 +123,7 @@ proc cornerRadius*(node: GeneralTheme) =
   ## Sets all radius of all 4 corners.
   current.cornerRadius =  node.cornerRadius
 
-proc highlight*(node: var Theme) =
+proc highlight*(node: var Palette) =
   ## Sets the color of text selection.
   current.highlightColor = node.highlight
 
@@ -152,11 +152,11 @@ proc colorsWith*(
     # th: Theme
     fill: Color = clearColor,
 ) =
-  var th = theme
+  var th = palette
   if fill != clearColor:
-    th.fill = fill
+    th.foreground = fill
   push th
-  defer: pop(Theme)
+  defer: pop(Palette)
 
 proc `'PP`*(n: string): float32 =
   ## numeric literal view height unit

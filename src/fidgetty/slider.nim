@@ -41,18 +41,18 @@ proc slider*(
 
     text "text":
       box 0, 0, bw, bh
-      fill theme.text
+      fill palette.text
       characters label
     rectangle "pip":
       box sb+pipPos, sb, bh-2*sb, bh-2*sb
-      fill theme.cursor
+      fill palette.cursor
       cornerRadius generalTheme
       stroke generalTheme.outerStroke
       clipContent true
       imageOf generalTheme.gloss
     rectangle "fg-bar":
       box barOuter, barOuter, pipPos+bh/2, bh-2*barOuter 
-      fill theme.accent
+      fill palette.accent
       cornerRadius generalTheme
       clipContent true
       imageOf generalTheme.gloss, 0.77
@@ -60,7 +60,7 @@ proc slider*(
       imageOf generalTheme.gloss
       rotation 180
       box 0, 0, bw, bh
-      fill theme.fill
+      fill palette.foreground
       cornerRadius generalTheme
       clipContent true
       stroke generalTheme.outerStroke

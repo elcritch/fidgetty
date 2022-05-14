@@ -14,7 +14,7 @@ proc checkbox*(
     # cornerRadius theme
     # strokeLine theme
     # fill theme
-    # imageOf theme.gloss
+    # imageOf palette.gloss
 
   render:
 
@@ -23,22 +23,22 @@ proc checkbox*(
 
     text "label":
       box 2'em, 0, parent.box().w - 2'em, parent.box().h
-      fill theme.text
+      fill palette.text
       characters message
 
     rectangle "square":
       box 0, 0, 2'em, 2'em
-      # echo fmt"{theme.fill=}"
-      fill theme
+      # echo fmt"{palette.fill=}"
+      fill palette.foreground
       clipContent true
       imageOf generalTheme.gloss
       if checked:
-        highlight theme
+        highlight palette
         text "checkfil":
-          # textStyle theme.text.textStyle
+          # textStyle palette.text.textStyle
           fontSize 1.4 * fontSize()
           box 0.15'em, 0.40'em, 1'em, 1'em
-          fill theme.text
+          fill palette.text
           characters "✓"
       stroke generalTheme.outerStroke
       cornerRadius generalTheme

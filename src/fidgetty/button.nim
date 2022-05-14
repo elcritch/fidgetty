@@ -13,23 +13,23 @@ proc button*(
     shadows generalTheme
     stroke generalTheme.outerStroke
     imageOf generalTheme.gloss
-    fill theme.fill
+    fill palette.foreground
 
   render:
     text "text":
-      fill theme.text
+      fill palette.text
       characters message
 
     clipContent true
     if disabled:
-      imageColor theme.disabled
+      imageColor palette.disabled
     else:
       onHover:
-        highlight theme
+        highlight palette
       if isActive:
-        highlight theme
+        highlight palette
       onClick:
-        highlight theme
+        highlight palette
         if not clicker.isNil:
           clicker()
         result = true

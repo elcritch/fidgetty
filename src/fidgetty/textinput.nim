@@ -13,29 +13,29 @@ proc textInput*(
     imageOf generalTheme.gloss
     imageTransparency 0.33
     rotation 0
-    fill theme
+    fill palette.foreground
 
   render:
     stroke generalTheme.outerStroke
 
     text "text":
-      fill theme.text
+      fill palette.text
       binding(value):
         if value != keyboard.input:
           result = some keyboard.input
 
-    fill theme.textBg
+    fill palette.textBg
     clipContent true
     if disabled:
-      imageColor theme.disabled
+      imageColor palette.disabled
     else:
       onHover:
         # imageTransparency 0.0
         rotation 180
-        stroke theme.highlight * 0.40
+        stroke palette.highlight * 0.40
         strokeWeight 0.2'em
       if isActive:
-        highlight theme
+        highlight palette
 
 proc textInputBind*(
     value {.property: value.}: var string,

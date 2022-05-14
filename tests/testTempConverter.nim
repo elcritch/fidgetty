@@ -42,18 +42,18 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
           setup: size 5'em, 2'em
         text "data":
           size 6'em, 2'em
-          fill theme.textFill
+          fill palette.textFill
           characters: fmt"Celsius"
         text "data":
           size 3'em, 2'em
-          fill theme.textFill
+          fill palette.textFill
           characters: fmt" = "
         let fValStr = TextInput:
           value: fmt"{toF(self.temp).float:5.1f}".strip()
           setup: size 5'em, 2'em
         text "data":
           size 6'em, 2'em
-          fill theme.textFill
+          fill palette.textFill
           characters: fmt" Fahrenheit"
 
         cValStr.parseTemp(Celsius)

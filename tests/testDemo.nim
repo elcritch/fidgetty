@@ -27,7 +27,7 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
 
     setTitle(fmt"Fidget Animated Progress Example")
     textStyle generalTheme
-    fill theme.background.lighten(0.11)
+    fill palette.background.lighten(0.11)
 
     Button:
       text: "Dump"
@@ -40,7 +40,7 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
     group "center":
       box 50, 0, 100'vw - 100, 100'vh
       orgBox 50, 0, 100'vw, 100'vw
-      fill theme.background.darken(1'PP)
+      fill palette.background.darken(1'PP)
       strokeWeight 1
 
       self.value = (self.count1.toFloat * 0.10) mod 1.0
@@ -70,12 +70,12 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
               text: fmt"Click {self.myCheck}"
               setup:
                 # themeWith(fill = pallete.warning)
-                var th = theme
-                th.highlight = pallete.warning.lighten(0.1)
-                th.fill = pallete.warning.lighten(0.2)
+                var th = palette
+                th.highlight = themePalette.warning.lighten(0.1)
+                th.foreground = themePalette.warning.lighten(0.2)
                 push th
               post:
-                pop(Theme)
+                pop(Palette)
 
         let ap1 = AnimatedProgress:
           delta: delta

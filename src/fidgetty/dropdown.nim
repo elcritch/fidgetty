@@ -59,23 +59,23 @@ proc dropdown*(
         imageOf this
         text "icon":
           box tw, 0, 1'em, bh
-          fill theme.text
+          fill palette.text
           if self.dropDownOpen: rotation -90
           else: rotation 0
           characters ">"
       text:
-        fill theme.text
+        fill palette.text
         if dropSelected < 0: defaultLabel
         else: dropItems[dropSelected]
       onHover:
         # fill "#5C8F9C"
-        highlight theme.highlight
+        highlight palette.highlight
       onClick:
         self.dropDownOpen = true
         self.itemsVisible = -1
       post:
         if self.dropDownOpen:
-          highlight theme.highlight
+          highlight palette.highlight
 
     let spad = 1.0'f32
     if self.dropDownOpen:

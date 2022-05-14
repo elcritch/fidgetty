@@ -26,7 +26,7 @@ proc progressbar*(
     if label.len() > 0:
       text "text":
         box 0, 0, bw, bh
-        fill theme.text
+        fill palette.text
         characters label
 
     rectangle "barFgTexture":
@@ -37,7 +37,7 @@ proc progressbar*(
 
     rectangle "barFgColor":
       box sb, sb, barW, barH-sb
-      fill theme.accent
+      fill palette.accent
       cornerRadius 0.80 * generalTheme.cornerRadius[0]
       imageOf generalTheme.gloss, 0.67
       clipContent true
@@ -46,7 +46,7 @@ proc progressbar*(
     # Draw the bar itself.
     box 0, 0, bw, bh
     stroke generalTheme.outerStroke
-    fill theme.fill
+    fill palette.foreground
     cornerRadius 1.0 * generalTheme.cornerRadius[0]
     clipContent true
     rectangle "bezel":
