@@ -5,8 +5,8 @@ export tables, strutils, strformat, options
 export bumpy, math, random
 export bumpy, variant, patty
 
-import fidget, themes
-export fidget, themes
+import fidget, theming
+export fidget, theming
 
 type
   WidgetProc* = proc()

@@ -70,7 +70,8 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
               setup:
                 # themeWith(fill = pallete.warning)
                 var th = theme
-                th.highlight = pallete.warning
+                th.highlight = pallete.warning.lighten(0.1)
+                th.fill = pallete.warning.lighten(0.2)
                 setTheme th
               post:
                 popTheme()
@@ -120,8 +121,8 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
 
 startFidget(
   wrapApp(exampleApp, ExampleApp),
-  # setup = setup(grayTheme),
-  setup = setup(bulmaTheme),
+  setup = setup(grayTheme),
+  # setup = setup(bulmaTheme),
   w = 640,
   h = 700,
   uiScale = 2.0
