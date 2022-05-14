@@ -11,9 +11,9 @@ proc listbox*(
   ## dropdown widget 
   init:
     size 8'em, 1.5'em
-    cornerRadius theme
-    stroke theme.outerStroke
-    imageOf theme.gloss
+    cornerRadius generalTheme
+    stroke generalTheme.outerStroke
+    imageOf generalTheme.gloss
 
   properties:
     showScrollBars: bool
@@ -33,8 +33,8 @@ proc listbox*(
 
     group "menuoutline":
       box 0, 0, bw, bdh
-      cornerRadius local
-      stroke theme.outerStroke
+      cornerRadius generalTheme
+      stroke generalTheme.outerStroke
 
     inPopup = true
     defer: inPopup = false
@@ -44,7 +44,7 @@ proc listbox*(
       box 0, 0, bw, bdh
       layout lmVertical
       counterAxisSizingMode csAuto
-      itemSpacing theme.itemSpacing
+      itemSpacing generalTheme.itemSpacing
       scrollBars true
 
       # inc framecount 
@@ -65,7 +65,7 @@ proc listbox*(
               imageTransparency 0.1
               boxOf parent
               cornerRadius 0
-              stroke theme.innerStroke
+              stroke generalTheme.innerStroke
           if clicked:
             echo fmt"listbox: set {selected=}"
             selected = idx

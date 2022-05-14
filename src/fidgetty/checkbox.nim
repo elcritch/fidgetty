@@ -23,7 +23,7 @@ proc checkbox*(
 
     text "label":
       box 2'em, 0, parent.box().w - 2'em, parent.box().h
-      fill theme.textFill
+      fill theme.text
       characters message
 
     rectangle "square":
@@ -31,14 +31,14 @@ proc checkbox*(
       # echo fmt"{theme.fill=}"
       fill theme
       clipContent true
-      imageOf theme.gloss
+      imageOf generalTheme.gloss
       if checked:
         highlight theme
         text "checkfil":
           # textStyle theme.text.textStyle
           fontSize 1.4 * fontSize()
           box 0.15'em, 0.40'em, 1'em, 1'em
-          fill theme.textFill
+          fill theme.text
           characters "✓"
-      stroke theme.outerStroke
-      cornerRadius theme
+      stroke generalTheme.outerStroke
+      cornerRadius generalTheme

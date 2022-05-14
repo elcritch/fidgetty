@@ -26,7 +26,7 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
                       "OpenGL", "Immediate", "mode"]
 
     setTitle(fmt"Fidget Animated Progress Example")
-    textStyle theme
+    textStyle generalTheme
     fill theme.background.lighten(0.11)
 
     Button:
@@ -73,9 +73,9 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
                 var th = theme
                 th.highlight = pallete.warning.lighten(0.1)
                 th.fill = pallete.warning.lighten(0.2)
-                setTheme th
+                push th
               post:
-                popTheme()
+                pop(Theme)
 
         let ap1 = AnimatedProgress:
           delta: delta

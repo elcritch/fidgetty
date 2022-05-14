@@ -14,9 +14,9 @@ proc dropdown*(
   ## dropdown widget 
   init:
     size 8'em, 1.5'em
-    cornerRadius theme
-    stroke theme.outerStroke
-    imageOf theme.gloss
+    cornerRadius generalTheme
+    stroke generalTheme.outerStroke
+    imageOf generalTheme.gloss
 
   properties:
     dropDownOpen: bool
@@ -53,18 +53,18 @@ proc dropdown*(
     widget button:
       setup:
         box 0, 0, bw, bh
-        cornerRadius this
+        cornerRadius generalTheme
         strokeLine this
-        shadows theme
+        shadows generalTheme
         imageOf this
         text "icon":
           box tw, 0, 1'em, bh
-          fill theme.textFill
+          fill theme.text
           if self.dropDownOpen: rotation -90
           else: rotation 0
           characters ">"
       text:
-        fill theme.textFill
+        fill theme.text
         if dropSelected < 0: defaultLabel
         else: dropItems[dropSelected]
       onHover:
@@ -75,7 +75,7 @@ proc dropdown*(
         self.itemsVisible = -1
       post:
         if self.dropDownOpen:
-          highlight theme.foreground
+          highlight theme.highlight
 
     let spad = 1.0'f32
     if self.dropDownOpen:
@@ -88,19 +88,19 @@ proc dropdown*(
 
         clipContent true
         zlevel ZLevelRaised
-        cornerRadius this
+        cornerRadius generalTheme
         strokeLine this
 
         group "menuoutline":
           box 0, 0, bw, bdh
-          cornerRadius this
-          stroke theme.outerStroke
+          cornerRadius generalTheme
+          stroke generalTheme.outerStroke
 
         group "menu":
           box 0, 0, bw, bdh
           layout lmVertical
           counterAxisSizingMode csAuto
-          itemSpacing theme.itemSpacing
+          itemSpacing generalTheme.itemSpacing
           scrollBars true
 
           onClickOutside:
@@ -122,7 +122,7 @@ proc dropdown*(
                   imageColor Color(r: 0, g: 0, b: 0, a: 0.20 * ic.a)
                   boxOf parent
                   cornerRadius 0
-                  stroke theme.innerStroke
+                  stroke generalTheme.innerStroke
               if clicked:
                 resetState()
                 echo fmt"dropdwon: set {dropSelected=}"

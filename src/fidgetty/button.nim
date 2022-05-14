@@ -9,15 +9,15 @@ proc button*(
   # Draw a progress bars
   init:
     box 0, 0, 8.Em, 2.Em
-    cornerRadius theme
-    shadows theme
-    stroke theme.outerStroke
-    imageOf theme.gloss
-    fill theme.foreground
+    cornerRadius generalTheme
+    shadows generalTheme
+    stroke generalTheme.outerStroke
+    imageOf generalTheme.gloss
+    fill theme.fill
 
   render:
     text "text":
-      fill theme.textFill
+      fill theme.text
       characters message
 
     clipContent true
