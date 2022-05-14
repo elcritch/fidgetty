@@ -28,7 +28,7 @@ proc checkbox*(
 
     rectangle "square":
       box 0, 0, 2'em, 2'em
-      echo fmt"{theme.fill=}"
+      # echo fmt"{theme.fill=}"
       fill theme
       clipContent true
       imageOf theme.gloss

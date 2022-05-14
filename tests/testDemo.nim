@@ -95,8 +95,7 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
             items: dropItems
             selected: self.dropIndexes
             label: "Menu"
-            setup:
-              size 12'em, 2'em
+            setup: size 12'em, 2'em
 
         text "data":
           size 60'vw, 2'em
@@ -105,26 +104,23 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
           characters: fmt"selected: {self.dropIndexes}"
         Slider:
           value: ap1.value
-          setup:
-            size 60'vw, 2'em
+          setup: size 60'vw, 2'em
         Listbox:
           items: dropItems
           selected: self.dropIndexes
           itemsVisible: 4
-          setup:
-            size 60'vw, 2'em
+          setup: size 60'vw, 2'em
         TextInputBind:
           value: self.textInput
-          setup:
-            size 60'vw, 2'em
+          setup: size 60'vw, 2'em
         Button:
           text: fmt"{self.textInput}"
           disabled: true
-          setup:
-            size 60'vw, 2'em
+          setup: size 60'vw, 2'em
 
 startFidget(
   wrapApp(exampleApp, ExampleApp),
+  # setup = setup(grayTheme),
   setup = setup(bulmaTheme),
   w = 640,
   h = 700,

@@ -34,7 +34,7 @@ proc bulmaTheme*(): Theme =
   result.font("IBM Plex Sans", fs, 200, 0, hCenter, vCenter)
   result.corners(5)
   result.dropShadow(4, 0, 0, "#000000", 0.05)
-  result.foreground = parseHtml("#CDCDCD")
+  result.fill = parseHtml("#CDCDCD")
   result.textFill = parseHtml("#565555")
   result.textCorner = common.uiScale * 1.2'f32
   result.textBg = parseHtml("#DFDFE0", 1.0)
