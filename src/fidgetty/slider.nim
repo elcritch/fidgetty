@@ -56,7 +56,6 @@ proc slider*(
       cornerRadius generalTheme
       clipContent true
       imageOf generalTheme.gloss, 0.77
-
     rectangle "bg":
       imageOf generalTheme.gloss
       rotation 180
