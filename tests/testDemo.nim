@@ -69,7 +69,6 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
               value: self.myCheck
               text: fmt"Click {self.myCheck}"
               setup:
-                # themeWith(fill = pallete.warning)
                 var pl = palette
                 pl.highlight = themePalette.warning.lighten(0.1)
                 pl.foreground = themePalette.warning.lighten(0.2)
