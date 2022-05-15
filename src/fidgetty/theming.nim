@@ -10,6 +10,8 @@ type
     success*: Color
     warning*: Color
     danger*: Color
+    textLight*: Color
+    textDark*: Color
 
   Palette* = object
     foreground*: Color

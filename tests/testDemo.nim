@@ -70,10 +70,11 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
               text: fmt"Click {self.myCheck}"
               setup:
                 # themeWith(fill = pallete.warning)
-                var th = palette
-                th.highlight = themePalette.warning.lighten(0.1)
-                th.foreground = themePalette.warning.lighten(0.2)
-                push th
+                var pl = palette
+                pl.highlight = themePalette.warning.lighten(0.1)
+                pl.foreground = themePalette.warning.lighten(0.2)
+                pl.text = themePalette.textDark
+                push pl
               post:
                 pop(Palette)
 
@@ -122,8 +123,9 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
 
 startFidget(
   wrapApp(exampleApp, ExampleApp),
-  setup = setup(grayTheme),
-  # setup = setup(bulmaTheme),
+  setup = 
+    when defined(demoBulmaTheme): setup(bulmaTheme)
+    else: setup(grayTheme),
   w = 640,
   h = 700,
   uiScale = 2.0
