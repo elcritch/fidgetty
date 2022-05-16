@@ -53,7 +53,6 @@ proc listbox*(
       for idx, buttonName in pairs(items):
         group "menuBtn":
           box 0, 0, bw, bih
-          offset idx*5, 0
           layoutAlign laCenter
           # echo fmt"{idx=} => {isCovered(popupBox)=}"
 

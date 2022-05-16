@@ -119,6 +119,7 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
           text: fmt"{self.textInput}"
           disabled: true
           setup: size 60'vw, 2'em
+      palette.accent = parseHtml("#87E3FF", 0.67).spin(ap1.value * 36)
 
 startFidget(
   wrapApp(exampleApp, ExampleApp),
