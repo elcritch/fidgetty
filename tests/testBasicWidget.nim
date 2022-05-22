@@ -4,8 +4,8 @@ import std/strformat
 import asyncdispatch # This is what provides us with async and the dispatcher
 import times, strutils # This is to provide the timing output
 
-import fidgets
-import fidgets/[button, progressbar]
+import fidgetty
+import fidgetty/[button, progressbar]
 
 loadFont("IBM Plex Sans", "IBMPlexSans-Regular.ttf")
 
