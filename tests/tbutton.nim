@@ -1,6 +1,6 @@
 
-import fidgets
-import fidgets/button
+import fidgetty
+import fidgetty/button
 
 loadFont("IBM Plex Sans", "IBMPlexSans-Regular.ttf")
 
