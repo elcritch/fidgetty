@@ -14,9 +14,8 @@ proc dropdown*(
   ## dropdown widget 
   init:
     size 8'em, 1.5'em
-    cornerRadius theme
-    stroke theme.outerStroke
-    imageOf theme.gloss
+    fill clearColor
+    imageColor clearColor
 
   properties:
     dropDownOpen: bool
@@ -50,21 +49,22 @@ proc dropdown*(
       self.itemsVisible = -1
 
     let this = current
+
     widget button:
       setup:
         box 0, 0, bw, bh
-        cornerRadius theme
-        strokeLine this
-        shadows theme
-        imageOf this
+        # cornerRadius theme
+        # strokeLine this
+        # shadows theme
+        # imageOf this
+        clipContent true
         text "icon":
           box tw, 0, 1'em, bh
           fill palette.text
           if self.dropDownOpen: rotation -90
           else: rotation 0
           characters ">"
-      text:
-        fill palette.text
+      label:
         if dropSelected < 0: defaultLabel
         else: dropItems[dropSelected]
       onHover:
@@ -115,7 +115,7 @@ proc dropdown*(
               layoutAlign laCenter
 
               let clicked = widget button:
-                text: buttonName
+                label: buttonName
                 setup:
                   clearShadows()
                   let ic = this.image.color

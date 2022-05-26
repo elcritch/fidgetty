@@ -1,7 +1,7 @@
 import widgets
 
 proc button*(
-    message {.property: text.}: string,
+    label {.property: label.}: string,
     clicker {.property: onClick.}: WidgetProc = proc () = discard,
     isActive {.property: isActive.}: bool = false,
     disabled {.property: disabled.}: bool = false
@@ -18,7 +18,7 @@ proc button*(
   render:
     text "text":
       fill palette.text
-      characters message
+      characters label
 
     clipContent true
     if disabled:

@@ -57,7 +57,7 @@ proc listbox*(
           # echo fmt"{idx=} => {isCovered(popupBox)=}"
 
           let clicked = widget button:
-            text: buttonName
+            label: buttonName
             isActive: idx == selected
             setup:
               clearShadows()

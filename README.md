@@ -43,7 +43,7 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
     fill "#F7F7F9"
 
     Button:
-      text: "Dump"
+      label: "Dump"
       setup:
         fill "#DFDFF0"
       onClick:
@@ -67,7 +67,7 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
           itemSpacing 1.5'em
           # Trigger an animation on animatedProgress below
           Button:
-            text: fmt"Arg Incr {self.count1:4d}"
+            label: fmt"Arg Incr {self.count1:4d}"
             onClick:
               self.count1.inc()
               delta = 0.02
@@ -76,7 +76,7 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
             itemSpacing 4'em
 
             Button:
-              text: fmt"Evt Incr {self.count2:4d}"
+              label: fmt"Evt Incr {self.count2:4d}"
               onClick:
                 self.count2.inc()
                 currEvents["pbc1"] = IncrementBar(increment = 0.02)
@@ -93,13 +93,13 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
 
         Horizontal:
           Button:
-            text: fmt"Animate"
+            label: fmt"Animate"
             onClick:
               self.count2.inc()
               currEvents["pbc1"] = JumpToValue(target = 0.01)
 
           Button:
-            text: fmt"Cancel"
+            label: fmt"Cancel"
             onClick:
               currEvents["pbc1"] = CancelJump()
 
@@ -134,7 +134,7 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
             size 60'vw, 2'em
 
         Button:
-          text: fmt"{self.textInput}"
+          label: fmt"{self.textInput}"
           disabled: true
           setup:
             size 60'vw, 2'em
