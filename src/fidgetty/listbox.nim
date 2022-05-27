@@ -28,6 +28,10 @@ proc listbox*(
     let
       bdh = min(bih * itemsVisible.float32, windowLogicalSize.y/2)
 
+    let evts = useEvents()
+    let evtCode = current.code
+    # echo fmt"event code: {current.code} {evts.data.keys().toSeq().repr}"
+
     box 0, bh, bw, bdh
     clipContent true
 
@@ -47,6 +51,16 @@ proc listbox*(
       itemSpacing theme.itemSpacing
       scrollBars true
 
+      var menuEvts: seq[Variant]
+      if evts.pop(evtCode, menuEvts):
+        echo fmt"listbox has scroll event!"
+        for me in menuEvts:
+          if me.ofType(ScrollEvent):
+            echo fmt"listbox has scroll event: "
+            current.hookEvents.scrollEvent(me.get(ScrollEvent))
+
+        # let menuEvt = useEvents()
+        # menuEvt.scrollEvent()
       # inc framecount 
       # echo "\n\n====== lists {framecount} \n\n".fmt
 

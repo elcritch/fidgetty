@@ -15,6 +15,7 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
     count1: int
     count2: int
     value: float
+    scrollValue: float
     myCheck: bool
     mySlider: float
     dropIndexes: int = -1
@@ -84,6 +85,7 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
             width 100'pw - 8'em
 
         Horizontal:
+
           Button:
             label: fmt"Animate"
             onClick:
@@ -111,7 +113,15 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
           items: dropItems
           selected: self.dropIndexes
           itemsVisible: 4
+          setup:
+            size 60'vw, 2'em
+            bindEvents "lstbx", currEvents
+        Slider:
+          value: self.scrollValue
           setup: size 60'vw, 2'em
+          onChange:
+            echo fmt"changed: {self.scrollValue}"
+            currEvents["lstbx"] = ScrollTo(self.scrollValue)
         TextInputBind:
           value: self.textInput
           setup: size 60'vw, 2'em
