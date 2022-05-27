@@ -120,7 +120,6 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
           value: self.scrollValue
           setup: size 60'vw, 2'em
           onChange:
-            echo fmt"changed: {self.scrollValue}"
             currEvents["lstbx"] = ScrollTo(self.scrollValue)
         TextInputBind:
           value: self.textInput
