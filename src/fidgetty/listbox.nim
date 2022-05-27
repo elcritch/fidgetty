@@ -53,16 +53,14 @@ proc listbox*(
 
       var menuEvts: seq[Variant]
       if evts.pop(evtCode, menuEvts):
-        echo fmt"listbox has scroll event!"
         for me in menuEvts:
           if me.ofType(ScrollEvent):
-            echo fmt"listbox has scroll event: "
-            current.hookEvents.scrollEvent(me.get(ScrollEvent))
-
-        # let menuEvt = useEvents()
-        # menuEvt.scrollEvent()
-      # inc framecount 
-      # echo "\n\n====== lists {framecount} \n\n".fmt
+            match me.get(ScrollEvent):
+              ScrollTo(perc: nperc):
+                current.offset.y = (current.screenBox.h - parent.screenBox.h) * nperc
+                current.scrollPercent = nperc
+              ScrollPage(amount: amount):
+                current.scrollPercent += amount
 
       for idx, buttonName in pairs(items):
         group "menuBtn":
