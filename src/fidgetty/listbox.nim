@@ -14,15 +14,22 @@ proc listbox*(
     cornerRadius theme
     stroke theme.outerStroke
     imageOf theme.gloss
+    var
+      scrollAmount = 0.0'f32
+      wasScrolled = false
 
   properties:
     showScrollBars: bool
 
-  # onEvents:
-  #   IncrementBar(increment):
-  #     # echo "pbar event: ", evt.repr()
-  #     self.value = self.value + increment
-  #     refresh()
+  onEvents(ScrollEvent):
+    ScrollTo(perc: nperc):
+      scrollAmount = nperc
+      wasScrolled = true
+      echo "LISTBOX:SCROLL"
+    ScrollPage(amount: amount):
+      scrollAmount = amount
+      wasScrolled = true
+      echo "LISTBOX:SCROLL"
 
   render:
     let
@@ -57,15 +64,9 @@ proc listbox*(
       itemSpacing theme.itemSpacing
       scrollBars true
 
-      var menuEvts: seq[Variant]
-      if evts.pop(evtCode, menuEvts):
-        for me in menuEvts:
-          if me.ofType(ScrollEvent):
-            match me.get(ScrollEvent):
-              ScrollTo(perc: nperc):
-                current.offset.y = (current.screenBox.h - parent.screenBox.h) * nperc
-              ScrollPage(amount: amount):
-                current.offset.y = parent.screenBox.h/2 * amount
+      if wasScrolled:
+        current.offset.y =
+          (current.screenBox.h - parent.screenBox.h) * scrollAmount
 
       for idx, buttonName in pairs(items):
         group "menuBtn":

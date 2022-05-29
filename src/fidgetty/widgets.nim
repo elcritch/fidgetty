@@ -153,8 +153,8 @@ proc makeWidgetPropertyMacro(procName, typeName: string): NimNode =
 proc eventsMacro*(tp: string, blks: TableRef[string, NimNode]): NimNode =
   result = newStmtList()
   let
-    variantEvt = ident "evtVariant"
-    evtName = ident "evt"
+    variantEvt = genSym(nskForVar, "evtVariant")
+    evtName = genSym(nskLet, "evt")
 
   var matchBodies = newStmtList()
   for evtType, blk in blks:
@@ -165,12 +165,11 @@ proc eventsMacro*(tp: string, blks: TableRef[string, NimNode]): NimNode =
         let `evtName` = `variantEvt`.get(`et`)
         `body`
   result.add quote do:
-    var evts {.inject.}: seq[Variant]
+    var evts: seq[Variant]
     if not current.hookEvents.data.isNil and
            current.hookEvents.data.pop(current.code, evts):
       for `variantEvt` in evts:
         `matchBodies`
-  echo "ONEVENTS:IMPL: ", result.repr
 
 
 ## ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -230,9 +229,7 @@ proc makeStatefulWidget*(blk: NimNode, hasState, defaultState, wrapper: bool): N
       code.expectKind(nnkStmtList)
       let evtIdent = code[0]
       evtName = evtIdent.strVal
-      echo "FIDGETS:EVENTS:NAME: ", evtName 
       let code = code[1]
-      echo "FIDGETS:EVENTS: ", evtName, " code: ", code.treeRepr
       let vp = nnkCommand.newTree(ident "variantp", evtIdent, code)
       preBody.add quote do:
         {.push hint[Name]: off.}
@@ -241,14 +238,8 @@ proc makeStatefulWidget*(blk: NimNode, hasState, defaultState, wrapper: bool): N
     of "onEvents":
       let evtIdent = code[0]
       evtName = evtIdent.strVal
-      echo "FIDGETS:ONEVENTS:NAME: ", evtIdent.treeRepr 
       let blk = code[1]
-      echo "FIDGETS:ONEVENTS: ", evtName, " code: ", blk.repr
-
-      # onEventsImpl.add eventsMacro(evtName, "", blk)
-      echo "FIDGETS:ONEVENTS:onEventsImpl: ", onEventsImpl.repr
       onEventsBlocks[evtName] = blk
-      # let evtIdent = code[0]
 
   if onEventsBlocks.len() > 0:
     onEventsImpl = eventsMacro(evtName, onEventsBlocks)
