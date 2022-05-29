@@ -29,7 +29,6 @@ proc listbox*(
     ScrollPage(amount: amount):
       scrollAmount = amount
       wasScrolled = true
-      echo "LISTBOX:SCROLL"
 
   render:
     let
