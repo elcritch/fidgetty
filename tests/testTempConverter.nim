@@ -2,7 +2,8 @@ import std/strformat, std/hashes, std/sequtils
 import parseutils, memo
 
 import fidgetty
-import fidgetty/[textinput]
+import fidgetty/textinput
+import fidgetty/themes
 
 loadFont("IBM Plex Sans", "IBMPlexSans-Regular.ttf")
 
@@ -30,7 +31,7 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
   render:
     setTitle(fmt"Fidget Animated Progress Example")
     textStyle theme
-    fill theme
+    fill palette.background
     box 0, 0, 100'vw, 100'vh
     Vertical:
       box 1'em, 1'em, 100'vw, 100'vh
@@ -42,23 +43,29 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
           setup: size 5'em, 2'em
         text "data":
           size 6'em, 2'em
-          fill palette.textFill
+          fill palette.text
           characters: fmt"Celsius"
         text "data":
           size 3'em, 2'em
-          fill palette.textFill
+          fill palette.text
           characters: fmt" = "
         let fValStr = TextInput:
           value: fmt"{toF(self.temp).float:5.1f}".strip()
           setup: size 5'em, 2'em
         text "data":
           size 6'em, 2'em
-          fill palette.textFill
+          fill palette.text
           characters: fmt" Fahrenheit"
 
         cValStr.parseTemp(Celsius)
         fValStr.parseTemp(Fahrenheit)
 
 
-startFidget(wrapApp(exampleApp, ExampleApp),
-            theme = grayTheme, w = 440, h = 140, uiScale = 2.0)
+startFidget(
+  wrapApp(exampleApp, ExampleApp),
+  setup = 
+    when defined(demoBulmaTheme): setup(bulmaTheme)
+    else: setup(grayTheme),
+  w = 440,
+  h = 140,
+  uiScale = 2.0)
