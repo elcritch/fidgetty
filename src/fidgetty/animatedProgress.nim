@@ -28,7 +28,7 @@ proc animatedProgress*(
     JumpToValue(target: float)
     CancelJump
 
-  onEvents:
+  onEvents(AnimatedEvents):
     IncrementBar(increment):
       # echo "pbar event: ", evt.repr()
       self.value = self.value + increment

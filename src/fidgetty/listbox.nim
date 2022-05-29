@@ -18,6 +18,12 @@ proc listbox*(
   properties:
     showScrollBars: bool
 
+  # onEvents:
+  #   IncrementBar(increment):
+  #     # echo "pbar event: ", evt.repr()
+  #     self.value = self.value + increment
+  #     refresh()
+
   render:
     let
       cb = current.box()

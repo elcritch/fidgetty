@@ -150,20 +150,27 @@ proc makeWidgetPropertyMacro(procName, typeName: string): NimNode =
   echo "\n=== Widget: makeWidgetPropertyMacro === "
   echo result.repr
 
-proc eventsMacro*(tp: string, blk: NimNode): NimNode =
+proc eventsMacro*(tp: string, blks: TableRef[string, NimNode]): NimNode =
   result = newStmtList()
-  var tn = ident tp
-  var code = blk
-  var name = ident "evt"
-  var matchBody = nnkCommand.newTree(ident "match", name, blk)
-  echo "ON EVENTS: ", blk.treeRepr
+  let
+    variantEvt = ident "evtVariant"
+    evtName = ident "evt"
+
+  var matchBodies = newStmtList()
+  for evtType, blk in blks:
+    let body = nnkCommand.newTree(ident "match", evtName, blk)
+    let et = ident(evtType)
+    matchBodies.add quote do:
+      if `variantEvt`.ofType(`et`):
+        let `evtName` = `variantEvt`.get(`et`)
+        `body`
   result.add quote do:
     var evts {.inject.}: seq[Variant]
     if not current.hookEvents.data.isNil and
            current.hookEvents.data.pop(current.code, evts):
-      for evt in evts:
-        let `name` = evt.get(`tn`)
-        `matchBody`
+      for `variantEvt` in evts:
+        `matchBodies`
+  echo "ONEVENTS:IMPL: ", result.repr
 
 
 ## ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -200,9 +207,10 @@ proc makeStatefulWidget*(blk: NimNode, hasState, defaultState, wrapper: bool): N
   var
     initImpl: NimNode = newStmtList()
     renderImpl: NimNode
-    onEventsImpl: NimNode
     evtName: string
     hasProperty = false
+    onEventsImpl = newStmtList()
+    onEventsBlocks = newTable[string, NimNode]()
 
   for idx, name, code in body.attributes():
     echo fmt"{idx=} {name=}"
@@ -231,12 +239,19 @@ proc makeStatefulWidget*(blk: NimNode, hasState, defaultState, wrapper: bool): N
         `vp`
         {.pop.}
     of "onEvents":
-      onEventsImpl = code
+      let evtIdent = code[0]
+      evtName = evtIdent.strVal
+      echo "FIDGETS:ONEVENTS:NAME: ", evtIdent.treeRepr 
+      let blk = code[1]
+      echo "FIDGETS:ONEVENTS: ", evtName, " code: ", blk.repr
 
-  if not onEventsImpl.isNil:
-    onEventsImpl = eventsMacro(evtName, onEventsImpl)
-  else:
-    onEventsImpl = newStmtList()
+      # onEventsImpl.add eventsMacro(evtName, "", blk)
+      echo "FIDGETS:ONEVENTS:onEventsImpl: ", onEventsImpl.repr
+      onEventsBlocks[evtName] = blk
+      # let evtIdent = code[0]
+
+  if onEventsBlocks.len() > 0:
+    onEventsImpl = eventsMacro(evtName, onEventsBlocks)
 
   if not wrapper and renderImpl.isNil:
     error("fidgets must provide a render body!", procDef)
