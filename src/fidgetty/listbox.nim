@@ -58,9 +58,8 @@ proc listbox*(
             match me.get(ScrollEvent):
               ScrollTo(perc: nperc):
                 current.offset.y = (current.screenBox.h - parent.screenBox.h) * nperc
-                current.scrollPercent = nperc
               ScrollPage(amount: amount):
-                current.scrollPercent += amount
+                current.offset.y = parent.screenBox.h/2 * amount
 
       for idx, buttonName in pairs(items):
         group "menuBtn":
