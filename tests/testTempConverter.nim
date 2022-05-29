@@ -38,9 +38,10 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
       spacer 0, 50'ph - 2'em
       Horizontal:
         spacer 1'em
-        let cValStr = TextInput:
-          value: fmt"{toC(self.temp).float:5.1f}".strip()
-          setup: size 5'em, 2'em
+        let cValStr =
+          TextInput:
+            value: fmt"{toC(self.temp).float:5.1f}".strip()
+            setup: size 5'em, 2'em
         text "data":
           size 6'em, 2'em
           fill palette.text
@@ -49,9 +50,10 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
           size 3'em, 2'em
           fill palette.text
           characters: fmt" = "
-        let fValStr = TextInput:
-          value: fmt"{toF(self.temp).float:5.1f}".strip()
-          setup: size 5'em, 2'em
+        let fValStr =
+          TextInput:
+            value: fmt"{toF(self.temp).float:5.1f}".strip()
+            setup: size 5'em, 2'em
         text "data":
           size 6'em, 2'em
           fill palette.text
