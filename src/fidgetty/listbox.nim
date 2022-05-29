@@ -25,7 +25,6 @@ proc listbox*(
     ScrollTo(perc: nperc):
       scrollAmount = nperc
       wasScrolled = true
-      echo "LISTBOX:SCROLL"
     ScrollPage(amount: amount):
       scrollAmount = amount
       wasScrolled = true
