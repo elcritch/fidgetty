@@ -165,11 +165,15 @@ proc animatedProgress*(
       ## Create an completed "empty" future
   
   events(AnimatedEvents):
+    ## This declares an object variant using [Patty](https://github.com/andreaferretti/patty). 
     IncrementBar(increment: float)
     JumpToValue(target: float)
     CancelJump
 
-  onEvents:
+  onEvents(AnimatedEvents):
+    ## Multiple `onEvents` can be defined to handle other defined events.
+    ## Events need to be defined using object variants, using Patty
+    ## makes this much easier if not using the `events` property above.  
     IncrementBar(increment):
       # echo "pbar event: ", evt.repr()
       self.value = self.value + increment
