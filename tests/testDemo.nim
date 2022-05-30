@@ -66,17 +66,10 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
               onClick:
                 self.count2.inc()
                 currEvents["pbc1"] = IncrementBar(increment = 0.02)
-            Checkbox:
-              value: self.myCheck
-              text: fmt"Click {self.myCheck}"
-              setup:
-                var pl = palette
-                pl.highlight = themePalette.warning.lighten(0.1)
-                pl.foreground = themePalette.warning.lighten(0.2)
-                pl.text = themePalette.textDark
-                push pl
-              post:
-                pop(Palette)
+            Theme(warningPalette()):
+              Checkbox:
+                value: self.myCheck
+                text: fmt"Click {self.myCheck}"
 
         let ap1 = AnimatedProgress:
           delta: delta

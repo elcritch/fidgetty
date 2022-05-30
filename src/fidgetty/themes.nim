@@ -9,8 +9,7 @@ proc grayTheme*(): tuple[palette: Palette, general: GeneralTheme] =
   themePalette.link = themePalette.primary
   themePalette.info = themePalette.primary
   themePalette.success = themePalette.primary
-  themePalette.warning = themePalette.primary
-  themePalette.danger = themePalette.primary
+  themePalette.warning = parseHtml("#ffdd57") # hsl(48, 100/360, 67/360).to(Color)
   themePalette.danger = themePalette.primary
   themePalette.textLight = parseHtml("#ffffff")
   themePalette.textDark = parseHtml("#000000")
@@ -61,3 +60,18 @@ proc bulmaTheme*(): tuple[palette: Palette, general: GeneralTheme] =
   result.palette.text = whiteColor
   result.palette.accent = parseHtml("#87E3FF", 0.77)
 
+
+template MakeDefaultPalette(name: untyped) =
+  proc `name Palette`*(textDark = true): Palette =
+    ## Set sub-palette using `name` colors for widgets
+    result = palette()
+    result.highlight = themePalette.`name`.lighten(0.05)
+    result.foreground = themePalette.`name`.lighten(0.2)
+    if textDark:
+      result.text = themePalette.textDark
+
+MakeDefaultPalette(info)
+MakeDefaultPalette(link)
+MakeDefaultPalette(success)
+MakeDefaultPalette(warning)
+MakeDefaultPalette(danger)

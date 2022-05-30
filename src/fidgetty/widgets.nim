@@ -384,6 +384,26 @@ template Vertical*(text, child: untyped) =
 template Vertical*(child: untyped) =
   vertical("", child)
 
+template Theme*(pl: Palette, child: untyped) =
+  block:
+    push pl
+    `child`
+    pop(Palette)
+
+template ThemePalette*(child: untyped) =
+  block:
+    var pl = palette()
+    push pl
+    `child`
+    pop(Palette)
+
+template GeneralTheme*(child: untyped) =
+  block:
+    var th = theme()
+    push th
+    `child`
+    pop(GeneralTheme)
+
 template spacer*(w, h: float32) =
   blank: size(w, h)
 
