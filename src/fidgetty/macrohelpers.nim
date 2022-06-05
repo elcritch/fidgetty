@@ -32,17 +32,17 @@ proc makeLambdaDecl*(
     argtype: NimNode,
     code: NimNode,
 ): NimNode =
-  result = nnkLetSection.newTree(
+  result = LetSection(
     nnkIdentDefs.newTree(
       pargname,
       argtype,
       nnkLambda.newTree(
-        newEmptyNode(),
-        newEmptyNode(),
-        newEmptyNode(),
-        nnkFormalParams.newTree(newEmptyNode()),
-        newEmptyNode(),
-        newEmptyNode(),
+        Empty(),
+        Empty(),
+        Empty(),
+        FormalParams(Empty()),
+        Empty(),
+        Empty(),
         code,
       )
     )
