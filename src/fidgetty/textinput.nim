@@ -21,8 +21,9 @@ proc textInput*(
     text "text":
       fill palette.text
       binding(value):
-        if value != keyboard.input:
-          result = some keyboard.input
+        let input = $keyboard.input
+        if value != input:
+          result = some input
 
     fill palette.textBg
     clipContent true
