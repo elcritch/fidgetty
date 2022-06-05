@@ -1,5 +1,7 @@
 import macros, tables, strutils, strformat, math, random, options
 import bumpy, variant, patty
+import std/macrocache
+
 
 export tables, strutils, strformat, options
 export bumpy, math, random
@@ -13,6 +15,36 @@ type
 
 template property*(name: untyped) {.pragma.}
 
+const widgetArgsTable = CacheTable"fidgettyWidgetArgsTable "
+
+type
+  WidgetArgs = (string, string, NimNode)
+
+proc makeWidgetArg(arg: WidgetArgs): NimNode =
+  # widgetArgs.add( (argname, pname, argtype,) )
+  let
+    argName = arg[0]
+    propName = arg[1]
+    argType = arg[2]
+  result = nnkTupleConstr.newTree(
+    newStrLitNode(argName),
+    newStrLitNode(propName),
+    argType,
+  )
+
+proc makeWidgetArgs(args: seq[WidgetArgs]): NimNode =
+  result = nnkBracketExpr.newTree()
+  for arg in args:
+    result.add arg.makeWidgetArg()
+
+proc toWidgetArg(arg: NimNode): WidgetArgs =
+  arg.expectKind(nnkTupleConstr)
+  result = (arg[0].strVal, arg[1].strVal, arg[2])
+
+proc toWidgetArgs(args: NimNode): seq[WidgetArgs] =
+  args.expectKind(nnkBracketExpr)
+  for an in args:
+    result.add an.toWidgetArg()
 
 proc makeLambdaDecl*(
     pargname: NimNode,
@@ -89,7 +121,7 @@ proc makeType(name: string, body: NimNode): NimNode =
   tp[0][^1][0][^1] = rec
   result.add tp
 
-var widgetArgsTable* {.compileTime.} = initTable[string, seq[(string, string, NimNode, )]]()
+# var widgetArgsTable* {.compileTime.} = initTable[string, seq[(string, string, NimNode, )]]()
 
 macro widget*(widget, body: untyped): untyped =
   let procName = widget.strVal
@@ -99,7 +131,7 @@ macro widget*(widget, body: untyped): untyped =
   for idx, name, code in body.attributes():
     attrs[name] = code
   var args = newSeq[NimNode]()
-  let widgetArgs = widgetArgsTable[procName]
+  let widgetArgs = widgetArgsTable[procName].toWidgetArgs()
   
   result = newStmtList()
   for (argname, propname, argtype) in widgetArgs:
@@ -292,7 +324,7 @@ proc makeStatefulWidget*(blk: NimNode, hasState, defaultState, wrapper: bool): N
     let pname = if propname == "": argname else: propname
     widgetArgs.add( (argname, pname, argtype,) )
 
-  widgetArgsTable[procName] = widgetArgs
+  widgetArgsTable[procName] = widgetArgs.makeWidgetArgs()
 
   result = newStmtList()
   result.add preBody 
@@ -352,7 +384,7 @@ template Horizontal*(text, child: untyped) =
     `child`
 
 template Horizontal*(child: untyped) =
-  horizontal("", child)
+  Horizontal("", child)
 
 template Vertical*(text, child: untyped) =
   group text:
@@ -362,7 +394,7 @@ template Vertical*(text, child: untyped) =
     `child`
 
 template Vertical*(child: untyped) =
-  vertical("", child)
+  Vertical("", child)
 
 template Theme*(pl: Palette, child: untyped) =
   block:
