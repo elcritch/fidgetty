@@ -25,8 +25,8 @@ macro widget*(widget, body: untyped): untyped =
 
   result = newStmtList()
   var attrs = initTable[string, NimNode]()
-  for idx, name, code in body.attributes():
-    attrs[name] = code
+  for idx, attr in body.attributes():
+    attrs[attr.name] = attr.code
   var args = newSeq[NimNode]()
   let widgetArgs = widgetArgsTable[procName].toWidgetArgs()
   
@@ -125,33 +125,33 @@ proc makeStatefulWidget*(blk: NimNode, hasState, defaultState, wrapper: bool): N
     onEventsImpl = newStmtList()
     onEventsBlocks = newTable[string, NimNode]()
 
-  for idx, name, code in body.attributes():
+  for idx, attr in body.attributes():
     body[idx] = newStmtList()
-    case name:
+    case attr.name:
     of "init":
-      initImpl = code
+      initImpl = attr.code
     of "render":
-      renderImpl = code
+      renderImpl = attr.code
     of "properties":
       if not hasState:
-        error("'properties' requires a Stateful Fidget type. ", code)
+        error("'properties' requires a Stateful Fidget type. ", attr.code)
       hasProperty = true
-      let wType = typeName.makeType(code)
+      let wType = typeName.makeType(attr.code)
       preBody.add wType
     of "events":
-      code.expectKind(nnkStmtList)
-      let evtIdent = code[0]
+      attr.code.expectKind(nnkStmtList)
+      let evtIdent = attr.code[0]
       evtName = evtIdent.strVal
-      let code = code[1]
+      let code = attr.code[1]
       let vp = nnkCommand.newTree(ident "variantp", evtIdent, code)
       preBody.add quote do:
         {.push hint[Name]: off.}
         `vp`
         {.pop.}
     of "onEvents":
-      let evtIdent = code[0]
+      let evtIdent = attr.code[0]
       evtName = evtIdent.strVal
-      let blk = code[1]
+      let blk = attr.code[1]
       onEventsBlocks[evtName] = blk
 
   if onEventsBlocks.len() > 0:
@@ -217,9 +217,10 @@ proc makeStatefulWidget*(blk: NimNode, hasState, defaultState, wrapper: bool): N
   params.add identArg 
 
   var widgetArgs = newSeq[(string, string, NimNode)]()
-  for idx, argname, propname, argtype in params.propertyNames():
-    let pname = if propname == "": argname else: propname
-    widgetArgs.add( (argname, pname, argtype,) )
+  for idx, prop in params.propertyNames():
+    echo fmt"PROPERTYNAMES: {prop.name=} {prop.label=} {prop.argtype.repr=}"
+    let pname = if prop.label == "": prop.name else: prop.label
+    widgetArgs.add( (prop.name, pname, prop.argtype,) )
 
   widgetArgsTable[procName] = widgetArgs.makeWidgetArgs()
 

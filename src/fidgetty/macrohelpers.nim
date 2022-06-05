@@ -8,6 +8,15 @@ import macroutils
 type
   WidgetArgs* = (string, string, NimNode)
 
+  Property* = object
+    name*: string
+    label*: string
+    argtype*: NimNode
+
+  Attribute* = object
+    name*: string
+    code*: NimNode
+
 proc makeWidgetArg*(arg: WidgetArgs): NimNode =
   # widgetArgs.add( (argname, pname, argtype,) )
   result = superQuote do:
@@ -48,17 +57,17 @@ proc makeLambdaDecl*(
     )
   )
 
-iterator attributes*(blk: NimNode): (int, string, NimNode) =
+iterator attributes*(blk: NimNode): (int, Attribute) =
   for idx, item in blk:
     if item.kind == nnkCall:
       var name = item[0].repr
       if item.len() > 2:
         let code = newStmtList(item[1..^1])
-        yield (idx, name, code)
+        yield (idx, Attribute(name: name, code: code))
       else:
-        yield (idx, name, item[1])
+        yield (idx, Attribute(name: name, code: item[1]))
 
-iterator propertyNames*(params: NimNode): (int, string, string, NimNode) =
+iterator propertyNames*(params: NimNode): (int, Property) =
   for idx, item in params:
     if item.kind == nnkEmpty:
       continue
@@ -66,11 +75,11 @@ iterator propertyNames*(params: NimNode): (int, string, string, NimNode) =
       var name = item[0][0].repr
       var pname = item[0][1][0][1].strVal
       var code = item[1]
-      yield (idx, name, pname, code)
+      yield (idx, Property(name: name, label: pname, argtype: code))
     elif item.kind == nnkIdentDefs and item[0].kind == nnkIdent:
       var name = item[0].repr
       var code = item[1]
-      yield (idx, name, "", code)
+      yield (idx, Property(name: name, label: "", argtype: code))
 
 proc makeType*(name: string, body: NimNode): NimNode =
   var propDefs = newTable[string, NimNode]()
