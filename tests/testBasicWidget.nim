@@ -5,6 +5,7 @@ import asyncdispatch # This is what provides us with async and the dispatcher
 import times, strutils # This is to provide the timing output
 
 import fidgetty
+import fidgetty/themes
 import fidgetty/[button, progressbar]
 
 loadFont("IBM Plex Sans", "IBMPlexSans-Regular.ttf")
@@ -48,7 +49,7 @@ proc exampleApp*(
       progressbar(self.value, fmt"Progress: {self.value:4.2}") do:
         box 10.WPerc, 20, 80.WPerc, 2.Em
 
-      horizontal:
+      Horizontal:
         # creates an horizontal spacing box
 
         box 90.WPerc - 16.Em, 100, 8.Em, 2.Em
@@ -62,8 +63,8 @@ proc exampleApp*(
         # Alternate format using `Widget` macro that enables
         # a YAML like syntax using property labels
         # (see parameters on `button` widget proc)
-        widget button:
-          text: fmt"Clicked2: {self.count:4d}"
+        Button:
+          label: fmt"Clicked2: {self.count:4d}"
           onClick: self.count.inc()
 
         # current limit on Widget macros is that all args
@@ -73,7 +74,7 @@ proc exampleApp*(
         #     Widget button(fmt"Clicked2: {self.count:4d}"):
         #       onClick: self.count.inc()
 
-      vertical:
+      Vertical:
         # creates a vertical spacing box
 
         box 10.WPerc, 160, 8.Em, 2.Em
@@ -86,8 +87,8 @@ proc exampleApp*(
         #   setup: size 8.Em, 2.Em
         #   onClick: self.count.inc()
 
-        widget button:
-          text: fmt"Clicked4: {self.count:4d}"
+        Button:
+          label: fmt"Clicked4: {self.count:4d}"
           setup: size 8.Em, 2.Em
           onClick: self.count.inc()
 
@@ -107,4 +108,11 @@ proc drawMain() =
       self: state
 
 
-startFidget(drawMain, theme=grayTheme, w=640, h=400, uiScale=2.0)
+startFidget(
+  drawMain,
+  setup = 
+    when defined(demoBulmaTheme): setup(bulmaTheme)
+    else: setup(grayTheme),
+  w=640, h=400,
+  uiScale=2.0
+)
