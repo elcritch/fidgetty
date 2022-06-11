@@ -43,16 +43,17 @@ proc progressbar*(
       clipContent true
       stroke theme.innerStroke
 
-    # Draw the bar itself.
-    box 0, 0, bw, bh
-    stroke theme.outerStroke
-    fill palette.foreground
-    cornerRadius 1.0 * theme.cornerRadius[0]
-    clipContent true
-    rectangle "bezel":
-      cornerRadius 0.80 * theme.cornerRadius[0]
-      box 0, 0, 100'pw, 100'ph
-      rotation 180
-      imageOf theme.gloss
+    rectangle "bar":
+      # Draw the bar itself.
+      box 0, 0, bw, bh
+      stroke theme.outerStroke
+      fill palette.foreground
+      cornerRadius 1.0 * theme.cornerRadius[0]
+
+    # rectangle "bezel":
+    #   cornerRadius 0.80 * theme.cornerRadius[0]
+    #   box 0, 0, 100'pw, 100'ph
+    #   rotation 180
+    #   imageOf theme.gloss
 
     cornerRadius 1.0 * theme.cornerRadius[0]

@@ -314,11 +314,17 @@ template GeneralTheme*(child: untyped) =
     `child`
     pop(GeneralTheme)
 
-template spacer*(w, h: float32) =
+template Spacer*(w, h: float32) =
   blank: size(w, h)
 
-template spacer*(s: float32) =
-  spacer(s, s)
+template Spacer*(s: float32) =
+  Spacer(s, s)
+
+template HSpacer*(h: float32) =
+  blank: size(0, h)
+
+template VSpacer*(w: float32) =
+  blank: size(w, 0)
 
 template wrapApp*(fidgetName: typed, fidgetType: typedesc): proc() =
   proc `fidgetName Main`() =
