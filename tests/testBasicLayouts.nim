@@ -53,8 +53,9 @@ proc exampleApp*(
       fill "#DFDFE0"
       strokeWeight 1
 
-      Grid:
+      Vertical:
         boxOf parent
+        itemSpacing 2.Em
 
         rectangle "bar":
           size 80.WPerc, 2.Em
@@ -65,25 +66,27 @@ proc exampleApp*(
           Progressbar:
             value: self.value
 
-        rectangle "area1":
-          size 8.Em, 2.Em
-          offset 2.Em, 4.Em
-          # constraints cScale, cScale
-          Button:
-            label: fmt"Clicked2: {self.count:4d}"
-            onClick: self.count.inc()
+        Horizontal:
+          itemSpacing 2.Em
+          rectangle "area1":
+            size 8.Em, 2.Em
+            offset 2.Em, 4.Em
+            # constraints cScale, cScale
+            Button:
+              label: fmt"Clicked2: {self.count:4d}"
+              setup:
+                size 8.Em, 2.Em
+              onClick: self.count.inc()
 
-
-        rectangle "area1":
-          size 8.Em, 2.Em
-          offset 3.Em, 7.Em
-          # constraints cScale, cScale
-          Button:
-            label: fmt"Clicked4: {self.count:4d}"
-            setup:
-              size 8.Em, 2.Em
-              constraints cScale, cScale
-            onClick: self.count.inc()
+          rectangle "area0":
+            size 8.Em, 2.Em
+            offset 3.Em, 7.Em
+            # constraints cScale, cScale
+            Button:
+              label: fmt"Clicked4: {self.count:4d}"
+              setup:
+                size 8.Em, 2.Em
+              onClick: self.count.inc()
 
 var state = ExampleApp(count: 2, value: 0.33)
 

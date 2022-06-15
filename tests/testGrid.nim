@@ -10,9 +10,12 @@ import fidgetty/[button, progressbar]
 
 loadFont("IBM Plex Sans", "IBMPlexSans-Regular.ttf")
 
+proc loadMain() =
+  setWindowBounds(vec2(300, 200), vec2(600, 400))
+
 template Grid(code: untyped) =
   frame "autoFrame":
-    # autoOrg()
+    autoOrg()
 
     # layout lmVertical
     # counterAxisSizingMode csAuto
@@ -41,72 +44,46 @@ proc exampleApp*(
     fill "#F7F7F9"
 
     group "center":
-      # box 100, 0, 80'vw, 100'vw
       paddingXY 1.Em
       cornerRadius 0.2'em
-      # autoOrg()
+      autoOrg()
       # layout lmVertical
       # counterAxisSizingMode csAuto
 
       fill "#DFDFE0"
       strokeWeight 1
 
-      Vertical:
+      Grid:
         boxOf parent
-        itemSpacing 2.Em
 
         rectangle "bar":
           size 80.WPerc, 2.Em
           offset 1.Em, 1.Em
-          # constraints cScale, cMin
+          constraints cScale, cMin
+
           self.value = (self.count.toFloat * 0.10) mod 1.0001
           Progressbar:
             value: self.value
 
-        # Horizontal:
         rectangle "area1":
-          strokeLine 1.0, "#000000", 0.87
-          itemSpacing 2.Em
+          size 8.Em, 2.Em
+          offset 2.Em, 4.Em
+          # constraints cScale, cScale
+          Button:
+            label: fmt"Clicked2: {self.count:4d}"
+            onClick: self.count.inc()
 
-          rectangle "area1":
-            # size 12.Em, 4.Em
-            paddingXY 4.Em, 4.Em
-            # offset 25.WPerc, 25.HPerc
-            # constraints cScale, cScale
-            Button:
-              label: fmt"Clicked1: {self.count:4d}"
-              onClick: self.count.inc()
 
-          rectangle "area1":
-            # size 12.Em, 4.Em
-            paddingXY 4.Em, 4.Em
-            # offset 75.WPerc, 25.HPerc
-            # constraints cScale, cScale
-            Button:
-              label: fmt"Clicked2: {self.count:4d}"
-              onClick: self.count.inc()
-
-        # Horizontal:
         rectangle "area1":
-          strokeLine 1.0, "#000000", 0.87
-          itemSpacing 2.Em
-
-          rectangle "area2":
-            size 8.Em, 2.Em
-            # offset 25.WPerc, 75.HPerc
-            # constraints cScale, cScale
-            Button:
-              label: fmt"Clicked3: {self.count:4d}"
-              onClick: self.count.inc()
-
-          rectangle "area2":
-            size 8.Em, 2.Em
-            # offset 75.WPerc, 75.HPerc
-            # constraints cScale, cScale
-            Button:
-              label: fmt"Clicked4: {self.count:4d}"
-              onClick: self.count.inc()
-
+          size 8.Em, 2.Em
+          offset 3.Em, 7.Em
+          # constraints cScale, cScale
+          Button:
+            label: fmt"Clicked4: {self.count:4d}"
+            setup:
+              size 8.Em, 2.Em
+              constraints cScale, cScale
+            onClick: self.count.inc()
 
 var state = ExampleApp(count: 2, value: 0.33)
 
@@ -126,6 +103,7 @@ proc drawMain() =
 
 startFidget(
   drawMain,
+  load=loadMain,
   setup = 
     when defined(demoBulmaTheme): setup(bulmaTheme)
     else: setup(grayTheme),
