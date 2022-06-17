@@ -78,7 +78,6 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
             width 100'pw - 8'em
 
         Horizontal:
-
           Button:
             label: fmt"Animate"
             onClick:

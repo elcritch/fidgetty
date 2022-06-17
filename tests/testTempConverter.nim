@@ -35,9 +35,9 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
     box 0, 0, 100'vw, 100'vh
     Vertical:
       box 1'em, 1'em, 100'vw, 100'vh
-      spacer 0, 50'ph - 2'em
+      Spacer 0, 50'ph - 2'em
       Horizontal:
-        spacer 1'em
+        Spacer 1'em
         let cValStr =
           TextInput:
             value: fmt"{toC(self.temp).float:5.1f}".strip()

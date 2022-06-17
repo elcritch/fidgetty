@@ -4,7 +4,7 @@ import std/macrocache
 
 import macrohelpers
 
-export tables, strutils, strformat, options
+export tables, strformat, options
 export bumpy, math, random
 export bumpy, variant, patty
 

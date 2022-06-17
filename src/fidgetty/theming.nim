@@ -1,3 +1,4 @@
+import strutils
 import fidget
 
 type
