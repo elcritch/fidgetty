@@ -1,4 +1,50 @@
 import widgets
+import times
+
+import fidget/patches/textboxes
+
+var
+  # Used for double-clicking
+  multiClick: int
+  lastClickTime: float
+  currLevel: ZLevel
+
+proc handleClicked(textBox: TextBox) =
+  # let mousePos = mouse.pos(raw=true) - current.screenBox.xy + current.totalOffset
+  # let mousePos = mouse.pos(raw=true) + current.totalOffset
+  let mousePos = mouse.pos(raw=false)
+  echo ""
+
+  # mouse actions click, drag, double clicking
+  if epochTime() - lastClickTime < 0.5:
+    inc multiClick
+  else:
+    multiClick = 0
+  lastClickTime = epochTime()
+  if multiClick == 1:
+    echo "selectWord"
+    textBox.selectWord(mousePos)
+    buttonDown[MOUSE_LEFT] = false
+  elif multiClick == 2:
+    echo "selectParagraph"
+    textBox.selectParagraph(mousePos)
+    buttonDown[MOUSE_LEFT] = false
+  elif multiClick == 3:
+    textBox.selectAll()
+    buttonDown[MOUSE_LEFT] = false
+  else:
+    echo "mouseAction"
+    textBox.mouseAction(mousePos, click = true, keyboard.shiftKey)
+
+proc handleDrag(textBox: TextBox) =
+  let mousePos = mouse.pos(raw=true) + current.totalOffset
+  if textBox != nil and
+      mouse.down and
+      not mouse.click and
+      keyboard.focusNode == current:
+    # Dragging the mouse:
+    echo "dragging mouse"
+    textBox.mouseAction(mousePos, click = false, keyboard.shiftKey)
 
 proc textInput*(
     value {.property: value.}: string,
@@ -24,6 +70,10 @@ proc textInput*(
         let input = $keyboard.input
         if value != input:
           result = some input
+      onMouseDown:
+        echo "mouseDown"
+        var textBox = current.currentEvents().mgetOrPut("$textbox", TextBox[Node])
+        handleClicked(textBox)
 
     fill palette.textBg
     clipContent true

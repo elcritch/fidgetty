@@ -30,13 +30,20 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
     textStyle theme
     fill palette.background.lighten(0.11)
 
-    Button:
-      label: "Dump"
-      setup:
-        fill "#DFDFF0"
-      onClick:
-        echo "dump: "
-        dumpTree(root)
+    Vertical:
+      Button:
+        label: "Dump"
+        setup:
+          fill "#DFDFF0"
+        onClick:
+          echo "dump: "
+          dumpTree(root)
+      Button:
+        label: fmt"test: {TEST}"
+        setup:
+          width: 20.Em
+          fill "#DFDFF0"
+        disabled: true
 
     group "center":
       box 50, 0, 100'vw - 100, 100'vh
