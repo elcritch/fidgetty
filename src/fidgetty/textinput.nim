@@ -62,11 +62,15 @@ proc textInput*(
     fill palette.foreground
 
   render:
+    echo fmt"text bind internal {current.screenbox=}"
     stroke theme.outerStroke
 
     text "text":
+      boxOf parent
+      echo fmt"text bind box internal {current.screenbox=}"
       fill palette.text
       binding(value):
+        echo "binding"
         let input = $keyboard.input
         if value != input:
           result = some input

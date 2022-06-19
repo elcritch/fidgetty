@@ -41,7 +41,14 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
       TextInputBind:
         value:
           self.textInput
-        setup: size 60'vw, 2'em
+        setup:
+          echo "text bind"
+          box 20'pw, 20'ph, 40'pw, 40'ph
+          # size 10'em, 2'em
+          # position 10, 10
+          # echo fmt" {40'pw=}, {40'ph=} "
+          # centeredWH 40'pw, 40'ph
+          # centeredH 40'ph
 
       echo "text: ", $self.textInput
 
