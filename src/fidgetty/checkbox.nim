@@ -1,4 +1,4 @@
-import bumpy, fidget
+import fidget
 import widgets
 
 proc checkbox*(

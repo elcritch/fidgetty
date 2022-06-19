@@ -15,8 +15,8 @@ proc progressbar*(
   render:
     let
       # some basic calcs
-      bw = current.box().w
-      bh = current.box().h
+      bw = current.box.w
+      bh = current.box.h
       sb = 0.3'em
       sbb = 2*sb
       wcalc = bw * value.clamp(0, 1.0) - sbb + 0.001

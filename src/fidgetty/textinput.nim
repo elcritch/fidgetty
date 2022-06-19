@@ -12,7 +12,7 @@ var
 proc handleClicked(textBox: TextBox) =
   # let mousePos = mouse.pos(raw=true) - current.screenBox.xy + current.totalOffset
   # let mousePos = mouse.pos(raw=true) + current.totalOffset
-  let mousePos = mouse.pos(raw=true)
+  let mousePos = mouse.pos
   echo ""
 
   # mouse actions click, drag, double clicking
@@ -66,7 +66,7 @@ proc textInput*(
     stroke theme.outerStroke
 
     text "text":
-      boxOf parent
+      size 100'pw, 100'ph
       echo fmt"text bind box internal {current.screenbox=}"
       fill palette.text
       binding(value):

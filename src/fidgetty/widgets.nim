@@ -1,12 +1,12 @@
 import macros, tables, strutils, strformat, math, random, options
-import bumpy, variant, patty
+import variant, patty
 import std/macrocache
 
 import macrohelpers
 
 export tables, strformat, options
-export bumpy, math, random
-export bumpy, variant, patty
+export math, random
+export variant, patty
 
 import fidget, theming
 export fidget, theming
