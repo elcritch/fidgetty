@@ -27,19 +27,23 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
 
   render:
     setTitle(fmt"Fidget  Progress Example")
+    textStyle theme
+
+    box 1.Em, 1.Em, 100'vw - 2.Em, 100'vh - 2.Em
     font "IBM Plex Sans", 16, 200, 0, hCenter, vCenter
     fill "#F7F7F9"
-    box 1.Em, 1.Em, 100'vw - 2.Em, 100'vh - 2.Em
     stroke theme.outerStroke
 
-    TextInputBind:
-      value:
-        self.textInput
-      setup:
-        # size 10'em, 2'em
-        # position 10, 10
-        centeredW 40'pw
-        centeredH 2.Em
+    rectangle:
+      centeredWH 90'pw, 90'ph
+      stroke theme.outerStroke
+
+      TextInputBind:
+        value:
+          self.textInput
+        setup: size 60'vw, 2'em
+
+      echo "text: ", $self.textInput
 
 
 startFidget(

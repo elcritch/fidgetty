@@ -12,7 +12,7 @@ var
 proc handleClicked(textBox: TextBox) =
   # let mousePos = mouse.pos(raw=true) - current.screenBox.xy + current.totalOffset
   # let mousePos = mouse.pos(raw=true) + current.totalOffset
-  let mousePos = mouse.pos(raw=false)
+  let mousePos = mouse.pos(raw=true)
   echo ""
 
   # mouse actions click, drag, double clicking
