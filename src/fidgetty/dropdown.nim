@@ -24,11 +24,11 @@ proc dropdown*(
 
   render:
     let
-      cb = current.box()
+      cb = current.box
       bw = cb.w
       bh = cb.h
-      bih = bh * 1.0
-      tw = bw - 1.5'em
+      bih = bh * 1.0'ui
+      tw = bw - 1.5'em.UICoord
 
     let
       visItems =
@@ -36,7 +36,7 @@ proc dropdown*(
         elif self.dropDownOpen: self.itemsVisible
         else: dropItems.len()
       itemCount = max(1, visItems).min(dropItems.len())
-      bdh = min(bih * itemCount.float32, windowLogicalSize.y/2)
+      bdh = min(bih * itemCount.UICoord, windowLogicalSize.descaled.y/2'ui)
 
     if itemCount <= 2:
       self.dropUp = true

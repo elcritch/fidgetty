@@ -31,10 +31,10 @@ proc listbox*(
 
   render:
     let
-      cb = current.box()
+      cb = current.box
       bw = cb.w
       bh = cb.h
-      bih = bh * 1.0
+      bih = bh.float32 * 1.0
 
     let
       bdh = min(bih * itemsVisible.float32, windowLogicalSize.y/2)
@@ -64,7 +64,7 @@ proc listbox*(
 
       if wasScrolled:
         current.offset.y =
-          (current.screenBox.h - parent.screenBox.h) * scrollAmount
+          (current.screenBox.h - parent.screenBox.h) * scrollAmount.UICoord
 
       for idx, buttonName in pairs(items):
         group "menuBtn":

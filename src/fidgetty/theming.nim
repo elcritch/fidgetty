@@ -30,7 +30,7 @@ type
     innerStroke*: Stroke
     outerStroke*: Stroke
     gloss*: ImageStyle
-    cornerRadius*: (float32, float32, float32, float32)
+    cornerRadius*: (UICoord, UICoord, UICoord, UICoord)
     shadows*: seq[Shadow]
     horizontalPadding*: float32
     verticalPadding*: float32
@@ -76,11 +76,11 @@ proc setFontStyle*(
   ## Sets the font.
   general.textStyle = TextStyle()
   general.textStyle.fontFamily = fontFamily
-  general.textStyle.fontSize = common.uiScale*fontSize
-  general.textStyle.fontWeight = common.uiScale*fontWeight
+  general.textStyle.fontSize = fontSize.UICoord
+  general.textStyle.fontWeight = fontWeight.UICoord
   general.textStyle.lineHeight =
-      if lineHeight != 0.0: common.uiScale*lineHeight
-      else: common.uiScale*fontSize
+      if lineHeight != 0.0: lineHeight.UICoord
+      else: fontSize.UICoord
   general.textStyle.textAlignHorizontal = textAlignHorizontal
   general.textStyle.textAlignVertical = textAlignVertical
 
@@ -111,12 +111,11 @@ proc strokeLine*(item: var Palette, weight: float32, color: string, alpha = 1.0)
   ## Sets stroke/border color.
   current.stroke.color = parseHtmlColor(color)
   current.stroke.color.a = alpha
-  current.stroke.weight = weight * common.uiScale
+  current.stroke.weight = weight.UICoord 
 
 proc corners*(item: var GeneralTheme, a, b, c, d: float32) =
   ## Sets all radius of all 4 corners.
-  let s = common.uiScale * 3
-  item.cornerRadius = (s*a, s*b, s*c, s*d)
+  item.cornerRadius = (a.UICoord, b.UICoord, c.UICoord, d.UICoord)
 
 proc corners*(item: var GeneralTheme, radius: float32) =
   ## Sets all radius of all 4 corners.
@@ -124,7 +123,7 @@ proc corners*(item: var GeneralTheme, radius: float32) =
 
 proc cornerRadius*(node: GeneralTheme) =
   ## Sets all radius of all 4 corners.
-  current.cornerRadius =  node.cornerRadius
+  current.cornerRadius = node.cornerRadius
 
 proc highlight*(node: var Palette) =
   ## Sets the color of text selection.
@@ -137,7 +136,7 @@ proc dropShadow*(item: var GeneralTheme; blur, x, y: float32, color: string, alp
   ## Sets drop shadow on an element
   var c = parseHtmlColor(color)
   c.a = alpha
-  let sh: Shadow =  Shadow(kind: DropShadow, blur: blur, x: x, y: y, color: c)
+  let sh: Shadow =  Shadow(kind: DropShadow, blur: blur.UICoord, x: x.UICoord, y: y.UICoord, color: c)
   item.shadows.add(sh)
 
 proc setup*(theme: Themer): proc() =

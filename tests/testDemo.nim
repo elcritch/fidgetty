@@ -39,7 +39,7 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
           echo "dump: "
           dumpTree(root)
       Button:
-        label: fmt"test: {TEST}"
+        label: fmt"test: "
         setup:
           width: 20.Em
           fill "#DFDFF0"
