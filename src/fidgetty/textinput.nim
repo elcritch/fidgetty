@@ -3,6 +3,8 @@ import times
 
 import fidget/patches/textboxes
 
+import print
+
 var
   # Used for double-clicking
   multiClick: int
@@ -62,12 +64,12 @@ proc textInput*(
     fill palette.foreground
 
   render:
-    echo fmt"text bind internal {current.screenbox=}"
+    print "text bind internal: ", current.screenbox
     stroke theme.outerStroke
 
     text "text":
       size 100'pw, 100'ph
-      echo fmt"text bind box internal {current.screenbox=}"
+      print "text bind internal text: ", current.screenbox
       fill palette.text
       binding(value):
         echo "binding"
