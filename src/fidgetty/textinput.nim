@@ -64,12 +64,12 @@ proc textInput*(
     fill palette.foreground
 
   render:
-    print "text bind internal: ", current.screenbox
+    echo "text bind internal: ", current.screenBox
     stroke theme.outerStroke
 
     text "text":
       size 100'pw, 100'ph
-      print "text bind internal text: ", current.screenbox
+      echo "text bind internal text: ", current.screenBox
       fill palette.text
       binding(value):
         echo "binding"
