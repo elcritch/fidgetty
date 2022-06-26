@@ -61,20 +61,20 @@ proc textInput*(
     fill palette.foreground
 
   render:
-    echo "text bind internal: ", current.screenBox
+    # echo "text bind internal: ", current.screenBox
     stroke theme.outerStroke
 
     text "text":
       size 100'pw, 100'ph
-      echo "text bind internal text: ", current.screenBox
+      # echo "text bind internal text: ", current.screenBox
       fill palette.text
       binding(value):
-        echo "binding"
+        # echo "binding"
         let input = $keyboard.input
         if value != input:
           result = some input
       onMouseDown:
-        echo "mouseDown"
+        # echo "mouseDown"
         var textBox = current.currentEvents().mgetOrPut("$textbox", TextBox[Node])
         handleClicked(textBox)
 
