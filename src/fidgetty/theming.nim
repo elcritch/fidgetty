@@ -111,7 +111,7 @@ proc strokeLine*(item: var Palette, weight: float32, color: string, alpha = 1.0)
   ## Sets stroke/border color.
   current.stroke.color = parseHtmlColor(color)
   current.stroke.color.a = alpha
-  current.stroke.weight = weight.UICoord 
+  current.stroke.weight = weight 
 
 proc corners*(item: var GeneralTheme, a, b, c, d: float32) =
   ## Sets all radius of all 4 corners.
