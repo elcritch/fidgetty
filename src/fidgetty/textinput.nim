@@ -3,8 +3,6 @@ import times
 
 import fidget/patches/textboxes
 
-import print
-
 var
   # Used for double-clicking
   multiClick: int
