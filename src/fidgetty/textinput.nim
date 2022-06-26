@@ -45,6 +45,8 @@ proc handleDrag(textBox: TextBox) =
     echo "dragging mouse"
     textBox.mouseAction(mousePos, click = false, keyboard.shiftKey)
 
+import print
+
 proc textInput*(
     value {.property: value.}: string,
     isActive {.property: isActive.}: bool = false,
@@ -65,7 +67,10 @@ proc textInput*(
     stroke theme.outerStroke
 
     text "text":
+      position 0, 0
       size 100'pw, 100'ph
+
+      print "textinput:", current.box, current.screenBox, parent.totalOffset
       # echo "text bind internal text: ", current.screenBox
       fill palette.text
       binding(value):
@@ -77,6 +82,7 @@ proc textInput*(
         # echo "mouseDown"
         var textBox = current.currentEvents().mgetOrPut("$textbox", TextBox[Node])
         handleClicked(textBox)
+      print "textinput:post:", current.box, current.screenBox
 
     fill palette.textBg
     clipContent true
