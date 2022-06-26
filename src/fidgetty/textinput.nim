@@ -68,8 +68,6 @@ proc textInput*(
 
     text "text":
 
-      print "textinput:", current.box, current.screenBox, parent.totalOffset
-      # echo "text bind internal text: ", current.screenBox
       fill palette.text
       binding(value):
         # echo "binding"
@@ -80,7 +78,6 @@ proc textInput*(
         # echo "mouseDown"
         var textBox = current.currentEvents().mgetOrPut("$textbox", TextBox[Node])
         handleClicked(textBox)
-      print "textinput:post:", current.box, current.screenBox
 
     fill palette.textBg
     clipContent true
