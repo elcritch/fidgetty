@@ -67,8 +67,6 @@ proc textInput*(
     stroke theme.outerStroke
 
     text "text":
-      position 0, 0
-      size 100'pw, 100'ph
 
       print "textinput:", current.box, current.screenBox, parent.totalOffset
       # echo "text bind internal text: ", current.screenBox
