@@ -22,6 +22,7 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
     textInput: string
 
   render:
+
     let currEvents = useEvents()
     let dropItems = @["Nim", "UI", "in", "100%", "Nim", "to",
                       "OpenGL", "Immediate", "mode"]
@@ -29,6 +30,8 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
     setTitle(fmt"Fidget Animated Progress Example")
     textStyle theme
     fill palette.background.lighten(0.11)
+
+    font "IBM Plex Sans", 16, 200, 0, hCenter, vCenter
 
     Vertical:
       Button:

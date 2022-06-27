@@ -4,13 +4,24 @@ import fidgetty/button
 
 loadFont("IBM Plex Sans", "IBMPlexSans-Regular.ttf")
 
-proc drawMain() =
-  frame "main":
-    font "IBM Plex Sans", 16, 200, 0, hCenter, vCenter
-    widget button:
-      text: "click me!"
-      onClick:
-        echo "hi!"
+proc exampleApp*(): ExampleApp {.appFidget.} =
+  properties:
+    count2: int
+
+  render:
+    frame "main":
+      font "IBM Plex Sans", 16, 200, 0, hCenter, vCenter
+      Button:
+        label: "click me!"
+        onClick:
+          echo "hi!"
 
 
-startFidget(drawMain, w=680, h=400, uiScale=2.0)
+startFidget(
+  wrapApp(exampleApp, ExampleApp),
+  setup = 
+    when defined(demoBulmaTheme): setup(bulmaTheme)
+    else: setup(grayTheme),
+  w=680, h=400,
+  uiScale=2.0
+)

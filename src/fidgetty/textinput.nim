@@ -67,7 +67,6 @@ proc textInput*(
     stroke theme.outerStroke
 
     text "text":
-
       fill palette.text
       binding(value):
         # echo "binding"
