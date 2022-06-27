@@ -15,11 +15,11 @@ proc progressbar*(
   render:
     let
       # some basic calcs
-      bw = current.box.w.float32
-      bh = current.box.h.float32
+      bw = current.box.w
+      bh = current.box.h
       sb = 0.3'em
-      sbb = 2*sb
-      wcalc = bw.float32 * value.clamp(0, 1.0) - sbb + 0.001
+      sbb = 2.0*sb
+      wcalc = bw * value.clamp(0, 1.0).UICoord - sbb + 0.001
       barW = wcalc.clamp(0.0, bw-sb)
       barH = bh - sb
 

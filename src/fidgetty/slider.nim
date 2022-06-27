@@ -23,7 +23,7 @@ proc slider*(
     let
       # some basic calcs
       sb = 0.3'em
-      sbb = 2*sb
+      sbb = sb*2
       barOuter = 0.5'em
       bh = current.box.h
       bw = current.box.w
@@ -43,21 +43,21 @@ proc slider*(
           clicker()
 
     let
-      pipPos = bww.float32*clamp(value, 0, 1.0)
+      pipPos = UICoord bww.float32*clamp(value, 0, 1.0)
 
     text "text":
       box 0, 0, bw, bh
       fill palette.text
       characters label
     rectangle "pip":
-      box sb+pipPos, sb, bh.float32-2*sb, bh.float32-2*sb
+      box sb+pipPos, sb, bh-2*sb, bh-2*sb
       fill palette.cursor
       cornerRadius theme
       stroke theme.outerStroke
       clipContent true
       imageOf theme.gloss
     rectangle "fg-bar":
-      box barOuter, barOuter, pipPos+bh.float32/2, bh.float32-2*barOuter 
+      box barOuter, barOuter, pipPos+bh/2, bh-barOuter*2
       fill palette.accent
       cornerRadius theme
       clipContent true

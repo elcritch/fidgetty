@@ -22,7 +22,7 @@ proc checkbox*(
       checked = not checked
 
     text "label":
-      box 2'em, 0, parent.box.w - 2'em.UICoord, parent.box.h
+      box 2'em, 0, parent.box.w - 2'em, parent.box.h
       fill palette.text
       characters message
 
