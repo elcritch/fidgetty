@@ -80,7 +80,7 @@ proc setFontStyle*(
   general.textStyle.fontWeight = fontWeight.UICoord
   general.textStyle.lineHeight =
       if lineHeight != 0.0: lineHeight.UICoord
-      else: fontSize.UICoord
+      else: defaultLineHeight(general.textStyle)
   general.textStyle.textAlignHorizontal = textAlignHorizontal
   general.textStyle.textAlignVertical = textAlignVertical
 

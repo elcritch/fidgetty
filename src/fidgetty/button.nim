@@ -22,7 +22,7 @@ proc button*(
       # xy 1.Em, 1.Em
       fill palette.text
       characters label
-      textAutoResize tsNone
+      textAutoResize tsHeight
       # centeredWH 50'pw, 50'ph
       # print "\nbutton:", parent.box, parent.screenBox, current.box, current.screenBox
 

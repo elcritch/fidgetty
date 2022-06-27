@@ -31,7 +31,7 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
     textStyle theme
     fill palette.background.lighten(0.11)
 
-    font "IBM Plex Sans", 16, 200, 0, hCenter, vCenter
+    # font "IBM Plex Sans", 16, 200, 0, hCenter, vCenter
 
     Vertical:
       Button:
