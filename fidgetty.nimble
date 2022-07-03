@@ -11,3 +11,4 @@ srcDir        = "src"
 
 requires "nim >= 1.6.5"
 requires "https://github.com/elcritch/fidget.git#head"
+requires "memo"

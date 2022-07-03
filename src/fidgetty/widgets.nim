@@ -314,16 +314,13 @@ template GeneralTheme*(child: untyped) =
     `child`
     pop(GeneralTheme)
 
-template Spacer*(w, h: float32) =
+template Spacer*(w: UICoord, h: UICoord) =
   blank: size(w, h)
 
-template Spacer*(s: float32) =
-  Spacer(s, s)
-
-template HSpacer*(h: float32) =
+template HSpacer*(h: UICoord) =
   blank: size(0, h)
 
-template VSpacer*(w: float32) =
+template VSpacer*(w: UICoord) =
   blank: size(w, 0)
 
 template wrapApp*(fidgetName: typed, fidgetType: typedesc): proc() =
