@@ -70,19 +70,6 @@ proc textInput*(
     text "text":
       fill palette.text
       let font = common.fonts[parent.textStyle.fontFamily]
-      var textBox = current.currentEvents().mgetOrPut("$textbox", 
-        newTextBox[Node](
-          font,
-          current.screenBox.w.scaled,
-          current.screenBox.h.scaled,
-          font.size * adjustTopTextFactor,
-          current,
-          hAlignMode(current.textStyle.textAlignHorizontal),
-          vAlignMode(current.textStyle.textAlignVertical),
-          current.multiline,
-          worldWrap = true,
-        )
-      )
       binding(value):
         # echo "binding"
         let input = $keyboard.input
@@ -90,6 +77,19 @@ proc textInput*(
           result = some input
       onMouseDown:
         # echo "mouseDown"
+        var textBox = current.currentEvents().mgetOrPut("$textbox", 
+          newTextBox[Node](
+            font,
+            current.screenBox.w.scaled,
+            current.screenBox.h.scaled,
+            font.size * adjustTopTextFactor,
+            current,
+            hAlignMode(current.textStyle.textAlignHorizontal),
+            vAlignMode(current.textStyle.textAlignVertical),
+            current.multiline,
+            worldWrap = true,
+          )
+        )
         handleClicked(textBox)
 
     fill palette.textBg
