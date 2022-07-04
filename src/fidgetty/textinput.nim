@@ -72,6 +72,21 @@ proc textInput*(
     # echo "text bind internal: ", current.screenBox
     stroke theme.outerStroke
     text "text":
+      # setup focus
+      current.bindingSet = true
+      selectable true
+      editableText true
+      onClick:
+        keyboard.focus(current, self.textBox)
+        handleClicked(self.textBox)
+      onClickOutside:
+        keyboard.unFocus(current)
+      onInput:
+        let input = $keyboard.input
+        if value != input:
+          self.changed = true
+      
+      # fill
       fill palette.text
       let font = common.fonts[current.textStyle.fontFamily]
       # echo "mouseDown"
@@ -94,19 +109,6 @@ proc textInput*(
           let cb = cursor.descaled
           box cb.x + 50'pw, cb.y + 50'ph + 0.25'em, cb.w, cb.h
           fill palette.cursor
-      # setup focus
-      current.bindingSet = true
-      selectable true
-      editableText true
-      onClick:
-        keyboard.focus(current, self.textBox)
-        handleClicked(self.textBox)
-      onClickOutside:
-        keyboard.unFocus(current)
-      onInput:
-        let input = $keyboard.input
-        if value != input:
-          self.changed = true
 
     fill palette.textBg
     clipContent true
