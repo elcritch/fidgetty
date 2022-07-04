@@ -73,7 +73,7 @@ proc textInput*(
     stroke theme.outerStroke
     text "text":
       fill palette.text
-      let font = common.fonts[parent.textStyle.fontFamily]
+      let font = common.fonts[current.textStyle.fontFamily]
       # echo "mouseDown"
       let evts = current.currentEvents()
       self.textBox = evts.mgetOrPut("$textbox",
@@ -83,20 +83,26 @@ proc textInput*(
           current.screenBox.h.scaled,
           font.size * adjustTopTextFactor,
           current,
-          hAlignMode(parent.textStyle.textAlignHorizontal),
-          vAlignMode(parent.textStyle.textAlignVertical),
+          hAlignMode(current.textStyle.textAlignHorizontal),
+          vAlignMode(current.textStyle.textAlignVertical),
           current.multiline,
           worldWrap = true))
+      if font.size > 0:
+        let cursor = self.textBox.cursorRect()
+        rectangle "cursor":
+          # box cursor.descaled
+          let cb = cursor.descaled
+          box cb.x + 50'pw, cb.y + 50'ph + 0.25'em, cb.w, cb.h
+          fill palette.cursor
       # setup focus
       current.bindingSet = true
       selectable true
       editableText true
-      when not defined(js):
-        onClick:
-          keyboard.focus(current, self.textBox)
-          handleClicked(self.textBox)
-        onClickOutside:
-          keyboard.unFocus(current)
+      onClick:
+        keyboard.focus(current, self.textBox)
+        handleClicked(self.textBox)
+      onClickOutside:
+        keyboard.unFocus(current)
       onInput:
         let input = $keyboard.input
         if value != input:
