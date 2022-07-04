@@ -1,7 +1,7 @@
 import widgets
 import times
 
-import typography/font
+# import typography/font
 import fidget/patches/textboxes
 
 var
@@ -52,7 +52,7 @@ proc textInput*(
     value {.property: value.}: string,
     isActive {.property: isActive.}: bool = false,
     disabled {.property: disabled.}: bool = false
-): Option[string] {.basicFidget, discardable.} =
+): TextInputState {.statefulFidget, discardable.} =
   # Draw a progress bars
   init:
     box 0, 0, 8.Em, 2.Em
@@ -63,34 +63,40 @@ proc textInput*(
     rotation 0
     fill palette.foreground
 
+  properties:
+    editing: bool
+    changed: bool
+    textBox: TextBox[Node]
+
   render:
     # echo "text bind internal: ", current.screenBox
     stroke theme.outerStroke
-
     text "text":
       fill palette.text
       let font = common.fonts[parent.textStyle.fontFamily]
-      binding(value):
+      # echo "mouseDown"
+      let tb = current.currentEvents().mgetOrPut("$textbox",
+        newTextBox[Node](
+          font,
+          current.screenBox.w.scaled,
+          current.screenBox.h.scaled,
+          font.size * adjustTopTextFactor,
+          current,
+          hAlignMode(parent.textStyle.textAlignHorizontal),
+          vAlignMode(parent.textStyle.textAlignVertical),
+          current.multiline,
+          worldWrap = true))
+      # re-store tb
+      self.textBox = tb
+
+      binding(value, tb):
         # echo "binding"
         let input = $keyboard.input
         if value != input:
-          result = some input
-      onMouseDown:
-        # echo "mouseDown"
-        var textBox = current.currentEvents().mgetOrPut("$textbox", 
-          newTextBox[Node](
-            font,
-            current.screenBox.w.scaled,
-            current.screenBox.h.scaled,
-            font.size * adjustTopTextFactor,
-            current,
-            hAlignMode(current.textStyle.textAlignHorizontal),
-            vAlignMode(current.textStyle.textAlignVertical),
-            current.multiline,
-            worldWrap = true,
-          )
-        )
-        handleClicked(textBox)
+          self.changed = true
+      onClick:
+        currTextBox = self.textBox
+        handleClicked(self.textBox)
 
     fill palette.textBg
     clipContent true
@@ -112,7 +118,7 @@ proc textInputBind*(
 ): bool {.wrapperFidget, discardable.} =
   # Draw a progress bars
   let curr = value
-  let res = textInput(curr, isActive, disabled, setup, post, id)
-  if res.isSome:
-    value = res.get()
+  let res = textInput(curr, isActive, disabled, nil, setup, post, id)
+  if res.changed:
+    value = $res.textBox.runes
 
