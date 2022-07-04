@@ -75,7 +75,8 @@ proc textInput*(
       fill palette.text
       let font = common.fonts[parent.textStyle.fontFamily]
       # echo "mouseDown"
-      let tb = current.currentEvents().mgetOrPut("$textbox",
+      let evts = current.currentEvents()
+      self.textBox = evts.mgetOrPut("$textbox",
         newTextBox[Node](
           font,
           current.screenBox.w.scaled,
@@ -86,17 +87,20 @@ proc textInput*(
           vAlignMode(parent.textStyle.textAlignVertical),
           current.multiline,
           worldWrap = true))
-      # re-store tb
-      self.textBox = tb
-
-      binding(value, tb):
-        # echo "binding"
+      # setup focus
+      current.bindingSet = true
+      selectable true
+      editableText true
+      when not defined(js):
+        onClick:
+          keyboard.focus(current, self.textBox)
+          handleClicked(self.textBox)
+        onClickOutside:
+          keyboard.unFocus(current)
+      onInput:
         let input = $keyboard.input
         if value != input:
           self.changed = true
-      onClick:
-        currTextBox = self.textBox
-        handleClicked(self.textBox)
 
     fill palette.textBg
     clipContent true
