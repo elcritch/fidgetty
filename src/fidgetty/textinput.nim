@@ -1,5 +1,6 @@
 import widgets
 import times
+import asyncdispatch # This is what provides us with async and the dispatcher
 
 # import typography/font
 import fidget/patches/textboxes
@@ -66,7 +67,9 @@ proc textInput*(
   properties:
     editing: bool
     changed: bool
+    showCursor: bool
     textBox: TextBox[Node]
+    ticks: Future[void] = emptyFuture()
 
   render:
     # echo "text bind internal: ", current.screenBox
@@ -79,8 +82,21 @@ proc textInput*(
       onClick:
         keyboard.focus(current, self.textBox)
         handleClicked(self.textBox)
+        self.editing = true
+        proc ticker(self: TextInputState) {.async.} =
+          let cursorBlink = 1_000
+          while self.editing:
+            await sleepAsync(cursorBlink)
+            self.showCursor = not self.showCursor
+            refresh()
+        
+        if self.ticks.isNil or self.ticks.finished:
+          echo "ticker..."
+          self.ticks = ticker(self)
+
       onClickOutside:
         keyboard.unFocus(current)
+        self.editing = false
       onInput:
         let input = $keyboard.input
         if value != input:
@@ -108,7 +124,10 @@ proc textInput*(
           # box cursor.descaled
           let cb = cursor.descaled
           box cb.x + 50'pw, cb.y + 50'ph + 0.25'em, cb.w, cb.h
-          fill palette.cursor
+          if self.showCursor:
+            fill palette.cursor
+          else:
+            fill clearColor
 
     fill palette.textBg
     clipContent true
