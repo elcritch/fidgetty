@@ -120,17 +120,16 @@ proc textInput*(
       if font.size > 0:
         self.textBox.resize(current.box.scaled.wh)
         rectangle "cursor":
-          # box cursor.descaled
           let cursor = self.textBox.cursorRect()
           box cursor.descaled
           if self.showCursor and self.editing:
             fill blackColor
           else:
-            fill clearColor
+            fill blackColor * 0.2
         for selection in self.textBox.selectionRegions():
           rectangle "selection":
             box selection.descaled
-            fill palette.cursor * 0.2
+            fill palette.cursor * 0.1
 
     fill palette.textBg
     clipContent true
