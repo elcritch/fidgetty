@@ -34,7 +34,6 @@ proc handleClicked(textBox: TextBox) =
     textBox.selectAll()
     buttonDown[MOUSE_LEFT] = false
   else:
-    echo "mouseAction"
     textBox.mouseAction(mousePos, click = true, keyboard.shiftKey)
 
 proc handleDrag(textBox: TextBox) =
@@ -128,6 +127,10 @@ proc textInput*(
             fill blackColor
           else:
             fill clearColor
+        for selection in self.textBox.selectionRegions():
+          rectangle "selection":
+            box selection.descaled
+            fill palette.cursor * 0.2
 
     fill palette.textBg
     clipContent true
