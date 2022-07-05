@@ -119,13 +119,12 @@ proc textInput*(
           current.multiline,
           worldWrap = true))
       if font.size > 0:
-        let cursor = self.textBox.cursorRect()
+        self.textBox.resize(current.box.scaled.wh)
         rectangle "cursor":
           # box cursor.descaled
-          let cb = cursor.descaled
-          box cb.x + 50'pw, cb.y + 50'ph + 0.25'em, cb.w, cb.h
+          let cursor = self.textBox.cursorRect()
+          box cursor.descaled
           if self.showCursor and self.editing:
-            # fill palette.cursor
             fill blackColor
           else:
             fill clearColor
