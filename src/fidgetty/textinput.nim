@@ -124,8 +124,9 @@ proc textInput*(
           # box cursor.descaled
           let cb = cursor.descaled
           box cb.x + 50'pw, cb.y + 50'ph + 0.25'em, cb.w, cb.h
-          if self.showCursor:
-            fill palette.cursor
+          if self.showCursor and self.editing:
+            # fill palette.cursor
+            fill blackColor
           else:
             fill clearColor
 
@@ -134,7 +135,7 @@ proc textInput*(
     if disabled:
       imageColor palette.disabled
     else:
-      onHover:
+      if self.editing:
         # imageTransparency 0.0
         rotation 180
         stroke palette.highlight * 0.40

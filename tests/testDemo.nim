@@ -34,6 +34,7 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
     # font "IBM Plex Sans", 16, 200, 0, hCenter, vCenter
 
     Vertical:
+      ## Debugging button
       Button:
         label: "Dump"
         setup:
@@ -41,12 +42,6 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
         onClick:
           echo "dump: "
           dumpTree(root)
-      Button:
-        label: fmt"test: "
-        setup:
-          width: 20.Em
-          fill "#DFDFF0"
-        disabled: true
 
     group "center":
       box 50, 0, 100'vw - 100, 100'vh
