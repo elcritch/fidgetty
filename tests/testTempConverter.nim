@@ -24,7 +24,6 @@ func toC*(val: Celsius): Celsius =
 template parseTemp(val, kind: untyped) =
   if `val`.updated.isSome():
     var res: float
-    echo "textInputBind changed: ", `val`.updated.repr
     if parseFloat(`val`.updated.get().strip(), res, 0) > 0:
       self.temp = `kind`(res).toC()
 
@@ -47,6 +46,7 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
           TextInput:
             value: fmt"{toC(self.temp).float:5.1f}".strip()
             setup: size 5'em, 2'em
+            ignorePostfix: true
         text "data":
           size 6'em, 2'em
           fill palette.text
@@ -59,6 +59,7 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
           TextInput:
             value: fmt"{toF(self.temp).float:5.1f}".strip()
             setup: size 5'em, 2'em
+            ignorePostfix: true
         text "data":
           size 6'em, 2'em
           fill palette.text

@@ -52,7 +52,8 @@ import print
 proc textInput*(
     value {.property: value.}: string,
     isActive {.property: isActive.}: bool = false,
-    disabled {.property: disabled.}: bool = false
+    disabled {.property: disabled.}: bool = false,
+    ignorePostfix {.property: ignorePostfix.}: bool = false,
 ): TextInputState {.statefulFidget, discardable.} =
   # Draw a progress bars
   init:
@@ -119,17 +120,15 @@ proc textInput*(
       self.updated = none[string]()
 
       if self.textBox.hasChange:
-        # echo "changed: txt: " & repr $current.text, " val: " & repr value
         if value != curr:
           self.updated = some(curr)
       # elif inputRunes != self.textBox.text:
       elif curr == "":
-        echo "\nupdate: textBox.text: ", repr $curr, " input: " & repr(value)
         self.textBox.text = value
-      elif curr != value and not value.contains(curr):
-        echo "\nchg: textBox.text: ", repr $curr, " input: " & repr(value)
-        self.updated = none[string]()
-        self.textBox.text = value
+      elif curr != value:
+        if not (ignorePostfix and value.contains(curr)):
+          self.updated = none[string]()
+          self.textBox.text = value
       # clear change
       self.textBox.hasChange = false
 
@@ -141,7 +140,7 @@ proc textInput*(
           if self.showCursor and self.editing:
             fill blackColor
           else:
-            fill blackColor * 0.2
+            fill clearColor
         for selection in self.textBox.selectionRegions():
           rectangle "selection":
             box selection.descaled
@@ -165,10 +164,11 @@ proc textInputBind*(
     value {.property: value.}: var string,
     isActive {.property: isActive.}: bool = false,
     disabled {.property: disabled.}: bool = false,
+    ignorePostfix {.property: ignorePostfix.}: bool = false,
 ): bool {.wrapperFidget, discardable.} =
   # Draw a progress bars
   let curr = value
-  let res = textInput(curr, isActive, disabled, nil, setup, post, id)
+  let res = textInput(curr, isActive, disabled, ignorePostfix, nil, setup, post, id)
   if res.updated.isSome():
     value = res.updated.get()
 
