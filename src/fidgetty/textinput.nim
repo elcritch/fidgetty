@@ -1,5 +1,6 @@
 import widgets
 import times
+import strutils
 import asyncdispatch # This is what provides us with async and the dispatcher
 
 # import typography/font
@@ -65,7 +66,7 @@ proc textInput*(
 
   properties:
     editing: bool
-    changed: bool
+    updated: Option[string]
     showCursor: bool
     textBox: TextBox[Node]
     ticks: Future[void] = emptyFuture()
@@ -96,10 +97,6 @@ proc textInput*(
       onClickOutside:
         keyboard.unFocus(current)
         self.editing = false
-      onInput:
-        let input = $keyboard.input
-        if value != input:
-          self.changed = true
       
       # fill
       fill palette.text
@@ -117,6 +114,25 @@ proc textInput*(
           vAlignMode(current.textStyle.textAlignVertical),
           current.multiline,
           worldWrap = true))
+      
+      let curr = $current.text
+      self.updated = none[string]()
+
+      if self.textBox.hasChange:
+        # echo "changed: txt: " & repr $current.text, " val: " & repr value
+        if value != curr:
+          self.updated = some(curr)
+      # elif inputRunes != self.textBox.text:
+      elif curr == "":
+        echo "\nupdate: textBox.text: ", repr $curr, " input: " & repr(value)
+        self.textBox.text = value
+      elif curr != value and not value.contains(curr):
+        echo "\nchg: textBox.text: ", repr $curr, " input: " & repr(value)
+        self.updated = none[string]()
+        self.textBox.text = value
+      # clear change
+      self.textBox.hasChange = false
+
       if font.size > 0:
         self.textBox.resize(current.box.scaled.wh)
         rectangle "cursor":
@@ -129,8 +145,9 @@ proc textInput*(
         for selection in self.textBox.selectionRegions():
           rectangle "selection":
             box selection.descaled
-            fill palette.cursor * 0.1
+            fill palette.cursor * 0.22
 
+      
     fill palette.textBg
     clipContent true
     if disabled:
@@ -152,6 +169,6 @@ proc textInputBind*(
   # Draw a progress bars
   let curr = value
   let res = textInput(curr, isActive, disabled, nil, setup, post, id)
-  if res.changed:
-    value = $res.textBox.runes
+  if res.updated.isSome():
+    value = res.updated.get()
 

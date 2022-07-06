@@ -11,16 +11,21 @@ type
   Fahrenheit = distinct float
   Celsius = distinct float
 
-func toF*(val: Celsius): Fahrenheit = Fahrenheit val.float * (9.0/5.0) + 32.0
-func toF*(val: Fahrenheit): Fahrenheit = val
+func toF*(val: Celsius): Fahrenheit =
+  Fahrenheit val.float * (9.0/5.0) + 32.0
+func toF*(val: Fahrenheit): Fahrenheit =
+  val
 
-func toC*(val: Fahrenheit): Celsius = Celsius (val.float - 32.0) * (5.0/9.0)
-func toC*(val: Celsius): Celsius = val
+func toC*(val: Fahrenheit): Celsius =
+  Celsius (val.float - 32.0) * (5.0/9.0)
+func toC*(val: Celsius): Celsius =
+  val
 
 template parseTemp(val, kind: untyped) =
-  if `val`.isSome:
+  if `val`.updated.isSome():
     var res: float
-    if parseFloat(`val`.get().strip(), res, 0) > 0:
+    echo "textInputBind changed: ", `val`.updated.repr
+    if parseFloat(`val`.updated.get().strip(), res, 0) > 0:
       self.temp = `kind`(res).toC()
 
 proc exampleApp*(): ExampleApp {.appFidget.} =
@@ -38,7 +43,7 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
       Spacer 0, 50'ph - 2'em
       Horizontal:
         HSpacer 1'em
-        let cValStr =
+        let cVal =
           TextInput:
             value: fmt"{toC(self.temp).float:5.1f}".strip()
             setup: size 5'em, 2'em
@@ -50,7 +55,7 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
           size 3'em, 2'em
           fill palette.text
           characters: fmt" = "
-        let fValStr =
+        let fVal =
           TextInput:
             value: fmt"{toF(self.temp).float:5.1f}".strip()
             setup: size 5'em, 2'em
@@ -59,8 +64,8 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
           fill palette.text
           characters: fmt" Fahrenheit"
 
-        cValStr.parseTemp(Celsius)
-        fValStr.parseTemp(Fahrenheit)
+        cVal.parseTemp(Celsius)
+        fVal.parseTemp(Fahrenheit)
 
 
 startFidget(
