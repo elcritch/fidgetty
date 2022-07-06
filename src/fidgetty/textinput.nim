@@ -57,7 +57,7 @@ proc textInput*(
 ): TextInputState {.statefulFidget, discardable.} =
   # Draw a progress bars
   init:
-    box 0, 0, 8.Em, 2.Em
+    boxSizeOf parent
     cornerRadius theme.textCorner
     shadows theme
     imageOf theme.gloss
