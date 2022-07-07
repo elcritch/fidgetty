@@ -2,6 +2,8 @@
 
 Widget library built using a fork of [Fidget](https://github.com/elcritch/fidget) written in pure Nim and OpenGL rendered.
 
+Note: You *must* use the forked version of Fidget. You can do a `nimble install https://github.com/elcritch/fidget`. 
+
 ![Demo](https://i.postimg.cc/ydxbyjJ4/Kapture-2022-05-04-at-01-07-14.gif)
 
 ```sh
