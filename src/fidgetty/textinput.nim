@@ -116,7 +116,9 @@ proc textInput*(
           hAlignMode(current.textStyle.textAlignHorizontal),
           vAlignMode(current.textStyle.textAlignVertical),
           current.multiline,
-          worldWrap = true))
+          worldWrap = true,
+          pattern = pattern
+          ))
       
       let curr = $current.text
       self.updated = none[string]()

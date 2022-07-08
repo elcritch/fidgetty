@@ -1,5 +1,6 @@
 import std/strformat, std/hashes, std/sequtils
 import parseutils, memo
+import re
 
 import fidgetty
 import fidgetty/textinput
@@ -47,6 +48,7 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
             value: fmt"{toC(self.temp).float:5.1f}".strip()
             setup: size 5'em, 2'em
             ignorePostfix: true
+            pattern: re"[0-9\.]"
         text "data":
           size 6'em, 2'em
           fill palette.text
@@ -60,6 +62,7 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
             value: fmt"{toF(self.temp).float:5.1f}".strip()
             setup: size 5'em, 2'em
             ignorePostfix: true
+            pattern: re"[0-9\.]"
         text "data":
           size 6'em, 2'em
           fill palette.text
