@@ -2,6 +2,7 @@ import widgets
 import times
 import strutils
 import asyncdispatch # This is what provides us with async and the dispatcher
+import re
 
 # import typography/font
 import fidget/patches/textboxes
@@ -54,6 +55,7 @@ proc textInput*(
     isActive {.property: isActive.}: bool = false,
     disabled {.property: disabled.}: bool = false,
     ignorePostfix {.property: ignorePostfix.}: bool = false,
+    pattern {.property: pattern.}: Regex = nil,
 ): TextInputState {.statefulFidget, discardable.} =
   # Draw a progress bars
   init:
@@ -165,10 +167,11 @@ proc textInputBind*(
     isActive {.property: isActive.}: bool = false,
     disabled {.property: disabled.}: bool = false,
     ignorePostfix {.property: ignorePostfix.}: bool = false,
+    pattern {.property: pattern.}: Regex = nil,
 ): bool {.wrapperFidget, discardable.} =
   # Draw a progress bars
   let curr = value
-  let res = textInput(curr, isActive, disabled, ignorePostfix, nil, setup, post, id)
+  let res = textInput(curr, isActive, disabled, ignorePostfix, pattern, nil, setup, post, id)
   if res.updated.isSome():
     value = res.updated.get()
 
