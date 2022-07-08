@@ -58,7 +58,7 @@ proc textInput*(
   # Draw a progress bars
   init:
     boxSizeOf parent
-    cornerRadius theme.textCorner
+    cornerRadius theme.textCorner.UICoord
     shadows theme
     imageOf theme.gloss
     imageTransparency 0.33

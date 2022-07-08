@@ -22,7 +22,6 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
     textInput: string
 
   render:
-
     let currEvents = useEvents()
     let dropItems = @["Nim", "UI", "in", "100%", "Nim", "to",
                       "OpenGL", "Immediate", "mode"]
