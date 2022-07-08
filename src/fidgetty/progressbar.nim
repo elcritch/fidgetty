@@ -31,14 +31,14 @@ proc progressbar*(
 
     rectangle "barFgTexture":
       box sb, sb, barW, barH-sb
-      cornerRadius 0.80 * theme.cornerRadius[0].float32
+      cornerRadius 0.80 * theme.cornerRadius[0]
       clipContent true
       # strokeLine 1.0, "#707070", 0.87
 
     rectangle "barFgColor":
       box sb, sb, barW, barH-sb
       fill palette.accent
-      cornerRadius 0.80 * theme.cornerRadius[0].float32
+      cornerRadius 0.80 * theme.cornerRadius[0]
       imageOf theme.gloss, 0.67
       clipContent true
       stroke theme.innerStroke
@@ -48,7 +48,7 @@ proc progressbar*(
       box 0, 0, bw, bh
       stroke theme.outerStroke
       fill palette.foreground
-      cornerRadius 1.0 * theme.cornerRadius[0].float32
+      cornerRadius 1.0 * theme.cornerRadius[0]
 
     # rectangle "bezel":
     #   cornerRadius 0.80 * theme.cornerRadius[0]
@@ -56,4 +56,4 @@ proc progressbar*(
     #   rotation 180
     #   imageOf theme.gloss
 
-    cornerRadius 1.0 * theme.cornerRadius[0].float32
+    cornerRadius 1.0 * theme.cornerRadius[0]
