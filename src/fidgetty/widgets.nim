@@ -274,6 +274,13 @@ macro reverseStmts*(body: untyped) =
     stmts.insert(ln, 0)
   result.add stmts
 
+template Box*(text, child: untyped) =
+  group text:
+    `child`
+
+template Box*(child: untyped) =
+  Box("", child)
+
 template Horizontal*(text, child: untyped) =
   group text:
     layout lmHorizontal
@@ -293,6 +300,12 @@ template Vertical*(text, child: untyped) =
 
 template Vertical*(child: untyped) =
   Vertical("", child)
+
+template VHBox*(sz, child: untyped) =
+  Vertical:
+    sz
+    Horizontal:
+      child
 
 template Theme*(pl: Palette, child: untyped) =
   block:

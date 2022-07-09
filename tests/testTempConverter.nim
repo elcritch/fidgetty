@@ -28,6 +28,24 @@ template parseTemp(val, kind: untyped) =
     if parseFloat(`val`.updated.get().strip(), res, 0) > 0:
       self.temp = `kind`(res).toC()
 
+template LabeledTextInput(valName, conv, label: untyped) =
+  Horizontal:
+    let `valName` {.inject.} =
+      TextInput:
+        value:
+          block:
+            let sval {.inject.} = `conv`(self.temp).float32
+            fmt"{sval:5.1f}".strip()
+        setup:
+          size 5'em, 2'em
+        ignorePostfix: true
+        pattern: re"[0-9\.]"
+
+    text "data":
+      size 6'em, 2'em
+      fill palette.text
+      characters: label
+
 proc exampleApp*(): ExampleApp {.appFidget.} =
   ## defines a stateful app widget
   properties:
@@ -38,37 +56,24 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
     textStyle theme
     fill palette.background
     box 0, 0, 100'vw, 100'vh
-    Vertical:
-      box 1'em, 1'em, 100'vw, 100'vh
-      Spacer 0, 50'ph - 2'em
-      Horizontal:
-        HSpacer 1'em
-        let cVal =
-          TextInput:
-            value: fmt"{toC(self.temp).float:5.1f}".strip()
-            setup: size 5'em, 2'em
-            ignorePostfix: true
-            pattern: re"[0-9\.]"
-        text "data":
-          size 6'em, 2'em
-          fill palette.text
-          characters: fmt"Celsius"
-        text "data":
-          size 3'em, 2'em
-          fill palette.text
-          characters: fmt" = "
-        let fVal =
-          TextInput:
-            value: fmt"{toF(self.temp).float:5.1f}".strip()
-            setup: size 5'em, 2'em
-            ignorePostfix: true
-            pattern: re"[0-9\.]"
-        text "data":
-          size 6'em, 2'em
-          fill palette.text
-          characters: fmt" Fahrenheit"
 
+    VHBox(Spacer(0, 50'ph-2.Em)):
+      boxSizeOf parent
+      Spacer 1'em, 0
+
+      component:
+        size 11'em, 2'em
+        LabeledTextInput(cVal, toC, "Celsius")
         cVal.parseTemp(Celsius)
+
+      text "data":
+        size 3'em, 2'em
+        fill palette.text
+        characters: fmt" = "
+
+      component:
+        size 11'em, 2'em
+        LabeledTextInput(fVal, toF, "Fahrenheit")
         fVal.parseTemp(Fahrenheit)
 
 
