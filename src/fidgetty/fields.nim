@@ -41,6 +41,7 @@ template fieldLeft*(
 ) =
   Horizontal:
     basicLabel(label, width, height, padding, align)
+    Spacer(padding, 0)
     `widget`
 
 template FieldLeft*(blk: varargs[untyped]) =

@@ -164,7 +164,6 @@ proc textInput*(
             box selection.descaled
             fill palette.cursor * 0.22
 
-
 proc textInputBind*(
     value : var string,
     isActive : bool = false,
