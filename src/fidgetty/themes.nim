@@ -28,7 +28,7 @@ proc grayTheme*(): tuple[palette: Palette, general: GeneralTheme] =
   result.general.outerStroke = stroke(1, "#707070", 1.0)
   result.general.innerStroke = stroke(1, "#707070", 0.4)
   result.general.gloss = imageStyle("shadow-button-middle.png", color(1, 1, 1, 0.27))
-  result.general.itemSpacing = 0.001 * fs
+  result.general.itemSpacing = 0.001 * fs.UICoord
 
 
 proc bulmaTheme*(): tuple[palette: Palette, general: GeneralTheme] =
@@ -49,7 +49,7 @@ proc bulmaTheme*(): tuple[palette: Palette, general: GeneralTheme] =
   result.general.dropShadow(4, 0, 0, "#000000", 0.05)
   result.general.outerStroke = stroke(0, "#707070", 1.0)
   result.general.innerStroke = stroke(1, "#707070", 0.4)
-  result.general.itemSpacing = 0.001 * fs
+  result.general.itemSpacing = 0.001 * fs.UICoord
   result.general.textCorner = common.uiScale * 3.2'f32
 
   result.palette.foreground = themePalette.primary * 1.0

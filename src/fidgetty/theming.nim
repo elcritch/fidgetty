@@ -32,9 +32,9 @@ type
     gloss*: ImageStyle
     cornerRadius*: (UICoord, UICoord, UICoord, UICoord)
     shadows*: seq[Shadow]
-    horizontalPadding*: float32
-    verticalPadding*: float32
-    itemSpacing*: float32
+    horizontalPadding*: UICoord
+    verticalPadding*: UICoord
+    itemSpacing*: UICoord
 
 
 # if common.themes.len() == 0:
