@@ -261,6 +261,10 @@ template Vertical*(text, child: untyped) =
 template Vertical*(child: untyped) =
   Vertical("", child)
 
+template Container*(child: untyped) =
+  group text:
+    layout lmVertical
+
 template VHBox*(sz, child: untyped) =
   Vertical:
     sz
