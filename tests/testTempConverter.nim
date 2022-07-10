@@ -31,7 +31,7 @@ template parseTemp(val, kind: untyped) =
 
 template LabeledTextInput(valName, conv, fstr: untyped) =
     FieldRight(label = fstr.repr()):
-      widget:
+      with:
         let valName {.inject.} =
           TextInput:
             value:

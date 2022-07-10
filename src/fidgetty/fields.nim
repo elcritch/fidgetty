@@ -23,11 +23,11 @@ template fieldRight*(
     height = 2'em,
     padding = 0.68'em,
     align = hLeft,
-    widget: untyped,
+    with: untyped,
 ) =
   Horizontal:
     size 0, 0
-    `widget`
+    `with`
     Spacer(padding, 0)
     basicLabel(label, width, height, padding, align)
 
