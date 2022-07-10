@@ -7,8 +7,8 @@ template dropUpY(n: Node, height: float32 = 0): bool =
   not (a.y + height <= b.y + b.h)
 
 proc dropdown*(
-    dropItems {.property: items.}: seq[string],
-    dropSelected {.property: selected.}: var int,
+    items {.property: items.}: seq[string],
+    selected {.property: selected.}: var int,
     defaultLabel {.property: label.}: string = "Dropdown",
 ): DropdownState {.statefulFidget.} =
   ## dropdown widget 
@@ -34,13 +34,13 @@ proc dropdown*(
       visItems =
         if self.dropUp: 4
         elif self.dropDownOpen: self.itemsVisible
-        else: dropItems.len()
-      itemCount = max(1, visItems).min(dropItems.len())
+        else: items.len()
+      itemCount = max(1, visItems).min(items.len())
       bdh = min(bih * itemCount.UICoord, windowLogicalSize.descaled.y/2'ui)
 
     if itemCount <= 2:
       self.dropUp = true
-      self.itemsVisible = dropItems.len()
+      self.itemsVisible = items.len()
       refresh()
 
     proc resetState() = 
@@ -50,7 +50,7 @@ proc dropdown*(
 
     let this = current
 
-    widget button:
+    Button:
       setup:
         box 0, 0, bw, bh
         # cornerRadius theme
@@ -65,12 +65,12 @@ proc dropdown*(
           else: rotation 0
           characters ">"
       label:
-        if dropSelected < 0: defaultLabel
-        else: dropItems[dropSelected]
-      onHover:
-        # fill "#5C8F9C"
-        highlight palette.highlight
-      onClick:
+        if selected < 0: defaultLabel
+        else: items[selected]
+      # onHover:
+      #   # fill "#5C8F9C"
+      #   highlight palette.highlight
+      clicker:
         self.dropDownOpen = true
         self.itemsVisible = -1
       post:
@@ -107,14 +107,14 @@ proc dropdown*(
             resetState()
 
           var itemsVisible = -1 + (if self.dropUp: -1 else: 0)
-          for idx, buttonName in pairs(dropItems):
+          for idx, buttonName in pairs(items):
             group "menuBtn":
               if current.screenBox.overlaps(scrollBox):
                 itemsVisible.inc()
               box 0, 0, bw, bih
               layoutAlign laCenter
 
-              let clicked = widget button:
+              let clicked = Button:
                 label: buttonName
                 setup:
                   clearShadows()
@@ -125,8 +125,8 @@ proc dropdown*(
                   stroke theme.innerStroke
               if clicked:
                 resetState()
-                echo fmt"dropdwon: set {dropSelected=}"
-                dropSelected = idx
+                echo fmt"dropdwon: set {selected=}"
+                selected = idx
 
 
           # group "menuBtnBlankSpacer":

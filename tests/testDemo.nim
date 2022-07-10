@@ -38,7 +38,7 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
         label: "Dump"
         setup:
           fill "#DFDFF0"
-        onClick:
+        clicker:
           echo "dump: "
           dumpTree(root)
 
@@ -59,20 +59,20 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
           # Trigger an animation on animatedProgress below
           Button:
             label: fmt"Arg Incr {self.count1:4d}"
-            onClick:
+            clicker:
               self.count1.inc()
               delta = 0.02
           Horizontal:
             itemSpacing 4'em
             Button:
               label: fmt"Evt Incr {self.count2:4d}"
-              onClick:
+              clicker:
                 self.count2.inc()
                 currEvents["pbc1"] = IncrementBar(increment = 0.02)
             Theme(warningPalette()):
               Checkbox:
-                value: self.myCheck
-                text: fmt"Click {self.myCheck}"
+                checked: self.myCheck
+                label: fmt"Click {self.myCheck}"
 
         let ap1 = AnimatedProgress:
           delta: delta
@@ -83,17 +83,17 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
         Horizontal:
           Button:
             label: fmt"Animate"
-            onClick:
+            clicker:
               self.count2.inc()
               currEvents["pbc1"] = JumpToValue(target = 0.01)
           Button:
             label: fmt"Cancel"
-            onClick:
+            clicker:
               currEvents["pbc1"] = CancelJump()
           Dropdown:
             items: dropItems
             selected: self.dropIndexes
-            label: "Menu"
+            defaultLabel: "Menu"
             setup: size 12'em, 2'em
 
         text "data":
@@ -114,7 +114,7 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
         Slider:
           value: self.scrollValue
           setup: size 60'vw, 2'em
-          onChange:
+          changed:
             currEvents["lstbx"] = ScrollTo(self.scrollValue)
         TextInputBind:
           value: self.textInput

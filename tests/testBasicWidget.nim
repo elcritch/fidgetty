@@ -65,7 +65,7 @@ proc exampleApp*(
         # (see parameters on `button` widget proc)
         Button:
           label: fmt"Clicked2: {self.count:4d}"
-          onClick: self.count.inc()
+          clicked: self.count.inc()
 
         # current limit on Widget macros is that all args
         # must be called as properties, no mix and match

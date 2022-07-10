@@ -5,7 +5,7 @@ import widgets
 proc slider*(
     value {.property: value.}: var float,
     label {.property: label.} = "",
-    clicker {.property: onChange.}: WidgetProc = proc () = discard,
+    changed {.property: onChange.}: WidgetProc = proc () = discard,
     disabled {.property: disabled.}: bool = false
 ): SliderState {.statefulFidget.} =
   ## Draw a progress bars 
@@ -39,8 +39,8 @@ proc slider*(
       value = float32 ((mpx - sbx - bh/2'ui)/bww).clamp(0'ui, 1.0'ui)
       self.pipDrag = buttonDown[MOUSE_LEFT]
       if oldValue != value:
-        if not clicker.isNil:
-          clicker()
+        if not changed.isNil:
+          changed()
 
     let
       pipPos = UICoord bww.float32*clamp(value, 0, 1.0)

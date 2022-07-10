@@ -3,7 +3,7 @@ import widgets
 
 proc checkbox*(
     checked {.property: value.}: var bool,
-    message {.property: text.}: string,
+    label {.property: text.}: string,
     clicker {.property: onClick.}: WidgetProc = proc () = discard,
     isActive {.property: isActive.}: bool = false,
     disabled {.property: disabled.}: bool = false
@@ -24,7 +24,7 @@ proc checkbox*(
     text "label":
       box 2'em, 0, parent.box.w - 2'em, parent.box.h
       fill palette.text
-      characters message
+      characters label
 
     rectangle "square":
       box 0, 0, 2'em, 2'em

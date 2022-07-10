@@ -72,7 +72,7 @@ proc listbox*(
           layoutAlign laCenter
           # echo fmt"{idx=} => {isCovered(popupBox)=}"
 
-          let clicked = widget button:
+          let clicked = Button:
             label: buttonName
             isActive: idx == selected
             setup:

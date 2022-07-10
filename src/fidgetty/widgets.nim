@@ -17,9 +17,6 @@ type
 
 template property*(name: untyped) {.pragma.}
 
-template `widget`*(widget: typed, blk: untyped) =
-  unpackLabelsAsArgs(widget, blk)
-
 proc makeWidgetPropertyMacro(procName, typeName: string): NimNode =
   let labelMacroName = ident typeName
 
