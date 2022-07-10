@@ -42,7 +42,6 @@ template LabeledTextInput(valName, conv, fstr: untyped) =
               size 5'em, 2'em
             ignorePostfix: true
             pattern: re"[0-9\.]"
-        valName.parseTemp(fstr)
 
 proc exampleApp*(): ExampleApp {.appFidget.} =
   ## defines a stateful app widget
@@ -56,17 +55,15 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
     box 0, 0, 100'vw, 100'vh
 
     VHBox(Spacer(0, 50'ph-2.Em)):
-      rectangle:
-        size 5'pw, 2'em
+      rectangle: size 5'pw, 2'em
       LabeledTextInput(cVal, toC, Celsius)
-      rectangle:
-        size 5'pw, 2'em
+      cVal.parseTemp(Celsius)
+      rectangle: size 5'pw, 2'em
       basicLabel(" = ")
-      rectangle:
-        size 5'pw, 2'em
+      rectangle: size 5'pw, 2'em
       LabeledTextInput(fVal, toF, Fahrenheit)
-      rectangle:
-        size 5'pw, 2'em
+      fVal.parseTemp(Fahrenheit)
+      rectangle: size 5'pw, 2'em
 
 
 startFidget(
