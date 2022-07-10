@@ -59,7 +59,7 @@ proc textInput*(
 ): TextInputState {.statefulFidget, discardable.} =
   # Draw a progress bars
   init:
-    boxSizeOf parent
+    # boxSizeOf parent
     cornerRadius theme.textCorner.UICoord
     shadows theme
     imageOf theme.gloss
@@ -77,11 +77,27 @@ proc textInput*(
   render:
     # echo "text bind internal: ", current.screenBox
     stroke theme.outerStroke
+    fill palette.textBg
+    clipContent true
+
+    if disabled:
+      imageColor palette.disabled
+    else:
+      if self.editing:
+        rotation 180
+        stroke palette.highlight * 0.40
+        strokeWeight 0.2'em
+      if isActive:
+        highlight palette
+
     text "text":
+      fill palette.text
+
       # setup focus
       current.bindingSet = true
       selectable true
       editableText true
+
       onClick:
         keyboard.focus(current, self.textBox)
         handleClicked(self.textBox)
@@ -101,10 +117,8 @@ proc textInput*(
         keyboard.unFocus(current)
         self.editing = false
       
-      # fill
-      fill palette.text
-      let font = common.fonts[current.textStyle.fontFamily]
       # echo "mouseDown"
+      let font = common.fonts[current.textStyle.fontFamily]
       let evts = current.currentEvents()
       self.textBox = evts.mgetOrPut("$textbox",
         newTextBox[Node](
@@ -150,19 +164,6 @@ proc textInput*(
             box selection.descaled
             fill palette.cursor * 0.22
 
-      
-    fill palette.textBg
-    clipContent true
-    if disabled:
-      imageColor palette.disabled
-    else:
-      if self.editing:
-        # imageTransparency 0.0
-        rotation 180
-        stroke palette.highlight * 0.40
-        strokeWeight 0.2'em
-      if isActive:
-        highlight palette
 
 proc textInputBind*(
     value : var string,

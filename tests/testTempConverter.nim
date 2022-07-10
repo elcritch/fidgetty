@@ -31,7 +31,7 @@ template parseTemp(val, kind: untyped) =
 
 template LabeledTextInput(valName, conv, fstr: untyped) =
     FieldRight(label = fstr.repr()):
-      width: 6'em
+      width: 8'em
       widget:
         let valName {.inject.} =
           TextInput:
@@ -57,10 +57,17 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
     box 0, 0, 100'vw, 100'vh
 
     VHBox(Spacer(0, 50'ph-2.Em)):
-      boxSizeOf parent
+      rectangle:
+        size 5'pw, 2'em
       LabeledTextInput(cVal, toC, Celsius)
+      rectangle:
+        size 5'pw, 2'em
       basicLabel(" = ")
+      rectangle:
+        size 5'pw, 2'em
       LabeledTextInput(fVal, toF, Fahrenheit)
+      rectangle:
+        size 5'pw, 2'em
 
 
 startFidget(

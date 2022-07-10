@@ -245,7 +245,6 @@ template Horizontal*(text, child: untyped) =
   group text:
     layout lmHorizontal
     counterAxisSizingMode csAuto
-    constraints cMin, cStretch
     `child`
 
 template Horizontal*(child: untyped) =

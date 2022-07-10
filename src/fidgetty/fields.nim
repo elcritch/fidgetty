@@ -9,8 +9,10 @@ proc basicLabel*(
     padding = 0.68'em,
     align = hCenter,
 ) =
+  let lw = max(width, label.len().float32.Em) * 0.5
+  size lw, height
   text "label":
-    size max(width, label.len().float32.Em), height
+    size lw, height
     fill palette.text
     current.textStyle.textAlignHorizontal = align
     characters label
@@ -24,6 +26,7 @@ template fieldRight*(
     widget: untyped,
 ) =
   Horizontal:
+    size 0, 0
     `widget`
     Spacer(padding, 0)
     basicLabel(label, width, height, padding, align)
