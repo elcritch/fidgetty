@@ -11,10 +11,6 @@ proc checkbox*(
   # Draw a progress bars
   init:
     box 0, 0, 8.Em, 2.Em
-    # cornerRadius theme
-    # strokeLine theme
-    # fill theme
-    # imageOf palette.gloss
 
   render:
 

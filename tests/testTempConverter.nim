@@ -3,8 +3,9 @@ import parseutils, memo
 import re
 
 import fidgetty
-import fidgetty/textinput
 import fidgetty/themes
+import fidgetty/textinput
+import fidgetty/label
 
 loadFont("IBM Plex Sans", "IBMPlexSans-Regular.ttf")
 
@@ -28,25 +29,23 @@ template parseTemp(val, kind: untyped) =
     if parseFloat(`val`.updated.get().strip(), res, 0) > 0:
       self.temp = `kind`(res).toC()
 
-template LabeledTextInput(valName, conv, label: untyped) =
-  Horizontal:
-    let valName {.inject.} =
-      TextInput:
-        value:
-          block:
-            let sval {.inject.} = conv(self.temp).float32
-            fmt"{sval:5.1f}".strip()
-        setup:
-          size 5'em, 2'em
-        ignorePostfix: true
-        pattern: re"[0-9\.]"
+template LabeledTextInput(valName, conv, fstr: untyped) =
+    FieldAfter(label = repr(fstr)):
+      width: 6'em
+      widget:
+        let valName {.inject.} =
+          TextInput:
+            value:
+              block:
+                let sval {.inject.} = conv(self.temp).float32
+                fmt"{sval:5.1f}".strip()
+            setup:
+              size 5'em, 2'em
+            ignorePostfix: true
+            pattern: re"[0-9\.]"
+        valName.parseTemp(fstr)
 
-    text "data":
-      size 6'em, 2'em
-      fill palette.text
-      characters: repr label
 
-    valName.parseTemp(label)
 
 proc exampleApp*(): ExampleApp {.appFidget.} =
   ## defines a stateful app widget
