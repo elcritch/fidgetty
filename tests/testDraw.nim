@@ -40,7 +40,10 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
       drawable:
         strokeLine 3'f32, "#000000"
         idx += 0.5
-        for i in 0..40:
+        if idx >= 100:
+          idx = 0
+        current.poly.setLen(0)
+        for i in 0..80:
           let t = i.float32 + idx
           current.poly.add vec2(5*t+10, 200+100.0*sin(1.0/5.0 * t))
 
