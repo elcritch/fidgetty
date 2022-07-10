@@ -30,11 +30,11 @@ template parseTemp(val, kind: untyped) =
 
 template LabeledTextInput(valName, conv, label: untyped) =
   Horizontal:
-    let `valName` {.inject.} =
+    let valName {.inject.} =
       TextInput:
         value:
           block:
-            let sval {.inject.} = `conv`(self.temp).float32
+            let sval {.inject.} = conv(self.temp).float32
             fmt"{sval:5.1f}".strip()
         setup:
           size 5'em, 2'em
@@ -44,7 +44,9 @@ template LabeledTextInput(valName, conv, label: untyped) =
     text "data":
       size 6'em, 2'em
       fill palette.text
-      characters: label
+      characters: repr label
+
+    valName.parseTemp(label)
 
 proc exampleApp*(): ExampleApp {.appFidget.} =
   ## defines a stateful app widget
@@ -63,8 +65,7 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
 
       component:
         size 11'em, 2'em
-        LabeledTextInput(cVal, toC, "Celsius")
-        cVal.parseTemp(Celsius)
+        LabeledTextInput(cVal, toC, Celsius)
 
       text "data":
         size 3'em, 2'em
@@ -73,8 +74,7 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
 
       component:
         size 11'em, 2'em
-        LabeledTextInput(fVal, toF, "Fahrenheit")
-        fVal.parseTemp(Fahrenheit)
+        LabeledTextInput(fVal, toF, Fahrenheit)
 
 
 startFidget(
