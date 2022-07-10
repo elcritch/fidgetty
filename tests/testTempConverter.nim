@@ -5,7 +5,7 @@ import re
 import fidgetty
 import fidgetty/themes
 import fidgetty/textinput
-import fidgetty/label
+import fidgetty/fields
 
 loadFont("IBM Plex Sans", "IBMPlexSans-Regular.ttf")
 
@@ -30,7 +30,7 @@ template parseTemp(val, kind: untyped) =
       self.temp = `kind`(res).toC()
 
 template LabeledTextInput(valName, conv, fstr: untyped) =
-    FieldAfter(label = repr(fstr)):
+    FieldRight(label = fstr.repr()):
       width: 6'em
       widget:
         let valName {.inject.} =
@@ -45,8 +45,6 @@ template LabeledTextInput(valName, conv, fstr: untyped) =
             pattern: re"[0-9\.]"
         valName.parseTemp(fstr)
 
-
-
 proc exampleApp*(): ExampleApp {.appFidget.} =
   ## defines a stateful app widget
   properties:
@@ -60,20 +58,9 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
 
     VHBox(Spacer(0, 50'ph-2.Em)):
       boxSizeOf parent
-      Spacer 1'em, 0
-
-      component:
-        size 11'em, 2'em
-        LabeledTextInput(cVal, toC, Celsius)
-
-      text "data":
-        size 3'em, 2'em
-        fill palette.text
-        characters: fmt" = "
-
-      component:
-        size 11'em, 2'em
-        LabeledTextInput(fVal, toF, Fahrenheit)
+      LabeledTextInput(cVal, toC, Celsius)
+      basicLabel(" = ")
+      LabeledTextInput(fVal, toF, Fahrenheit)
 
 
 startFidget(
