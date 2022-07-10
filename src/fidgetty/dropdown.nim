@@ -49,6 +49,7 @@ proc dropdown*(
       self.itemsVisible = -1
 
     let this = current
+    var outClick = false
 
     Button:
       setup:
@@ -64,6 +65,8 @@ proc dropdown*(
           if self.dropDownOpen: rotation -90
           else: rotation 0
           characters ">"
+        onClickOutside:
+          outClick = true
       label:
         if selected < 0: defaultLabel
         else: items[selected]
@@ -104,7 +107,9 @@ proc dropdown*(
           scrollBars true
 
           onClickOutside:
-            resetState()
+            # echo "outClick: ", outClick
+            if outClick == true:
+              resetState()
 
           var itemsVisible = -1 + (if self.dropUp: -1 else: 0)
           for idx, buttonName in pairs(items):
