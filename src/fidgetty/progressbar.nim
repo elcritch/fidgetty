@@ -2,7 +2,7 @@ import widgets
 
 proc progressbar*(
     value : var float,
-    label {.property: label.} = ""
+    label = ""
 ) {.basicFidget.} =
   ## Draw a progress bars 
 

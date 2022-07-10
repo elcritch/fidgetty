@@ -4,7 +4,7 @@ import widgets
 
 proc slider*(
     value : var float,
-    label {.property: label.} = "",
+    label = "",
     changed : WidgetProc = proc () = discard,
     disabled : bool = false
 ): SliderState {.statefulFidget.} =
