@@ -26,7 +26,7 @@ template Grid(code: untyped) =
 
 
 proc exampleApp*(
-    myName {.property: name.}: string,
+    myName : string,
 ): ExampleApp {.appFidget.} =
   ## defines a stateful app widget
   ## 

@@ -15,8 +15,6 @@ export fidget, theming
 type
   WidgetProc* = proc()
 
-template property*(name: untyped) {.pragma.}
-
 let removeOnPrefix* {.compileTime.} =
   proc (code: (string, NimNode)): (string, NimNode) = 
     if code[0].startsWith("on"):

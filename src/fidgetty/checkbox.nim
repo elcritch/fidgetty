@@ -2,11 +2,11 @@ import fidget
 import widgets
 
 proc checkbox*(
-    checked {.property: value.}: var bool,
-    label {.property: text.}: string,
-    clicker {.property: onClick.}: WidgetProc = proc () = discard,
-    isActive {.property: isActive.}: bool = false,
-    disabled {.property: disabled.}: bool = false
+    checked : var bool,
+    label : string,
+    clicker : WidgetProc = proc () = discard,
+    isActive : bool = false,
+    disabled : bool = false
 ): bool {.basicFidget, discardable.} =
   # Draw a progress bars
   init:

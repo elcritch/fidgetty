@@ -4,9 +4,9 @@ import button
 # var framecount = 0
 
 proc listbox*(
-    items {.property: items.}: seq[string],
-    selected {.property: selected.}: var int,
-    itemsVisible {.property: itemsVisible.}: int
+    items : seq[string],
+    selected : var int,
+    itemsVisible : int
 ): ListBoxState {.statefulFidget.} =
   ## dropdown widget 
   init:

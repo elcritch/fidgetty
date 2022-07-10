@@ -51,11 +51,11 @@ proc handleDrag(textBox: TextBox) =
 import print
 
 proc textInput*(
-    value {.property: value.}: string,
-    isActive {.property: isActive.}: bool = false,
-    disabled {.property: disabled.}: bool = false,
-    ignorePostfix {.property: ignorePostfix.}: bool = false,
-    pattern {.property: pattern.}: Regex = nil,
+    value : string,
+    isActive : bool = false,
+    disabled : bool = false,
+    ignorePostfix : bool = false,
+    pattern : Regex = nil,
 ): TextInputState {.statefulFidget, discardable.} =
   # Draw a progress bars
   init:
@@ -165,11 +165,11 @@ proc textInput*(
         highlight palette
 
 proc textInputBind*(
-    value {.property: value.}: var string,
-    isActive {.property: isActive.}: bool = false,
-    disabled {.property: disabled.}: bool = false,
-    ignorePostfix {.property: ignorePostfix.}: bool = false,
-    pattern {.property: pattern.}: Regex = nil,
+    value : var string,
+    isActive : bool = false,
+    disabled : bool = false,
+    ignorePostfix : bool = false,
+    pattern : Regex = nil,
 ): bool {.wrapperFidget, discardable.} =
   # Draw a progress bars
   let curr = value

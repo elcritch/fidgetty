@@ -3,10 +3,10 @@ import std/strformat
 import widgets
 
 proc slider*(
-    value {.property: value.}: var float,
+    value : var float,
     label {.property: label.} = "",
-    changed {.property: onChange.}: WidgetProc = proc () = discard,
-    disabled {.property: disabled.}: bool = false
+    changed : WidgetProc = proc () = discard,
+    disabled : bool = false
 ): SliderState {.statefulFidget.} =
   ## Draw a progress bars 
 

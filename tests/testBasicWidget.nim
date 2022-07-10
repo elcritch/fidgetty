@@ -12,7 +12,7 @@ import fidgetty/[button, progressbar]
 loadFont("IBM Plex Sans", "IBMPlexSans-Regular.ttf")
 
 proc exampleApp*(
-    myName {.property: name.}: string,
+    myName : string,
 ): ExampleApp {.appFidget.} =
   ## defines a stateful app widget
   ## 
