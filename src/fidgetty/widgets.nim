@@ -3,6 +3,7 @@ import variant, patty
 import std/macrocache
 
 import macrohelpers
+import cdecl/applies
 
 export tables, strformat, options
 export math, random
@@ -16,43 +17,8 @@ type
 
 template property*(name: untyped) {.pragma.}
 
-const widgetArgsTable = CacheTable"fidgettyWidgetArgsTable "
-
-# var widgetArgsTable* {.compileTime.} = initTable[string, seq[(string, string, NimNode, )]]()
-
-macro widget*(widget, body: untyped): untyped =
-  let procName = widget.strVal
-
-  result = newStmtList()
-  var attrs = initTable[string, NimNode]()
-  for idx, attr in body.attributes():
-    attrs[attr.name] = attr.code
-  var args = newSeq[NimNode]()
-  let widgetArgs = widgetArgsTable[procName].toWidgetArgs()
-  
-  result = newStmtList()
-  for (argname, propname, argtype) in widgetArgs:
-    if argtype.repr == "WidgetProc" and attrs.hasKey(propname):
-      let pargname = genSym(nskLet, argname & "Arg")
-      let code =
-        if attrs.hasKey(propname): attrs[propname]
-        else: nnkDiscardStmt.newTree(newEmptyNode())
-      let pdecl = makeLambdaDecl(pargname, argtype, code)
-      result.add pdecl
-      args.add newNimNode(nnkExprEqExpr).
-        add(ident(argname)).add(pargname)
-    elif argtype.repr == "WidgetProc":
-      args.add newNimNode(nnkExprEqExpr).
-        add(ident(argname)).add(newNilLit())
-    else:
-      if not attrs.hasKey(propname):
-        continue
-      let code =
-        if attrs.hasKey(propname): attrs[propname]
-        else: newNilLit()
-      args.add newNimNode(nnkExprEqExpr).
-        add(ident(argname)).add(code)
-  result.add newCall(`procName`, args)
+template `widget`*(widget: typed, blk: untyped) =
+  unpackLabelsAsArgs(widget, blk)
 
 proc makeWidgetPropertyMacro(procName, typeName: string): NimNode =
   let labelMacroName = ident typeName
@@ -216,24 +182,16 @@ proc makeStatefulWidget*(blk: NimNode, hasState, defaultState, wrapper: bool): N
   params.add postArg 
   params.add identArg 
 
-  var widgetArgs = newSeq[(string, string, NimNode)]()
-  for idx, prop in params.propertyNames():
-    echo fmt"PROPERTYNAMES: {prop.name=} {prop.label=} {prop.argtype.repr=}"
-    let pname = if prop.label == "": prop.name else: prop.label
-    widgetArgs.add( (prop.name, pname, prop.argtype,) )
-
-  widgetArgsTable[procName] = widgetArgs.makeWidgetArgs()
-
   result = newStmtList()
   result.add preBody 
   result.add procDef
 
   if typeName != procNameCap:
-    let pn = procName
+    let pn = ident procName
     let pu = ident procNameCap
     result.add quote do:
-      macro `pu`*(blk: untyped) =
-        result = newCall("widget", ident `pn`, blk)
+      template `pu`*(blk: untyped) =
+        unpackLabelsAsArgs(`pn`, blk)
 
   
   if not hasState:
