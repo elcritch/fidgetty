@@ -89,9 +89,9 @@ proc textInput*(
         proc ticker(self: TextInputState) {.async.} =
           let cursorBlink = 1_000
           while self.editing:
-            await sleepAsync(cursorBlink)
             self.showCursor = not self.showCursor
             refresh()
+            await sleepAsync(cursorBlink)
         
         if self.ticks.isNil or self.ticks.finished:
           echo "ticker..."
