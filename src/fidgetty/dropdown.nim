@@ -70,7 +70,7 @@ proc dropdown*(
       # onHover:
       #   # fill "#5C8F9C"
       #   highlight palette.highlight
-      clicker:
+      onClick:
         self.dropDownOpen = true
         self.itemsVisible = -1
       post:

@@ -38,7 +38,7 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
         label: "Dump"
         setup:
           fill "#DFDFF0"
-        clicker:
+        onClick:
           echo "dump: "
           dumpTree(root)
 
@@ -59,14 +59,14 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
           # Trigger an animation on animatedProgress below
           Button:
             label: fmt"Arg Incr {self.count1:4d}"
-            clicker:
+            onClick:
               self.count1.inc()
               delta = 0.02
           Horizontal:
             itemSpacing 4'em
             Button:
               label: fmt"Evt Incr {self.count2:4d}"
-              clicker:
+              onClick:
                 self.count2.inc()
                 currEvents["pbc1"] = IncrementBar(increment = 0.02)
             Theme(warningPalette()):
@@ -83,12 +83,12 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
         Horizontal:
           Button:
             label: fmt"Animate"
-            clicker:
+            onClick:
               self.count2.inc()
               currEvents["pbc1"] = JumpToValue(target = 0.01)
           Button:
             label: fmt"Cancel"
-            clicker:
+            onClick:
               currEvents["pbc1"] = CancelJump()
           Dropdown:
             items: dropItems

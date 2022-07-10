@@ -5,6 +5,7 @@ import asyncdispatch # This is what provides us with async and the dispatcher
 import times, strutils # This is to provide the timing output
 
 import fidgetty
+import fidgetty/widgets
 import fidgetty/themes
 import fidgetty/[button, progressbar]
 
@@ -65,7 +66,7 @@ proc exampleApp*(
         # (see parameters on `button` widget proc)
         Button:
           label: fmt"Clicked2: {self.count:4d}"
-          clicked: self.count.inc()
+          onClick: self.count.inc()
 
         # current limit on Widget macros is that all args
         # must be called as properties, no mix and match
@@ -102,10 +103,7 @@ proc drawMain() =
     # the `statefulWidget` always takes a `self` paramter
     # that that widgets state reference 
     # alternatively:
-    #   exampleApp("basic widgets", state)
-    widget exampleApp:
-      name: "basic widgets"
-      self: state
+    exampleApp("basic widgets", state)
 
 
 startFidget(

@@ -17,6 +17,13 @@ type
 
 template property*(name: untyped) {.pragma.}
 
+let removeOnPrefix* {.compileTime.} =
+  proc (code: (string, NimNode)): (string, NimNode) = 
+    if code[0].startsWith("on"):
+      result = ("do" & code[0][2..^1], code[1])
+    else:
+      result = code
+
 proc makeWidgetPropertyMacro(procName, typeName: string): NimNode =
   let labelMacroName = ident typeName
 
@@ -188,7 +195,7 @@ proc makeStatefulWidget*(blk: NimNode, hasState, defaultState, wrapper: bool): N
     let pu = ident procNameCap
     result.add quote do:
       template `pu`*(blk: untyped) =
-        unpackLabelsAsArgs(`pn`, blk)
+        unpackLabelsAsArgsWithFn(removeOnPrefix, `pn`, blk)
 
   
   if not hasState:

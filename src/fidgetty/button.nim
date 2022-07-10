@@ -3,7 +3,7 @@ import widgets
 import print
 proc button*(
     label {.property: label.}: string,
-    clicker {.property: onClick.}: WidgetProc = proc () = discard,
+    doClick {.property: onClick.}: WidgetProc = proc () = discard,
     isActive {.property: isActive.}: bool = false,
     disabled {.property: disabled.}: bool = false
 ): bool {.basicFidget, discardable.} =
@@ -36,6 +36,6 @@ proc button*(
         highlight palette
       onClick:
         highlight palette
-        if not clicker.isNil:
-          clicker()
+        if not doClick.isNil:
+          doclick()
         result = true
