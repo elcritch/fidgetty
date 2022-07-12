@@ -37,7 +37,7 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
 
     proc ticker(self: ExampleApp) {.async.} =
       while not self.done:
-        self.time += 1.0
+        self.time += 2.0
         refresh()
         await sleepAsync(32)
 
@@ -49,13 +49,16 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
       centeredWH 90'pw, 90'ph
       strokeLine 3, "#000000"
   
-      for i in 0..3200:
-        let t = i.float32 + self.time
-        if i mod 10 == 0:
-          rectangle:
-            fill "#000000"
-            offset 0.125*i.float+0, 50.0 + 60.0*sin(1.0/12.0 * 0.125 * t) + 50.0
-            size 3, 3
+      drawable:
+        fill "#000000"
+        size 3, 3
+
+        current.points.setLen(3200)
+        for i in 0..<3200:
+          let t = i.float32 + self.time
+          if i mod 1 == 0:
+            current.points[i].x = 0.125*i.UICoord+0
+            current.points[i].y = 50.0'ui + 60.0*sin(1.0/12.0 * 0.125 * t) + 50.0
 
 startFidget(
   wrapApp(exampleApp, ExampleApp),
