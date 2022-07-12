@@ -37,7 +37,7 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
 
     proc ticker(self: ExampleApp) {.async.} =
       while not self.done:
-        self.time += 2.0
+        self.time += 13.0
         refresh()
         await sleepAsync(32)
 
@@ -51,7 +51,7 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
   
       drawable:
         fill "#000000"
-        size 3, 3
+        size 2, 2
 
         current.points.setLen(3200)
         for i in 0..<3200:
