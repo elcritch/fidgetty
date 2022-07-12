@@ -21,8 +21,10 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
     ## capitalized proc name which is `ExampleApp` in this example. 
     ## This will be customizable in the future. 
     count: int
-    value: float
+    time: float
+    done: bool
     textInput: string
+    ticks: Future[void] = emptyFuture()
 
   render:
     setTitle(fmt"Fidget  Progress Example")
@@ -33,19 +35,26 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
     fill "#F7F7F9"
     stroke theme.outerStroke
 
+    proc ticker(self: ExampleApp) {.async.} =
+      while not self.done:
+        self.time += 0.1
+        refresh()
+        await sleepAsync(16)
+
+    if self.ticks.isNil or self.ticks.finished:
+      echo "ticker: ", self.count
+      self.ticks = ticker(self)
+
     rectangle:
       centeredWH 90'pw, 90'ph
-      stroke theme.outerStroke
+      strokeLine 3, "#000000"
   
-      drawable:
-        strokeLine 3'f32, "#000000"
-        idx += 0.5
-        if idx >= 100:
-          idx = 0
-        current.poly.setLen(0)
-        for i in 0..80:
-          let t = i.float32 + idx
-          current.poly.add vec2(5*t+10, 200+100.0*sin(1.0/5.0 * t))
+      for i in 0..400:
+        let t = i.float32 + self.time
+        rectangle:
+          fill "#000000"
+          offset 1.0*i.float+0, 50.0 + 60.0*sin(1.0/12.0 * t) + 50.0
+          size 3, 3
 
 startFidget(
   wrapApp(exampleApp, ExampleApp),
