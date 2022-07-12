@@ -50,6 +50,10 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
       strokeLine 3, "#000000"
   
       drawable:
+        # Drawable node's don't draw a normal rectangle. Instead they draw
+        # a list of points set in `current.points` using the nodes fill/stroke. 
+        # The size of the drawable node is used for the point sizes, etc. 
+        # Note: experimental
         fill "#000000"
         size 2, 2
 
