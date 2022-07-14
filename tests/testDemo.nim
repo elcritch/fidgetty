@@ -79,13 +79,11 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
             width 100'pw - 8'em
 
         Horizontal:
-          Button:
-            label: fmt"Animate"
+          Button(label = "Animate"):
             onClick:
               self.count2.inc()
               currEvents["pbc1"] = JumpToValue(target = 0.01)
-          Button:
-            label: fmt"Cancel"
+          Button(label = "Cancel"):
             onClick:
               currEvents["pbc1"] = CancelJump()
           Dropdown:
@@ -117,8 +115,7 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
         TextInputBind:
           value: self.textInput
           setup: size 60'vw, 2'em
-        Button:
-          label: fmt"{self.textInput}"
+        Button(label = &"{self.textInput}"):
           disabled: true
           setup: size 60'vw, 2'em
       palette.accent = parseHtml("#87E3FF", 0.67).spin(ap1.value * 36)
