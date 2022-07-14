@@ -64,15 +64,13 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
               delta = 0.02
           Horizontal:
             itemSpacing 4'em
-            Button:
-              label: fmt"Evt Incr {self.count2:4d}"
+            Button(label = &"Evt Incr {self.count2:4d}"):
               onClick:
                 self.count2.inc()
                 currEvents["pbc1"] = IncrementBar(increment = 0.02)
             Theme(warningPalette()):
-              Checkbox:
+              Checkbox(label = fmt"Click {self.myCheck}"):
                 checked: self.myCheck
-                label: fmt"Click {self.myCheck}"
 
         let ap1 = AnimatedProgress:
           delta: delta

@@ -192,9 +192,8 @@ proc makeStatefulWidget*(blk: NimNode, hasState, defaultState, wrapper: bool): N
     let pn = ident procName
     let pu = ident procNameCap
     result.add quote do:
-      template `pu`*(blk: untyped) =
-        unpackLabelsAsArgsWithFn(removeOnPrefix, `pn`, blk)
-
+      template `pu`*(args: varargs[untyped]) =
+        unpackLabelsAsArgsWithFn(removeOnPrefix, `pn`, args)
   
   if not hasState:
     result.add makeWidgetPropertyMacro(procName, typeName) 
