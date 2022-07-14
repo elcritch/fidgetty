@@ -34,8 +34,7 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
 
     Vertical:
       ## Debugging button
-      Button:
-        label: "Dump"
+      Button(label = "Dump"):
         setup:
           fill "#DFDFF0"
         onClick:
