@@ -13,7 +13,7 @@ proc drawMain() =
     font "IBM Plex Sans", 14, 200, 0, hCenter, vCenter
     box 1'em, 1'em, 100'pw - 1'em, 100'ph - 1'em
 
-    vertical:
+    Vertical:
       itemSpacing 1'em
 
       text "first desc":
@@ -28,12 +28,19 @@ proc drawMain() =
         fill "#000d00"
         characters "linked dropdowns: "
       dropdown(dropItems, dropIndexes[2])
-      widget dropdown:
+      Dropdown:
         items: dropItems
         selected: dropIndexes[2]
         setup:
           box 0, 0, 12'em, 2'em
       
 
-startFidget(drawMain, theme = grayTheme, uiScale=2.0, w=600, h=300)
-  
+startFidget(
+  drawMain,
+  setup = 
+    when defined(demoBulmaTheme): setup(bulmaTheme)
+    else: setup(grayTheme),
+  w = 640,
+  h = 700,
+  uiScale = 2.0
+)

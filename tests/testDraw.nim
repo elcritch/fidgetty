@@ -40,6 +40,11 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
         self.time += 13.0
         refresh()
         await sleepAsync(32)
+    proc ticker(self: ExampleApp) {.async.} =
+      while not self.done:
+        self.time += 13.0
+        refresh()
+        await sleepAsync(32)
 
     if self.ticks.isNil or self.ticks.finished:
       echo "ticker: ", self.count
