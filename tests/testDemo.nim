@@ -72,11 +72,12 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
               Checkbox(label = fmt"Click {self.myCheck}"):
                 checked: self.myCheck
 
-        let ap1 = AnimatedProgress:
-          delta: delta
-          setup:
-            bindEvents "pbc1", currEvents
-            width 100'pw - 8'em
+        let ap1 =
+          AnimatedProgress:
+            delta: delta
+            setup:
+              bindEvents "pbc1", currEvents
+              width 100'pw - 8'em
 
         Horizontal:
           Button(label = "Animate"):
