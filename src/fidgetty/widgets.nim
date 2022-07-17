@@ -16,11 +16,11 @@ type
   WidgetProc* = proc()
 
 let removeOnPrefix* {.compileTime.} =
-  proc (code: (string, NimNode)): (string, NimNode) = 
+  proc (code: (string, NimNode)): Option[(string, NimNode)] = 
     if code[0].startsWith("on"):
-      result = ("do" & code[0][2..^1], code[1])
+      result = some ("do" & code[0][2..^1], code[1])
     else:
-      result = code
+      result = some code
 
 proc makeWidgetPropertyMacro(procName, typeName: string): NimNode =
   let labelMacroName = ident typeName

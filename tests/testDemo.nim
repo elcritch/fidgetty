@@ -54,18 +54,21 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
 
         Vertical:
           itemSpacing 1.5'em
+
           # Trigger an animation on animatedProgress below
           Button:
             label: fmt"Arg Incr {self.count1:4d}"
             onClick:
               self.count1.inc()
               delta = 0.02
+
           Horizontal:
             itemSpacing 4'em
             Button(label = &"Evt Incr {self.count2:4d}"):
               onClick:
                 self.count2.inc()
                 currEvents["pbc1"] = IncrementBar(increment = 0.02)
+
             Theme(warningPalette()):
               Checkbox(label = fmt"Click {self.myCheck}"):
                 checked: self.myCheck
