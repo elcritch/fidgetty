@@ -52,7 +52,7 @@ proc dropdown*(
     var outClick = false
 
     Button:
-      setup:
+      proc setup() =
         box 0, 0, bw, bh
         # cornerRadius theme
         # strokeLine this
@@ -67,16 +67,16 @@ proc dropdown*(
           characters ">"
         onClickOutside:
           outClick = true
-      label:
+      label =
         if selected < 0: defaultLabel
         else: items[selected]
       # onHover:
       #   # fill "#5C8F9C"
       #   highlight palette.highlight
-      onClick:
+      proc onClick() =
         self.dropDownOpen = true
         self.itemsVisible = -1
-      post:
+      proc post() =
         if self.dropDownOpen:
           highlight palette.highlight
 
@@ -120,8 +120,8 @@ proc dropdown*(
               layoutAlign laCenter
 
               let clicked = Button:
-                label: buttonName
-                setup:
+                label = buttonName
+                proc setup() =
                   clearShadows()
                   let ic = this.image.color
                   imageColor Color(r: 0, g: 0, b: 0, a: 0.20 * ic.a)

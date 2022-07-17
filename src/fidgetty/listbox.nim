@@ -73,9 +73,9 @@ proc listbox*(
           # echo fmt"{idx=} => {isCovered(popupBox)=}"
 
           let clicked = Button:
-            label: buttonName
-            isActive: idx == selected
-            setup:
+            label = buttonName
+            isActive = idx == selected
+            proc setup() =
               clearShadows()
               imageTransparency 0.1
               boxOf parent
