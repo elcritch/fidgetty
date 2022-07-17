@@ -110,7 +110,6 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
           value = ap1.value
           setup = block:
             size 60'vw, 2'em
-            size 60'vw, 2'em
 
         Listbox:
           items = dropItems
