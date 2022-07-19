@@ -7,9 +7,9 @@ template dropUpY(n: Node, height: float32 = 0): bool =
   not (a.y + height <= b.y + b.h)
 
 proc dropdown*(
-    items : seq[string],
-    selected : var int,
-    defaultLabel : string = "Dropdown",
+    items: seq[string],
+    selected: var int,
+    defaultLabel: string = "Dropdown",
 ): DropdownState {.statefulFidget.} =
   ## dropdown widget 
   init:
@@ -70,9 +70,6 @@ proc dropdown*(
       label =
         if selected < 0: defaultLabel
         else: items[selected]
-      # onHover:
-      #   # fill "#5C8F9C"
-      #   highlight palette.highlight
       proc onClick() =
         self.dropDownOpen = true
         self.itemsVisible = -1
@@ -119,7 +116,8 @@ proc dropdown*(
               box 0, 0, bw, bih
               layoutAlign laCenter
 
-              let clicked = Button:
+              let clicked =
+                Button:
                 label = buttonName
                 proc setup() =
                   clearShadows()
@@ -132,7 +130,6 @@ proc dropdown*(
                 resetState()
                 echo fmt"dropdwon: set {selected=}"
                 selected = idx
-
 
           # group "menuBtnBlankSpacer":
             # box 0, 0, bw, this.cornerRadius[0]

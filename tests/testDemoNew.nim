@@ -54,7 +54,6 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
         itemSpacing 1.5'em
 
         Vertical:
-          itemSpacing 1.5'em
 
           # Trigger an animation on animatedProgress below
           Button:
