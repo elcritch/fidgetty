@@ -107,7 +107,7 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
 
         Slider:
           value = ap1.value
-          setup = block:
+          proc setup() =
             size 60'vw, 2'em
 
         Listbox:

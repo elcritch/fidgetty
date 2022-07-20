@@ -34,14 +34,13 @@ template LabeledTextInput(valName, conv, fstr: untyped) =
       with:
         let valName {.inject.} =
           TextInput:
-            value:
-              block:
-                let sval {.inject.} = conv(self.temp).float32
-                fmt"{sval:5.1f}".strip()
-            setup:
+            value = block:
+              let sval {.inject.} = conv(self.temp).float32
+              fmt"{sval:5.1f}".strip()
+            proc setup() =
               size 5'em, 2'em
-            ignorePostfix: true
-            pattern: re"[0-9\.]"
+            ignorePostfix = true
+            pattern = re"[0-9\.]"
 
 proc exampleApp*(): ExampleApp {.appFidget.} =
   ## defines a stateful app widget

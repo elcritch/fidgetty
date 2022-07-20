@@ -118,14 +118,14 @@ proc dropdown*(
 
               let clicked =
                 Button:
-                label = buttonName
-                proc setup() =
-                  clearShadows()
-                  let ic = this.image.color
-                  imageColor Color(r: 0, g: 0, b: 0, a: 0.20 * ic.a)
-                  boxOf parent
-                  cornerRadius 0
-                  stroke theme.innerStroke
+                  label = buttonName
+                  proc setup() =
+                    clearShadows()
+                    let ic = this.image.color
+                    imageColor Color(r: 0, g: 0, b: 0, a: 0.20 * ic.a)
+                    boxOf parent
+                    cornerRadius 0
+                    stroke theme.innerStroke
               if clicked:
                 resetState()
                 echo fmt"dropdwon: set {selected=}"

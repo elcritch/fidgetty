@@ -2,10 +2,10 @@ import widgets
 
 import print
 proc button*(
-    label : string,
-    doClick : WidgetProc = proc () = discard,
-    isActive : bool = false,
-    disabled : bool = false
+    label: string,
+    doClick: WidgetProc = proc () = discard,
+    isActive: bool = false,
+    disabled: bool = false
 ): bool {.basicFidget, discardable.} =
   # Draw a progress bars
   init:
