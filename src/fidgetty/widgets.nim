@@ -16,11 +16,11 @@ type
   WidgetProc* = proc()
 
 let removeOnPrefix* {.compileTime.} =
-  proc (code: (string, NimNode)): (string, NimNode) = 
+  proc (code: (string, NimNode)): Option[(string, NimNode)] = 
     if code[0].startsWith("on"):
-      result = ("do" & code[0][2..^1], code[1])
+      result = some ("do" & code[0][2..^1], code[1])
     else:
-      result = code
+      result = some code
 
 proc makeWidgetPropertyMacro(procName, typeName: string): NimNode =
   let labelMacroName = ident typeName
@@ -189,11 +189,21 @@ proc makeStatefulWidget*(blk: NimNode, hasState, defaultState, wrapper: bool): N
   result.add procDef
 
   if typeName != procNameCap:
+    # setup template wrapper
     let pn = ident procName
     let pu = ident procNameCap
-    result.add quote do:
+    var res = quote do:
       template `pu`*(args: varargs[untyped]) =
+        ## docs
         unpackLabelsAsArgsWithFn(removeOnPrefix, `pn`, args)
+    # add argument docs
+    var msg = $(pn) & " args:\n"
+    msg &= "\n"
+    for p in params[1..^1]:
+      msg &= " - " & p.repr & ";\n"
+    res.body[0].strVal = msg
+
+    result.add res
   
   if not hasState:
     result.add makeWidgetPropertyMacro(procName, typeName) 
