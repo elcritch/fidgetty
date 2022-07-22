@@ -37,5 +37,5 @@ proc button*(
       onClick:
         highlight palette
         if not doClick.isNil:
-          doclick()
+          doClick()
         result = true
