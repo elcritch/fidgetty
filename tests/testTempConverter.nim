@@ -53,18 +53,25 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
     textStyle theme
     fill palette.background
     box 0, 0, 100'vw, 100'vh
+    setWindowBounds(vec2(400, 200), vec2(600, 400))
 
     Centered:
-      Horizontal:
-        # deg C
-        LabeledTextInput(cVal, toC, Celsius)
-        cVal.parseTemp(Celsius)
+      rectangle:
+        box 0, 0, 400, 200
+        fill "#DEDEDE"
+        cornerRadius 0.5'em
 
-        basicLabel(" = ")
+        Centered:
+          Horizontal:
+            # deg C
+            LabeledTextInput(cVal, toC, Celsius)
+            cVal.parseTemp(Celsius)
 
-        # deg F
-        LabeledTextInput(fVal, toF, Fahrenheit)
-        fVal.parseTemp(Fahrenheit)
+            basicLabel(" = ")
+
+            # deg F
+            LabeledTextInput(fVal, toF, Fahrenheit)
+            fVal.parseTemp(Fahrenheit)
 
 
 startFidget(
@@ -72,6 +79,6 @@ startFidget(
   setup = 
     when defined(demoBulmaTheme): setup(bulmaTheme)
     else: setup(grayTheme),
-  w = 440,
-  h = 140,
+  w = 400,
+  h = 200,
   uiScale = 2.0)
