@@ -276,8 +276,8 @@ template Group*(child: untyped) =
 
 template Centered*(child: untyped) =
   Horizontal: # "centered":
-    centeredH current.screenBox.h
-    centeredW current.screenBox.w
+    centeredX current.screenBox.w
+    centeredY current.screenBox.h
     `child`
 
 
