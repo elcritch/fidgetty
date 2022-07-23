@@ -54,16 +54,17 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
     fill palette.background
     box 0, 0, 100'vw, 100'vh
 
-    VHBox(Spacer(0, 50'ph-2.Em)):
-      rectangle: size 5'pw, 2'em
-      LabeledTextInput(cVal, toC, Celsius)
-      cVal.parseTemp(Celsius)
-      rectangle: size 5'pw, 2'em
-      basicLabel(" = ")
-      rectangle: size 5'pw, 2'em
-      LabeledTextInput(fVal, toF, Fahrenheit)
-      fVal.parseTemp(Fahrenheit)
-      rectangle: size 5'pw, 2'em
+    Centered:
+      Horizontal:
+        # deg C
+        LabeledTextInput(cVal, toC, Celsius)
+        cVal.parseTemp(Celsius)
+
+        basicLabel(" = ")
+
+        # deg F
+        LabeledTextInput(fVal, toF, Fahrenheit)
+        fVal.parseTemp(Fahrenheit)
 
 
 startFidget(

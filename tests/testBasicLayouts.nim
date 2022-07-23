@@ -25,9 +25,7 @@ template Grid(code: untyped) =
     `code`
 
 
-proc exampleApp*(
-    myName : string,
-): ExampleApp {.appFidget.} =
+proc exampleApp*(): ExampleApp {.appFidget.} =
   ## defines a stateful app widget
   ## 
   
@@ -39,7 +37,7 @@ proc exampleApp*(
     value: float
 
   render:
-    setTitle(fmt"Fidget Animated Progress Example - {myName}")
+    setTitle("Fidget Animated Progress Example ")
     font "IBM Plex Sans", 16, 200, 0, hCenter, vCenter
     fill "#F7F7F9"
 
@@ -53,14 +51,14 @@ proc exampleApp*(
       fill "#DFDFE0"
       strokeWeight 1
 
-      Vertical:
+      Grid:
         boxOf parent
         itemSpacing 2.Em
 
         rectangle "bar":
-          size 80.WPerc, 2.Em
+          size 80'vw, 2.Em
           offset 1.Em, 1.Em
-          constraints cScale, cMin
+          # constraints cScale, cMin
 
           self.value = (self.count.toFloat * 0.10) mod 1.0001
           Progressbar:
@@ -88,25 +86,9 @@ proc exampleApp*(
                 size 8.Em, 2.Em
               onClick: self.count.inc()
 
-var state = ExampleApp(count: 2, value: 0.33)
-
-const callform {.intdefine.} = 2
-
-proc drawMain() =
-  frame "main":
-    # we call exampleApp with a pre-made state
-    # the `statefulWidget` always takes a `self` paramter
-    # that that widgets state reference 
-    # alternatively:
-    #   exampleApp("basic widgets", state)
-    widget exampleApp:
-      name: "basic widgets"
-      self: state
-
 
 startFidget(
-  drawMain,
-  load=loadMain,
+  wrapApp(exampleApp, ExampleApp),
   setup = 
     when defined(demoBulmaTheme): setup(bulmaTheme)
     else: setup(grayTheme),

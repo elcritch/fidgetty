@@ -245,6 +245,8 @@ macro reverseStmts*(body: untyped) =
 
 template Box*(text, child: untyped) =
   group text:
+    layout parent.layoutMode
+    counterAxisSizingMode parent.counterAxisSizingMode
     `child`
 
 template Box*(child: untyped) =
@@ -263,15 +265,21 @@ template Vertical*(text, child: untyped) =
   group text:
     layout lmVertical
     counterAxisSizingMode csAuto
-    constraints cMin, cStretch
     `child`
 
 template Vertical*(child: untyped) =
   Vertical("", child)
 
-template Container*(child: untyped) =
+template Group*(child: untyped) =
   group text:
-    layout lmVertical
+    `child`
+
+template Centered*(child: untyped) =
+  Horizontal: # "centered":
+    centeredH current.screenBox.h
+    centeredW current.screenBox.w
+    `child`
+
 
 template VHBox*(sz, child: untyped) =
   Vertical:
@@ -302,10 +310,10 @@ template GeneralTheme*(child: untyped) =
 template Spacer*(w: UICoord, h: UICoord) =
   blank: size(w, h)
 
-template HSpacer*(h: UICoord) =
+template VSpacer*(h: UICoord) =
   blank: size(0, h)
 
-template VSpacer*(w: UICoord) =
+template HSpacer*(w: UICoord) =
   blank: size(w, 0)
 
 template wrapApp*(fidgetName: typed, fidgetType: typedesc): proc() =
