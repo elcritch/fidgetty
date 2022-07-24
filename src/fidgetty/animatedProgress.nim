@@ -45,12 +45,13 @@ proc animatedProgress*(
         ## This simple procedure will "tick" ten times delayed 1,000ms each.
         ## Every tick will increment the progress bar 10% until its done. 
         let
-          frameDelay = 16
+          frameDelay = 11
           duration = 3_000
           n = duration div frameDelay
         var prev = getMonoTime()
         for i in 1..n:
           await sleepAsync(frameDelay)
+          refresh()
           if self.cancelTicks:
             self.cancelTicks = false
             return
@@ -62,7 +63,6 @@ proc animatedProgress*(
             prev = ts
             continue
           prev = ts
-          refresh()
       
       if self.ticks.isNil or self.ticks.finished:
         echo "ticker..."

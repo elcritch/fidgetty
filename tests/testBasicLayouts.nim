@@ -43,8 +43,8 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
 
     group "center":
       paddingXY 1.Em
-      cornerRadius 0.2'em
-      autoOrg()
+      # cornerRadius 0.2'em
+      # autoOrg()
       # layout lmVertical
       # counterAxisSizingMode csAuto
 
