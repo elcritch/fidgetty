@@ -11,7 +11,6 @@ var
   # Used for double-clicking
   multiClick: int
   lastClickTime: float
-  currLevel: ZLevel
 
 proc handleClicked(textBox: TextBox) =
   # let mousePos = mouse.pos(raw=true) - current.screenBox.xy + current.totalOffset

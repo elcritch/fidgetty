@@ -1,6 +1,5 @@
 import widgets
 
-import print
 proc button*(
     label : string,
     doClick : WidgetProc = proc () = discard,
@@ -19,12 +18,9 @@ proc button*(
   render:
     text "text":
       boxSizeOf parent
-      # xy 1.Em, 1.Em
       fill palette.text
       characters label
       textAutoResize tsHeight
-      # centeredWH 50'pw, 50'ph
-      # print "\nbutton:", parent.box, parent.screenBox, current.box, current.screenBox
 
     clipContent true
     if disabled:
