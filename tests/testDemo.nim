@@ -49,6 +49,9 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
           # Trigger an animation on animatedProgress below
           Button:
             label: fmt"Arg Incr {self.count1:4d}"
+            setup:
+              onClickOutside:
+                echo "incr clicked outside"
             onClick:
               self.count1.inc()
               delta = 0.02
