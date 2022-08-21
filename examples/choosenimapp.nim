@@ -16,6 +16,12 @@ const textFG = whiteColor
 const headerFC = rgba(194,166,9,255).color
 const regularFC = rgba(207,185,69, 255).color
 
+proc doInstallNim*() =
+  echo "Installing Nim..."
+
+proc doShow*() =
+  echo "Show Nim..."
+
 proc chooseNimApp*(): ChooseNimApp {.appFidget.} =
   ## defines a stateful app widget
   properties:
@@ -42,7 +48,7 @@ proc chooseNimApp*(): ChooseNimApp {.appFidget.} =
 
     frame "autoLayout":
       # setup frame for css grid
-      setWindowBounds(vec2(440, 300), vec2(1200, 800))
+      setWindowBounds(vec2(440, 460), vec2(1200, 800))
       centeredXY 90'pw, 90'ph
       fill clearColor
       cornerRadius 0.5'em
@@ -61,6 +67,9 @@ proc chooseNimApp*(): ChooseNimApp {.appFidget.} =
                         ["middle"] 1'fr \ 
                         ["footer"] 30'ui \
                         ["bottom"]
+
+      # draw debug lines
+      # gridTemplateDebugLines true
 
       Theme(infoPalette({txtHighlight})):
         rectangle "banner":
@@ -84,25 +93,40 @@ proc chooseNimApp*(): ChooseNimApp {.appFidget.} =
         # some color stuff
         fill textBG
 
-        Vertical:
+        frame "options":
+          font "IBM Plex Sans", 16, 200, 40, hCenter, vCenter
           centeredXY 90'pw, 90'ph
-
+          gridTemplateColumns 1'fr 3'fr 250'ui 3'fr 1'fr
+          gridTemplateRows 100'ui 1'fr 40'ui 1'fr 40'ui 1'fr 40'ui 1'fr 40'ui 1'fr
+          # gridTemplateDebugLines true
           text "info":
-            font "IBM Plex Sans", 16, 200, 40, hCenter, vTop
             height 6'em
+            gridColumn 2 // 5
+            gridRow 1 // 2
             fill palette.text
             characters """
             ChooseNimApp installs the Nim programming language from official downloads and sources, enabling you to easily switch between stable and development compilers.
             """
 
-          Button:
-            label: fmt"Clicked: {self.count1:4d}"
-            onClick: self.count1.inc()
-            setup:
-              size 10'em, 2'em
+          font "IBM Plex Sans", 22, 200, 40, hCenter, vCenter
 
-      # draw debug lines
-      # gridTemplateDebugLines true
+          Button:
+            label: fmt"Install Nim"
+            onClick: doInstallNim()
+            setup:
+              gridColumn 3 // 4
+              gridRow 3 // 4
+              size 250'ui, 40'ui
+
+          Button:
+            label: fmt"Show Nim Version"
+            onClick: doShow()
+            setup:
+              gridColumn 3 // 4
+              gridRow 5 // 6
+              size 250'ui, 40'ui
+
+
 
 
 
