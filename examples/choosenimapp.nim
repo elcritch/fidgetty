@@ -10,8 +10,9 @@ import fidgetty/[textinput]
 loadFont("IBM Plex Sans", "IBMPlexSans-Regular.ttf")
 
 const blackBG = rgba(23, 24, 31, 255).color
-const darkBG = rgba(32,33,44,255).color
+const darkBG = rgba(32,33,44,255).color.lighten(0.01)
 const textBG = rgba(27,29,38,255).color
+const textFG = whiteColor
 const headerFC = rgba(194,166,9,255).color
 const regularFC = rgba(207,185,69, 255).color
 
@@ -34,20 +35,14 @@ proc chooseNimApp*(): ChooseNimApp {.appFidget.} =
 
     setTitle(fmt"Fidget Animated Progress Example")
     textStyle theme
-    fill darkBG
+    fill palette.background
     strokeWeight 1
 
     font "IBM Plex Sans", 16, 200, 0, hCenter, vCenter
 
-    # text "header":
-    #   size 10'em, 2'em
-    #   fill "#ffffff"
-    #   characters "Choose Nim!"
-    #   textAutoResize tsHeight
-
     frame "autoLayout":
       # setup frame for css grid
-      setWindowBounds(vec2(400, 200), vec2(1200, 800))
+      setWindowBounds(vec2(440, 300), vec2(1200, 800))
       centeredXY 90'pw, 90'ph
       fill clearColor
       cornerRadius 0.5'em
@@ -67,37 +62,47 @@ proc chooseNimApp*(): ChooseNimApp {.appFidget.} =
                         ["footer"] 30'ui \
                         ["bottom"]
 
-      rectangle "css grid item":
-        # Setup CSS Grid Template
-        
-        cornerRadius 1'em
-        gridColumn "outer-l" // "outer-r"
-        gridRow "top" // "middle"
-        fill blackBG
-        text "header":
-          font "IBM Plex Sans", 32, 200, 0, hCenter, vCenter
-          paddingXY 1'em, 1'em
-          fill headerFC
-          characters "Choose Nim!"
-          textAutoResize tsHeight
+      Theme(infoPalette({txtHighlight})):
+        rectangle "banner":
+          fill palette.background.darken(0.11)
+          
+          cornerRadius 1'em
+          gridColumn "outer-l" // "outer-r"
+          gridRow "top" // "middle"
+          text "header":
+            font "IBM Plex Sans", 32, 200, 0, hCenter, vCenter
+            paddingXY 1'em, 1'em
+            fill palette.text
+            characters "Choose Nim!"
+            textAutoResize tsHeight
 
       rectangle "css grid item":
         # Setup CSS Grid Template
-        font "IBM Plex Sans", 16, 200, 40, hCenter, vTop
         cornerRadius 1'em
         gridColumn "outer-l" // "outer-r"
         gridRow "middle" // "footer"
         # some color stuff
         fill textBG
-        text "info":
+
+        Vertical:
           centeredXY 90'pw, 90'ph
-          fill whiteColor
-          characters """
-          ChooseNimApp installs the Nim programming language from official downloads and sources, enabling you to easily switch between stable and development compilers.
-          """
+
+          text "info":
+            font "IBM Plex Sans", 16, 200, 40, hCenter, vTop
+            height 6'em
+            fill palette.text
+            characters """
+            ChooseNimApp installs the Nim programming language from official downloads and sources, enabling you to easily switch between stable and development compilers.
+            """
+
+          Button:
+            label: fmt"Clicked: {self.count1:4d}"
+            onClick: self.count1.inc()
+            setup:
+              size 10'em, 2'em
 
       # draw debug lines
-      gridTemplateDebugLines true
+      # gridTemplateDebugLines true
 
 
 
@@ -105,8 +110,7 @@ proc chooseNimApp*(): ChooseNimApp {.appFidget.} =
 startFidget(
   wrapApp(chooseNimApp, ChooseNimApp),
   setup = 
-    when defined(demoBulmaTheme): setup(bulmaTheme)
-    else: setup(grayTheme),
+    setup(darkNimTheme),
   w = 640,
   h = 700,
   uiScale = 2.0
