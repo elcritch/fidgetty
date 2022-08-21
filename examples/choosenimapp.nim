@@ -47,6 +47,7 @@ proc chooseNimApp*(): ChooseNimApp {.appFidget.} =
 
     frame "autoLayout":
       # setup frame for css grid
+      setWindowBounds(vec2(400, 200), vec2(1200, 800))
       centeredXY 90'pw, 90'ph
       fill clearColor
       cornerRadius 0.5'em
@@ -68,13 +69,14 @@ proc chooseNimApp*(): ChooseNimApp {.appFidget.} =
 
       rectangle "css grid item":
         # Setup CSS Grid Template
+        
         cornerRadius 1'em
         gridColumn "outer-l" // "outer-r"
         gridRow "top" // "middle"
         fill blackBG
         text "header":
           font "IBM Plex Sans", 32, 200, 0, hCenter, vCenter
-          boxSizeOf parent
+          paddingXY 1'em, 1'em
           fill headerFC
           characters "Choose Nim!"
           textAutoResize tsHeight
@@ -95,7 +97,7 @@ proc chooseNimApp*(): ChooseNimApp {.appFidget.} =
           """
 
       # draw debug lines
-      # gridTemplateDebugLines true
+      gridTemplateDebugLines true
 
 
 
