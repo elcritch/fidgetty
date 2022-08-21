@@ -10,9 +10,6 @@ import fidgetty/[button, progressbar]
 
 loadFont("IBM Plex Sans", "IBMPlexSans-Regular.ttf")
 
-proc loadMain() =
-  setWindowBounds(vec2(300, 200), vec2(600, 400))
-
 template Grid(code: untyped) =
   frame "autoFrame":
     `code`
@@ -32,43 +29,59 @@ proc exampleApp*(
     value: float
 
   render:
-    setTitle(fmt"Fidget Animated Progress Example - {myName}")
+    setWindowBounds(vec2(400, 200), vec2(800, 600))
+    setTitle(fmt"Grid Example")
     font "IBM Plex Sans", 16, 200, 0, hCenter, vCenter
     fill "#F7F7F9"
     cornerRadius 0.2'em
 
-    Grid:
-      boxOf parent
+    # Setup CSS Grid Template
+    gridTemplateRows  ["edge-t"] auto \
+                      ["header"] 70'ui \
+                      ["top"]    70'ui \
+                      ["middle"] 30'ui \ 
+                      ["bottom"] 1'fr \ 
+                      ["footer"] auto \
+                      ["edge-b"]
 
-      rectangle "bar":
-        size 80'pw, 2.Em
-        offset 10'pw, 10'ph
+    gridTemplateColumns ["edge-l"]  40'ui \
+                        ["button-la", "outer-l"] 150'ui \
+                        ["button-lb"] 1'fr \
+                        ["inner-m"] 1'fr \
+                        ["button-ra"] 150'ui \
+                        ["button-rb", "outer-r"] 40'ui \
+                        ["edge-r"]
 
-        self.value = (self.count.toFloat * 0.10) mod 1.0001
-        Progressbar:
-          value: self.value
+    boxOf parent
 
-      rectangle "bar":
-        offset 0, 3.Em
-        size 80'pw, 100'ph - 3.Em
+    rectangle "bar":
+      # size 80'pw, 2.Em
+      offset 10'pw, 10'ph
+      gridRow "top" // "middle"
+      gridColumn "outer-l" // "outer-r"
 
-        Button:
-          label: fmt"Clicked1: {self.count:4d}"
-          onClick: self.count.inc()
-          setup:
-            size 8.Em, 2.Em
-            offset 80'pw - 4.Em, 30'ph - 1.Em
+      self.value = (self.count.toFloat * 0.10) mod 1.0001
+      Progressbar:
+        value: self.value
 
-        Button:
-          label: fmt"Clicked2: {self.count:4d}"
-          setup:
-            size 8.Em, 2.Em
-            offset 80'pw - 4.Em, 80'ph - 1.Em
-          onClick: self.count.inc()
+    Button:
+      label: fmt"Clicked1: {self.count:4d}"
+      onClick: self.count.inc()
+      setup:
+        gridRow "middle" // "bottom"
+        gridColumn "button-la" // "button-lb"
+
+    Button:
+      label: fmt"Clicked2: {self.count:4d}"
+      onClick: self.count.inc()
+      setup:
+        gridRow "middle" // "bottom"
+        gridColumn "button-ra" // "button-rb"
+    
+    ## uncomment to show track lines for grid
+    # gridTemplateDebugLines true
 
 var state = ExampleAppState(count: 2, value: 0.33)
-
-const callform {.intdefine.} = 2
 
 proc drawMain() =
   frame "main":
@@ -84,7 +97,6 @@ proc drawMain() =
 
 startFidget(
   drawMain,
-  load=loadMain,
   setup = 
     when defined(demoBulmaTheme): setup(bulmaTheme)
     else: setup(grayTheme),
