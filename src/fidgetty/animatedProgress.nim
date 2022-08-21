@@ -6,12 +6,6 @@ import progressbar
 
 loadFont("IBM Plex Sans", "IBMPlexSans-Regular.ttf")
 
-import std/monotimes, std/times
-
-var
-  frameCount = 0
-  start = getMonoTime()
-
 proc animatedProgress*(
     delta: float32 = 0.1,
   ): AnimatedProgressState {.statefulFidget.} =
@@ -64,7 +58,6 @@ proc animatedProgress*(
       
       if self.ticks.isNil or self.ticks.finished:
         echo "ticker..."
-        start = getMonoTime()
         self.ticks = ticker(self)
 
   
