@@ -40,13 +40,10 @@ proc animatedProgress*(
       proc ticker(self: AnimatedProgressState) {.async.} =
         ## This simple procedure will "tick" ten times delayed 1,000ms each.
         ## Every tick will increment the progress bar 10% until its done. 
-        let
-          frameDelayMs = 32
-          duration = 3_000
-          n = duration div frameDelayMs
+        let duration = 3_000
 
         # await runEveryMillis(frameDelayMs, repeat=n) do (frame: FrameIdx) -> bool:
-        await runForMillis(3_000) do (frame: FrameIdx) -> bool:
+        await runForMillis(duration) do (frame: FrameIdx) -> bool:
           # echo "tick ", "frame ", frame, " ", inMilliseconds(getMonoTime() - start), "ms"
           refresh()
           if self.cancelTicks:
