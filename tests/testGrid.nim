@@ -20,7 +20,7 @@ template Grid(code: untyped) =
 
 proc exampleApp*(
     myName : string,
-): ExampleApp {.appFidget.} =
+): ExampleAppState {.appFidget.} =
   ## defines a stateful app widget
   ## 
   
@@ -66,7 +66,7 @@ proc exampleApp*(
             offset 80'pw - 4.Em, 80'ph - 1.Em
           onClick: self.count.inc()
 
-var state = ExampleApp(count: 2, value: 0.33)
+var state = ExampleAppState(count: 2, value: 0.33)
 
 const callform {.intdefine.} = 2
 
@@ -77,8 +77,8 @@ proc drawMain() =
     # that that widgets state reference 
     # alternatively:
     #   exampleApp("basic widgets", state)
-    widget exampleApp:
-      name: "basic widgets"
+    ExampleApp:
+      myName: "basic widgets"
       self: state
 
 
