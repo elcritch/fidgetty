@@ -25,23 +25,6 @@ proc log(output: var seq[string], msg: string) =
   if output.len() > 5:
     output = output[^5..^1]
 
-proc listVersions[S](self: S) {.async.} =
-  ## This simple procedure will "tick" ten times delayed 1,000ms each.
-  ## Every tick will increment the progress bar 10% until its done. 
-  echo "running..."
-  # let (res, output) = await execProcess("choosenim", @["--noColors", ], options={})
-  # let (res, output) = await execProcess("ls", @[], options={})
-  let (res, output) = await execProcess("choosenim --noColor versions")
-  echo "done..."
-  self.output.add("done: " & $res)
-  refresh()
-  var avails = false
-  for line in output.split("\n").mapIt(strutils.strip(it)):
-    if avails and line.len() > 0:
-      self.versions.add(line)
-    if line == "Available:":
-      avails = true
-
 proc chooseNimApp*(): ChooseNimApp {.appFidget.} =
   ## defines a stateful app widget
   properties:
@@ -62,6 +45,23 @@ proc chooseNimApp*(): ChooseNimApp {.appFidget.} =
     proc doShow(self: ChooseNimApp) =
       let msg = "Show Nim..."
       self.output.log msg
+
+    proc listVersions(self: ChooseNimApp) {.async.} =
+      ## This simple procedure will "tick" ten times delayed 1,000ms each.
+      ## Every tick will increment the progress bar 10% until its done. 
+      echo "running..."
+      # let (res, output) = await execProcess("choosenim", @["--noColors", ], options={})
+      # let (res, output) = await execProcess("ls", @[], options={})
+      let (res, output) = await execProcess("choosenim --noColor versions")
+      echo "done..."
+      self.output.add("done: " & $res)
+      refresh()
+      var avails = false
+      for line in output.split("\n").mapIt(strutils.strip(it)):
+        if avails and line.len() > 0:
+          self.versions.add(line)
+        if line == "Available:":
+          avails = true
 
     # let currEvents = useEvents()
     if not self.initialized:
