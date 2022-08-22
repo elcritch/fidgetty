@@ -167,14 +167,19 @@ proc chooseNimApp*(): ChooseNimApp {.appFidget.} =
           size 100'pw, self.output.len().UICoord * 22'ui
           # echo "footer: box: ", current.box.repr
 
+          # if self.outputLines != self.output.len():
+          #   echo "footer: box: ", $current.offset.y.float32
+          #   current.offset.y =
+          #     (current.screenBox.h - parent.screenBox.h) * 1.0.UICoord
+
           text "footer-txt":
             # paddingXY 1'em, 1'em
             fill palette.text
+            textAutoResize tsHeight
+            size 100'pw, self.output.len().UICoord * lineHeight().UICoord
             if self.outputLines != self.output.len():
               self.outputLines = self.output.len()
               characters self.output.join("\n")
-            textAutoResize tsHeight
-            size 100'pw, self.output.len().UICoord * lineHeight().UICoord
             # echo "footer-txt: box: ", current.box.repr
 
       rectangle "css grid item":
