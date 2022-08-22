@@ -1,4 +1,4 @@
-import std/strformat, std/hashes, std/sequtils
+import std/strformat, std/hashes, std/sequtils, std/strutils
 
 import fidgetty
 import fidgetty/themes
@@ -16,21 +16,26 @@ const textFG = whiteColor
 const headerFC = rgba(194,166,9,255).color
 const regularFC = rgba(207,185,69, 255).color
 
+proc log(output: var seq[string], msg: string) =
+  output.add(msg)
+  if output.len() > 5:
+    output = output[^5..^1]
+
 proc chooseNimApp*(): ChooseNimApp {.appFidget.} =
   ## defines a stateful app widget
   properties:
     count1: int
     count2: int
-    output: string
+    output: seq[string]
 
   render:
     proc doInstallNim(self: ChooseNimApp) =
       let msg = "Installing Nim..."
-      self.output = msg
+      self.output.log msg
 
     proc doShow(self: ChooseNimApp) =
       let msg = "Show Nim..."
-      self.output = msg
+      self.output.log msg
 
     let currEvents = useEvents()
 
@@ -86,10 +91,10 @@ proc chooseNimApp*(): ChooseNimApp {.appFidget.} =
         gridRow "footer" // "bottom"
 
         text "footer-txt":
-          font "IBM Plex Sans", 12, 200, 0, hCenter, vCenter
+          font "IBM Plex Sans", 12, 200, 20, hCenter, vCenter
           paddingXY 1'em, 1'em
           fill palette.text
-          characters self.output
+          characters self.output.join("\n")
           textAutoResize tsHeight
 
       rectangle "css grid item":
