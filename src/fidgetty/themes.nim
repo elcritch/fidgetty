@@ -75,16 +75,13 @@ proc darkNimTheme*(): tuple[palette: Palette, general: GeneralTheme] =
   let fs = 16'f32
   result.general.font("IBM Plex Sans", fs, 200, 0, hCenter, vCenter)
   result.general.corners(5)
-  # result.general.dropShadow(4, 0, 0, "#000000", 0.05)
-  # result.general.outerStroke = stroke(0, "#707070", 1.0)
-  # result.general.innerStroke = stroke(1, "#707070", 0.4)
-  # result.general.itemSpacing = 0.1 * fs.UICoord
   result.general.textCorner = 3.2'f32
 
   result.palette.foreground = themePalette.info
   result.palette.highlight = themePalette.info.lighten(0.14)
   result.palette.disabled = themePalette.info.darken(0.3)
-  result.palette.background = rgba(32,33,44,255).color.lighten(0.01)
+  # result.palette.background = rgba(32,33,44,255).color
+  result.palette.background = rgba(27,29,38,255).color
   result.palette.cursor = whiteColor
 
   result.palette.text = whiteColor
