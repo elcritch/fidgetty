@@ -56,7 +56,7 @@ loadFont("IBM Plex Sans", "IBMPlexSans-Regular.ttf")
 
 proc log(output: var seq[string], msg: string) =
   const logCnt = 1000
-  output.insert(msg, 0)
+  output.add(msg)
   if output.len() > logCnt:
     output = output[^logCnt..^1]
 
@@ -66,7 +66,7 @@ proc chooseNimApp*(): ChooseNimApp {.appFidget.} =
     count1: int
     count2: int
     output: seq[string]
-    outputLines: int
+    updateLines: int
     versions: seq[string]
     versionSelected: int
     initialized: bool
@@ -89,7 +89,6 @@ proc chooseNimApp*(): ChooseNimApp {.appFidget.} =
       # let (res, output) = await execProcess("choosenim --noColor versions")
       await sleepAsync(1_111)
       let (res, output) = (0, verExample)
-      refresh()
       var avails = false
       for line in output.split("\n").mapIt(strutils.strip(it)):
         if avails and line.len() > 0:
@@ -98,6 +97,8 @@ proc chooseNimApp*(): ChooseNimApp {.appFidget.} =
         if line == "Available:":
           avails = true
       self.output.log "versions loaded..."
+      self.updateLines = 1
+      refresh()
 
     # let currEvents = useEvents()
     if not self.initialized:
@@ -167,19 +168,24 @@ proc chooseNimApp*(): ChooseNimApp {.appFidget.} =
           size 100'pw, self.output.len().UICoord * 22'ui
           # echo "footer: box: ", current.box.repr
 
-          # if self.outputLines != self.output.len():
-          #   echo "footer: box: ", $current.offset.y.float32
-          #   current.offset.y =
-          #     (current.screenBox.h - parent.screenBox.h) * 1.0.UICoord
+          echo "footer: offset.y: ", $current.offset.y.float32
+          if self.updateLines == 2:
+            echo "footer: offset.y.new: ", $current.offset.y.float32
+            current.offset.y =
+              (current.screenBox.h - parent.screenBox.h) * 1.0.UICoord
+            self.updateLines = 0
+            refresh()
 
           text "footer-txt":
-            # paddingXY 1'em, 1'em
+            paddingXY 1'em, 1'em
             fill palette.text
             textAutoResize tsHeight
             size 100'pw, self.output.len().UICoord * lineHeight().UICoord
-            if self.outputLines != self.output.len():
-              self.outputLines = self.output.len()
+            if self.updateLines == 1:
+              echo "new footer text"
+              self.updateLines = 2
               characters self.output.join("\n")
+              refresh()
             # echo "footer-txt: box: ", current.box.repr
 
       rectangle "css grid item":
