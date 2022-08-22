@@ -1,1 +1,2 @@
 --path:"../src"
+--d:debug

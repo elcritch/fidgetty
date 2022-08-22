@@ -21,6 +21,11 @@ proc log[T](self: T, msg: string) =
   self.updateLines = 1
   if self.output.len() > logCnt:
     self.output = self.output[^logCnt..^1]
+  refresh()
+
+proc log[T](self: T, msg: seq[string]) =
+  for line in msg:
+    self.log(line)
 
 proc chooseNimApp*(): ChooseNimApp {.appFidget.} =
   ## defines a stateful app widget
@@ -38,15 +43,39 @@ proc chooseNimApp*(): ChooseNimApp {.appFidget.} =
 
   render:
     proc runInstall(self: ChooseNimApp, version: string) {.async.} =
-      self.log "installing version: "
-      await sleepAsync(100)
-      when defined(debug):
-        let (res, output) = (0, verExamples())
+      self.log "installing version: " & version
+      let opts = {poStdErrToStdOut, poUsePath, poEvalCommand}
+      when defined(debugExample):
+        # let p = startProcess("ping", @["127.0.0.1"], nil, opts)
+        # let p = startProcess("ping 127.0.0.1", args, nil, options=opts)
+        let p = startProcess("ping 127.0.0.1 ", options=opts)
       else:
-        let (res, output) = await execProcess("choosenim " & version)
-      
-      for line in output.split("\n").mapIt(strutils.strip(it)):
-        self.log(line)
+        # let p = startProcess("ping 127.0.0.1",  options=opts)
+        let cmd = "choosenim --noColor " & version & " "
+        echo "cmd: ", cmd
+        let p = startProcess(cmd, options=opts)
+
+      self.log "running install "
+      echo "running..."
+      let bufferSize = 4
+      var data = newString(bufferSize)
+      var msg = ""
+      while true:
+        let res = await p.outputHandle.readInto(addr data[0], bufferSize)
+        echo "reading..."
+        if res > 0:
+          data.setLen(res)
+          msg &= data
+          if "\n" in msg:
+            var m = msg.split("\n")
+            msg = m.pop()
+            self.log m
+          data.setLen(bufferSize)
+        else:
+          break
+      # result.exitcode = await p.waitForExit()
+      let code = await p.waitForExit
+      self.log "exited: " & $code
       refresh()
 
     proc doInstallNim(self: ChooseNimApp) =
@@ -67,7 +96,7 @@ proc chooseNimApp*(): ChooseNimApp {.appFidget.} =
       ## Every tick will increment the progress bar 10% until its done. 
       self.log "getting versions..."
       await sleepAsync(100)
-      when defined(debug):
+      when defined(debugExample):
         let (res, output) = (0, verExamples())
       else:
         let (res, output) = await execProcess("choosenim --noColor versions")
@@ -273,4 +302,5 @@ const verExample = """
 """
 
 proc verExamples(): string =
+  echo "fake version..."
   verExample
