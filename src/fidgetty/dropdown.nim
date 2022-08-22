@@ -21,6 +21,7 @@ proc dropdown*(
     dropDownOpen: bool
     dropUp: bool
     itemsVisible: int
+    itemsCount: int
 
   render:
     let
@@ -29,6 +30,16 @@ proc dropdown*(
       bh = cb.h
       bih = bh * 1.0'ui
       tw = bw - 1.5'em.UICoord
+
+    proc resetState() = 
+      self.dropDownOpen = false
+      self.dropUp = false
+      self.itemsVisible = -1
+
+    if self.itemsCount != items.len():
+      echo "new dropdowns" 
+      self.itemsCount = items.len()
+      resetState()
 
     let
       visItems =
@@ -42,11 +53,6 @@ proc dropdown*(
       self.dropUp = true
       self.itemsVisible = items.len()
       refresh()
-
-    proc resetState() = 
-      self.dropDownOpen = false
-      self.dropUp = false
-      self.itemsVisible = -1
 
     let this = current
     var outClick = false
@@ -68,8 +74,10 @@ proc dropdown*(
         onClickOutside:
           outClick = true
       label:
-        if selected < 0: defaultLabel
-        else: items[selected]
+        if selected < 0:
+          defaultLabel
+        else:
+          items[selected]
       # onHover:
       #   # fill "#5C8F9C"
       #   highlight palette.highlight

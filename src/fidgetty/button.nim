@@ -25,6 +25,7 @@ proc button*(
     clipContent true
     if disabled:
       imageColor palette.disabled
+      fill palette.disabled
     else:
       onHover:
         highlight palette

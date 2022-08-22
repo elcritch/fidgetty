@@ -82,7 +82,8 @@ proc darkNimTheme*(): tuple[palette: Palette, general: GeneralTheme] =
   result.general.textCorner = 3.2'f32
 
   result.palette.foreground = themePalette.info
-  result.palette.highlight = themePalette.info.saturate(10'PP)
+  result.palette.highlight = themePalette.info.lighten(0.14)
+  result.palette.disabled = themePalette.info.darken(0.3)
   result.palette.background = rgba(32,33,44,255).color.lighten(0.01)
   result.palette.cursor = whiteColor
 
