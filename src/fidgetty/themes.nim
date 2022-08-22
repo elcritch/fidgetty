@@ -91,6 +91,8 @@ proc darkNimTheme*(): tuple[palette: Palette, general: GeneralTheme] =
 
 type
   ThemeAccents* = enum
+    fgDarken,
+    bgDarken,
     txtDark,
     txtHighlight
 
@@ -99,7 +101,12 @@ template MakeDefaultPalette(name: untyped) =
     ## Set sub-palette using `name` colors for widgets
     result = palette()
     result.highlight = themePalette.`name`.lighten(0.1)
-    result.foreground = themePalette.`name`.lighten(0.2)
+    if fgDarken in accents:
+      result.foreground = themePalette.`name`.darken(0.2)
+    else:
+      result.foreground = themePalette.`name`.lighten(0.2)
+    if bgDarken in accents:
+      result.background = result.background.darken(0.2)
     if txtDark in accents:
       result.text = themePalette.textDark
     else:

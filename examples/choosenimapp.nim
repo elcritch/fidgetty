@@ -16,28 +16,23 @@ const textFG = whiteColor
 const headerFC = rgba(194,166,9,255).color
 const regularFC = rgba(207,185,69, 255).color
 
-proc doInstallNim*() =
-  echo "Installing Nim..."
-
-proc doShow*() =
-  echo "Show Nim..."
-
 proc chooseNimApp*(): ChooseNimApp {.appFidget.} =
   ## defines a stateful app widget
   properties:
     count1: int
     count2: int
-    value: float
-    scrollValue: float
-    myCheck: bool
-    mySlider: float
-    dropIndexes: int = -1
-    textInput: string
+    output: string
 
   render:
+    proc doInstallNim(self: ChooseNimApp) =
+      let msg = "Installing Nim..."
+      self.output = msg
+
+    proc doShow(self: ChooseNimApp) =
+      let msg = "Show Nim..."
+      self.output = msg
+
     let currEvents = useEvents()
-    let dropItems = @["Nim", "UI", "in", "100%", "Nim", "to",
-                      "OpenGL", "Immediate", "mode"]
 
     setTitle(fmt"Fidget Animated Progress Example")
     textStyle theme
@@ -49,7 +44,7 @@ proc chooseNimApp*(): ChooseNimApp {.appFidget.} =
     frame "autoLayout":
       # setup frame for css grid
       setWindowBounds(vec2(440, 460), vec2(1200, 800))
-      centeredXY 90'pw, 90'ph
+      centeredXY 98'pw, 98'ph
       fill clearColor
       cornerRadius 0.5'em
       # clipContent true
@@ -65,16 +60,15 @@ proc chooseNimApp*(): ChooseNimApp {.appFidget.} =
       gridTemplateRows  ["header"] 30'ui \
                         ["top"]    70'ui \
                         ["middle"] 1'fr \ 
-                        ["footer"] 30'ui \
+                        ["footer"] 100'ui \
                         ["bottom"]
 
       # draw debug lines
       # gridTemplateDebugLines true
 
-      Theme(infoPalette({txtHighlight})):
+      Theme(infoPalette({txtHighlight, bgDarken})):
         rectangle "banner":
-          fill palette.background.darken(0.11)
-          
+          fill palette.background
           cornerRadius 1'em
           gridColumn "outer-l" // "outer-r"
           gridRow "top" // "middle"
@@ -84,6 +78,19 @@ proc chooseNimApp*(): ChooseNimApp {.appFidget.} =
             fill palette.text
             characters "Choose Nim!"
             textAutoResize tsHeight
+
+      rectangle "footer":
+        fill palette.background.lighten(0.03)
+        cornerRadius 1'em
+        gridColumn "outer-l" // "outer-r"
+        gridRow "footer" // "bottom"
+
+        text "footer-txt":
+          font "IBM Plex Sans", 12, 200, 0, hCenter, vCenter
+          paddingXY 1'em, 1'em
+          fill palette.text
+          characters self.output
+          textAutoResize tsHeight
 
       rectangle "css grid item":
         # Setup CSS Grid Template
@@ -112,7 +119,8 @@ proc chooseNimApp*(): ChooseNimApp {.appFidget.} =
 
           Button:
             label: fmt"Install Nim"
-            onClick: doInstallNim()
+            onClick:
+              self.doInstallNim()
             setup:
               gridColumn 3 // 4
               gridRow 3 // 4
@@ -120,15 +128,12 @@ proc chooseNimApp*(): ChooseNimApp {.appFidget.} =
 
           Button:
             label: fmt"Show Nim Version"
-            onClick: doShow()
+            onClick:
+              self.doShow()
             setup:
               gridColumn 3 // 4
               gridRow 5 // 6
               size 250'ui, 40'ui
-
-
-
-
 
 
 startFidget(
