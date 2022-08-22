@@ -109,7 +109,7 @@ proc chooseNimApp*(): ChooseNimApp {.appFidget.} =
           font "IBM Plex Sans", 16, 200, 40, hCenter, vCenter
           centeredXY 90'pw, 90'ph
           gridTemplateColumns 1'fr 3'fr 250'ui 3'fr 1'fr
-          gridTemplateRows 100'ui 1'fr 40'ui 1'fr 40'ui 1'fr 40'ui 1'fr 40'ui 1'fr
+          gridTemplateRows 100'ui 2'fr 40'ui 1'fr 40'ui 1'fr 40'ui 1'fr 40'ui 1'fr 1'fr
           # gridTemplateDebugLines true
           text "info":
             height 6'em
@@ -145,7 +145,7 @@ startFidget(
   wrapApp(chooseNimApp, ChooseNimApp),
   setup = 
     setup(darkNimTheme),
-  w = 640,
+  w = 600,
   h = 700,
   uiScale = 2.0
 )

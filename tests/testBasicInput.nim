@@ -35,7 +35,7 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
     stroke theme.outerStroke
 
     rectangle:
-      centeredWH 90'pw, 90'ph
+      centeredXY 90'pw, 90'ph
       stroke theme.outerStroke
 
       TextInputBind:
