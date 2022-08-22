@@ -48,9 +48,12 @@ proc chooseNimApp*(): ChooseNimApp {.appFidget.} =
       ## This simple procedure will "tick" ten times delayed 1,000ms each.
       ## Every tick will increment the progress bar 10% until its done. 
       self.log "getting versions..."
-      # let (res, output) = await execProcess("choosenim --noColor versions")
-      await sleepAsync(1_111)
-      let (res, output) = (0, verExamples())
+      await sleepAsync(100)
+      when defined(debug):
+        let (res, output) = (0, verExamples())
+      else:
+        let (res, output) = await execProcess("choosenim --noColor versions")
+      
       var avails = false
       for line in output.split("\n").mapIt(strutils.strip(it)):
         if avails and line.len() > 0:
