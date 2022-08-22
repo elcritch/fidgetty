@@ -21,9 +21,10 @@ const headerFC = rgba(194,166,9,255).color
 const regularFC = rgba(207,185,69, 255).color
 
 proc log(output: var seq[string], msg: string) =
+  const logCnt = 1000
   output.add(msg)
-  if output.len() > 5:
-    output = output[^5..^1]
+  if output.len() > logCnt:
+    output = output[^logCnt..^1]
 
 proc chooseNimApp*(): ChooseNimApp {.appFidget.} =
   ## defines a stateful app widget
@@ -49,19 +50,19 @@ proc chooseNimApp*(): ChooseNimApp {.appFidget.} =
     proc listVersions(self: ChooseNimApp) {.async.} =
       ## This simple procedure will "tick" ten times delayed 1,000ms each.
       ## Every tick will increment the progress bar 10% until its done. 
-      echo "running..."
+      self.output.log "getting versions..."
       # let (res, output) = await execProcess("choosenim", @["--noColors", ], options={})
       # let (res, output) = await execProcess("ls", @[], options={})
       let (res, output) = await execProcess("choosenim --noColor versions")
-      echo "done..."
-      self.output.add("done: " & $res)
       refresh()
       var avails = false
       for line in output.split("\n").mapIt(strutils.strip(it)):
         if avails and line.len() > 0:
           self.versions.add(line)
+          self.output.log(line)
         if line == "Available:":
           avails = true
+      self.output.log "versions loaded..."
 
     # let currEvents = useEvents()
     if not self.initialized:
@@ -96,7 +97,7 @@ proc chooseNimApp*(): ChooseNimApp {.appFidget.} =
       gridTemplateRows  ["header"] 30'ui \
                         ["top"]    70'ui \
                         ["middle"] 1'fr \ 
-                        ["footer"] 100'ui \
+                        ["footer"] 200'ui \
                         ["bottom"]
 
       # draw debug lines
@@ -115,21 +116,27 @@ proc chooseNimApp*(): ChooseNimApp {.appFidget.} =
             characters "Choose Nim!"
             textAutoResize tsHeight
 
-      rectangle "footer":
-        fill palette.background.lighten(0.03)
-        cornerRadius 1'em
+      frame "footer-box":
+        font "IBM Plex Sans", 12, 200, 0, hCenter, vCenter
         gridColumn "outer-l" // "outer-r"
         gridRow "footer" // "bottom"
-        clipContent true
-        scrollBars true
-        size 90'pw, 100'ui
+        size 80'vw, 200'ui
 
-        text "footer-txt":
-          font "IBM Plex Sans", 12, 200, 22, hCenter, vCenter
-          paddingXY 1'em, 1'em
-          fill palette.text
-          characters self.output.join("\n")
-          textAutoResize tsHeight
+        rectangle "footer":
+          fill palette.background.lighten(0.03)
+          cornerRadius 1'em
+          clipContent true
+          scrollBars true
+          size 100'pw, self.output.len().UICoord * 22'ui
+          echo "footer: box: ", current.box.repr
+
+          text "footer-txt":
+            # paddingXY 1'em, 1'em
+            fill palette.text
+            characters self.output.join("\n")
+            textAutoResize tsHeight
+            size 100'pw, self.output.len().UICoord * lineHeight()
+            echo "footer-txt: box: ", current.box.repr
 
       rectangle "css grid item":
         # Setup CSS Grid Template
