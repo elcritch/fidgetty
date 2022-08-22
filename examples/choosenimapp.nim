@@ -34,11 +34,29 @@ proc chooseNimApp*(): ChooseNimApp {.appFidget.} =
     initialized: bool
     listPid: Future[void] = emptyFuture() ##\
       ## Create an completed "empty" future
+    runPid: Future[void] = emptyFuture() ##\
 
   render:
+    proc runInstall(self: ChooseNimApp, version: string) {.async.} =
+      self.log "installing version: "
+      await sleepAsync(100)
+      when defined(debug):
+        let (res, output) = (0, verExamples())
+      else:
+        let (res, output) = await execProcess("choosenim " & version)
+      
+      for line in output.split("\n").mapIt(strutils.strip(it)):
+        self.log(line)
+      refresh()
+
     proc doInstallNim(self: ChooseNimApp) =
-      let msg = "Installing Nim..."
-      self.log msg
+      try:
+        let selected = self.versionSelected
+        let version = self.versions[selected]
+        self.runPid = self.runInstall(version)
+      except Exception as err:
+        self.log "Error installing: "
+        self.log err.msg
 
     proc doShow(self: ChooseNimApp) =
       let msg = "Show Nim..."
