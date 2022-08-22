@@ -11,54 +11,16 @@ import fidgetty/[textinput]
 
 import asynctools
 
-const verExample = """
-   Channel: stable
-
- Installed:  
-          * 1.6.6 (latest)
-
- Available:  
-            1.6.4
-            1.6.2
-            1.6.0
-            1.4.8
-            1.4.6
-            1.4.4
-            1.4.2
-            1.4.0
-            1.2.18
-            1.2.16
-            1.2.14
-            1.2.12
-            1.2.10
-            1.2.8
-            1.2.6
-            1.2.4
-            1.2.2
-            1.2.0
-            1.0.10
-            1.0.8
-            1.0.6
-            1.0.4
-            1.0.2
-            1.0.0
-            0.20.2
-            0.20.0
-            0.19.6
-            0.19.4
-            0.19.2
-
-
-
-"""
+proc verExamples(): string
 
 loadFont("IBM Plex Sans", "IBMPlexSans-Regular.ttf")
 
-proc log(output: var seq[string], msg: string) =
+proc log[T](self: T, msg: string) =
   const logCnt = 1000
-  output.add(msg)
-  if output.len() > logCnt:
-    output = output[^logCnt..^1]
+  self.output.add(msg)
+  self.updateLines = 1
+  if self.output.len() > logCnt:
+    self.output = self.output[^logCnt..^1]
 
 proc chooseNimApp*(): ChooseNimApp {.appFidget.} =
   ## defines a stateful app widget
@@ -76,27 +38,27 @@ proc chooseNimApp*(): ChooseNimApp {.appFidget.} =
   render:
     proc doInstallNim(self: ChooseNimApp) =
       let msg = "Installing Nim..."
-      self.output.log msg
+      self.log msg
 
     proc doShow(self: ChooseNimApp) =
       let msg = "Show Nim..."
-      self.output.log msg
+      self.log msg
 
     proc listVersions(self: ChooseNimApp) {.async.} =
       ## This simple procedure will "tick" ten times delayed 1,000ms each.
       ## Every tick will increment the progress bar 10% until its done. 
-      self.output.log "getting versions..."
+      self.log "getting versions..."
       # let (res, output) = await execProcess("choosenim --noColor versions")
       await sleepAsync(1_111)
-      let (res, output) = (0, verExample)
+      let (res, output) = (0, verExamples())
       var avails = false
       for line in output.split("\n").mapIt(strutils.strip(it)):
         if avails and line.len() > 0:
           self.versions.add(line)
-          self.output.log(line)
+          self.log(line)
         if line == "Available:":
           avails = true
-      self.output.log "versions loaded..."
+      self.log "versions loaded..."
       self.updateLines = 1
       refresh()
 
@@ -104,7 +66,7 @@ proc chooseNimApp*(): ChooseNimApp {.appFidget.} =
     if not self.initialized:
       self.initialized = true
       self.versionSelected = -1
-      self.output.log "getting versions..."
+      self.log "getting versions..."
       self.listPid = listVersions(self)
 
     setTitle(fmt"Fidget Animated Progress Example")
@@ -168,9 +130,7 @@ proc chooseNimApp*(): ChooseNimApp {.appFidget.} =
           size 100'pw, self.output.len().UICoord * 22'ui
           # echo "footer: box: ", current.box.repr
 
-          echo "footer: offset.y: ", $current.offset.y.float32
           if self.updateLines == 2:
-            echo "footer: offset.y.new: ", $current.offset.y.float32
             current.offset.y =
               (current.screenBox.h - parent.screenBox.h) * 1.0.UICoord
             self.updateLines = 0
@@ -182,7 +142,6 @@ proc chooseNimApp*(): ChooseNimApp {.appFidget.} =
             textAutoResize tsHeight
             size 100'pw, self.output.len().UICoord * lineHeight().UICoord
             if self.updateLines == 1:
-              echo "new footer text"
               self.updateLines = 2
               characters self.output.join("\n")
               refresh()
@@ -250,3 +209,47 @@ startFidget(
   h = 600,
   uiScale = 2.0
 )
+
+const verExample = """
+ Channel: stable
+
+ Installed:  
+          * 1.6.6 (latest)
+
+ Available:  
+            1.6.4
+            1.6.2
+            1.6.0
+            1.4.8
+            1.4.6
+            1.4.4
+            1.4.2
+            1.4.0
+            1.2.18
+            1.2.16
+            1.2.14
+            1.2.12
+            1.2.10
+            1.2.8
+            1.2.6
+            1.2.4
+            1.2.2
+            1.2.0
+            1.0.10
+            1.0.8
+            1.0.6
+            1.0.4
+            1.0.2
+            1.0.0
+            0.20.2
+            0.20.0
+            0.19.6
+            0.19.4
+            0.19.2
+
+
+
+"""
+
+proc verExamples(): string =
+  verExample
