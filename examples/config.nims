@@ -1,2 +1,3 @@
 --path:"../src"
---d:debug
+--define:debug
+# --define:debugExample
