@@ -27,97 +27,35 @@ proc log[T](self: T, msg: seq[string]) =
   for line in msg:
     self.log(line)
 
-proc chooseNimApp*(): ChooseNimApp {.appFidget.} =
-  ## defines a stateful app widget
-  properties:
-    count1: int
-    count2: int
+type
+  AppStatus = ref object
     output: seq[string]
     updateLines: int
     versions: seq[string]
     versionSelected: int
+    listPid: Future[void] 
+    runPid: Future[void]
+
+proc runInstall(self: AppStatus, version: string) {.async.}
+proc doInstallNim(self: AppStatus)
+proc listVersions(self: AppStatus) {.async.}
+
+proc chooseNimApp*(): ChooseNimApp {.appFidget.} =
+  ## defines a stateful app widget
+  properties:
+    status: AppStatus
     initialized: bool
-    listPid: Future[void] = emptyFuture() ##\
-      ## Create an completed "empty" future
-    runPid: Future[void] = emptyFuture() ##\
 
   render:
-    proc runInstall(self: ChooseNimApp, version: string) {.async.} =
-      self.log "installing version: " & version
-      let opts = {poStdErrToStdOut, poUsePath, poEvalCommand}
-      when defined(debugExample):
-        # let p = startProcess("ping", @["127.0.0.1"], nil, opts)
-        # let p = startProcess("ping 127.0.0.1", args, nil, options=opts)
-        let p = startProcess("ping 127.0.0.1 ", options=opts)
-      else:
-        # let p = startProcess("ping 127.0.0.1",  options=opts)
-        let cmd = "choosenim --noColor " & version & " "
-        echo "cmd: ", cmd
-        let p = startProcess(cmd, options=opts)
-
-      self.log "running install "
-      echo "running..."
-      let bufferSize = 4
-      var data = newString(bufferSize)
-      var msg = ""
-      while true:
-        let res = await p.outputHandle.readInto(addr data[0], bufferSize)
-        echo "reading..."
-        if res > 0:
-          data.setLen(res)
-          msg &= data
-          if "\n" in msg:
-            var m = msg.split("\n")
-            msg = m.pop()
-            self.log m
-          data.setLen(bufferSize)
-        else:
-          break
-      # result.exitcode = await p.waitForExit()
-      let code = await p.waitForExit
-      self.log "exited: " & $code
-      refresh()
-
-    proc doInstallNim(self: ChooseNimApp) =
-      try:
-        let selected = self.versionSelected
-        let version = self.versions[selected]
-        self.runPid = self.runInstall(version)
-      except Exception as err:
-        self.log "Error installing: "
-        self.log err.msg
-
-    proc doShow(self: ChooseNimApp) =
-      let msg = "Show Nim..."
-      self.log msg
-
-    proc listVersions(self: ChooseNimApp) {.async.} =
-      ## This simple procedure will "tick" ten times delayed 1,000ms each.
-      ## Every tick will increment the progress bar 10% until its done. 
-      self.log "getting versions..."
-      await sleepAsync(100)
-      when defined(debugExample):
-        let (res, output) = (0, verExamples())
-      else:
-        let (res, output) = await execProcess("choosenim --noColor versions")
-      
-      var avails = false
-      for line in output.split("\n").mapIt(strutils.strip(it)):
-        if avails and line.len() > 0:
-          self.versions.add(line)
-          self.log(line)
-        if line == "Available:":
-          avails = true
-      self.log "versions loaded..."
-      self.updateLines = 1
-      refresh()
 
     # let currEvents = useEvents()
     if not self.initialized:
       self.initialized = true
-      self.versionSelected = -1
-      self.log "getting versions..."
-      self.listPid = listVersions(self)
+      self.status = AppStatus()
+      self.status.versionSelected = -1
+      self.status.log "getting versions..."
+      self.status.listPid = listVersions(self.status)
+      self.status.runPid = emptyFuture() 
 
     setTitle(fmt"Fidget Animated Progress Example")
     textStyle theme
@@ -177,23 +115,23 @@ proc chooseNimApp*(): ChooseNimApp {.appFidget.} =
           cornerRadius 1'em
           clipContent true
           scrollBars true
-          size 100'pw, self.output.len().UICoord * 22'ui
+          size 100'pw, self.status.output.len().UICoord * 22'ui
           # echo "footer: box: ", current.box.repr
 
-          if self.updateLines == 2:
+          if self.status.updateLines == 2:
             current.offset.y =
               (current.screenBox.h - parent.screenBox.h) * 1.0.UICoord
-            self.updateLines = 0
+            self.status.updateLines = 0
             refresh()
 
           text "footer-txt":
             paddingXY 1'em, 1'em
             fill palette.text
             textAutoResize tsHeight
-            size 100'pw, self.output.len().UICoord * lineHeight().UICoord
-            if self.updateLines == 1:
-              self.updateLines = 2
-              characters self.output.join("\n")
+            size 100'pw, self.status.output.len().UICoord * lineHeight().UICoord
+            if self.status.updateLines == 1:
+              self.status.updateLines = 2
+              characters self.status.output.join("\n")
               refresh()
             # echo "footer-txt: box: ", current.box.repr
 
@@ -214,10 +152,10 @@ proc chooseNimApp*(): ChooseNimApp {.appFidget.} =
           font "IBM Plex Sans", 22, 200, 0, hCenter, vCenter
 
           Dropdown:
-            disabled: self.versions.len() == 0
-            items: self.versions
+            disabled: self.status.versions.len() == 0
+            items: self.status.versions
             defaultLabel: "Available Versions"
-            selected: self.versionSelected
+            selected: self.status.versionSelected
             setup:
               gridColumn 3 // 4
               gridRow 4 // 5
@@ -225,9 +163,9 @@ proc chooseNimApp*(): ChooseNimApp {.appFidget.} =
 
           Button:
             label: fmt"Install Nim"
-            disabled: self.versionSelected < 0
+            disabled: self.status.versionSelected < 0
             onClick:
-              self.doInstallNim()
+              self.status.doInstallNim()
             setup:
               gridColumn 3 // 4
               gridRow 6 // 7
@@ -250,6 +188,72 @@ proc chooseNimApp*(): ChooseNimApp {.appFidget.} =
             ChooseNimApp installs the Nim programming language from official downloads and sources, enabling you to easily switch between stable and development compilers.
             """
 
+proc runInstall(self: AppStatus, version: string) {.async.} =
+  self.log "installing version: " & version
+  let opts = {poStdErrToStdOut, poUsePath, poEvalCommand}
+  when defined(debugExample):
+    # let p = startProcess("ping", @["127.0.0.1"], nil, opts)
+    # let p = startProcess("ping 127.0.0.1", args, nil, options=opts)
+    let p = startProcess("ping 127.0.0.1 ", options=opts)
+  else:
+    # let p = startProcess("ping 127.0.0.1",  options=opts)
+    let cmd = "choosenim --noColor " & version & " "
+    echo "cmd: ", cmd
+    let p = startProcess(cmd, options=opts)
+
+  self.log "running install "
+  echo "running..."
+  let bufferSize = 4
+  var data = newString(bufferSize)
+  var msg = ""
+  while true:
+    let res = await p.outputHandle.readInto(addr data[0], bufferSize)
+    echo "reading..."
+    if res > 0:
+      data.setLen(res)
+      msg &= data
+      if "\n" in msg:
+        var m = msg.split("\n")
+        msg = m.pop()
+        self.log m
+      data.setLen(bufferSize)
+    else:
+      break
+  # result.exitcode = await p.waitForExit()
+  let code = await p.waitForExit
+  self.log "exited: " & $code
+  refresh()
+
+proc doInstallNim(self: AppStatus) =
+  try:
+    let selected = self.versionSelected
+    let version = self.versions[selected]
+    let pid = self.runInstall(version)
+    self.runPid = pid
+  except Exception as err:
+    self.log "Error installing: "
+    self.log err.msg
+
+proc listVersions(self: AppStatus) {.async.} =
+  ## This simple procedure will "tick" ten times delayed 1,000ms each.
+  ## Every tick will increment the progress bar 10% until its done. 
+  self.log "getting versions..."
+  await sleepAsync(100)
+  when defined(debugExample):
+    let (res, output) = (0, verExamples())
+  else:
+    let (res, output) = await execProcess("choosenim --noColor versions")
+  
+  var avails = false
+  for line in output.split("\n").mapIt(strutils.strip(it)):
+    if avails and line.len() > 0:
+      self.versions.add(line)
+      self.log(line)
+    if line == "Available:":
+      avails = true
+  self.log "versions loaded..."
+  self.updateLines = 1
+  refresh()
 
 
 startFidget(
