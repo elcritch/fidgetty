@@ -1,19 +1,11 @@
-import std/strformat, std/hashes, std/sequtils, std/strutils, std/sequtils
-import std/asyncdispatch # This is what provides us with async and the dispatcher
-
-import fidgetty
-import fidgetty/timers
-import fidgetty/themes
-import fidgetty/[button, dropdown, checkbox]
-import fidgetty/[slider, progressbar, animatedProgress]
-import fidgetty/[listbox]
-import fidgetty/[textinput]
-
+import std/strformat, std/sequtils, std/strutils
+import std/asyncdispatch
 import asynctools
 
-proc verExamples(): string
+import fidgetty
+import fidgetty/[themes, button, dropdown]
 
-loadFont("IBM Plex Sans", "IBMPlexSans-Regular.ttf")
+proc verExamples(): string
 
 proc log[T](self: T, msg: string) =
   const logCnt = 1000
@@ -39,6 +31,8 @@ type
 proc runInstall(self: AppStatus, version: string) {.async.}
 proc doInstallNim(self: AppStatus)
 proc listVersions(self: AppStatus) {.async.}
+
+loadFont("IBM Plex Sans", "IBMPlexSans-Regular.ttf")
 
 proc chooseNimApp*(): ChooseNimApp {.appFidget.} =
   ## defines a stateful app widget
@@ -265,46 +259,7 @@ startFidget(
   uiScale = 2.0
 )
 
-const verExample = """
- Channel: stable
-
- Installed:  
-          * 1.6.6 (latest)
-
- Available:  
-            1.6.4
-            1.6.2
-            1.6.0
-            1.4.8
-            1.4.6
-            1.4.4
-            1.4.2
-            1.4.0
-            1.2.18
-            1.2.16
-            1.2.14
-            1.2.12
-            1.2.10
-            1.2.8
-            1.2.6
-            1.2.4
-            1.2.2
-            1.2.0
-            1.0.10
-            1.0.8
-            1.0.6
-            1.0.4
-            1.0.2
-            1.0.0
-            0.20.2
-            0.20.0
-            0.19.6
-            0.19.4
-            0.19.2
-
-
-
-"""
+const verExample = " Channel: stable\n \n Installed:  \n * 1.6.6 (latest)\n \n Available:  \n 1.6.4\n 1.6.2\n 1.6.0\n 1.4.8\n 1.4.6\n 1.4.4\n 1.4.2\n 1.4.0\n 1.2.18\n 1.2.16\n 1.2.14\n 1.2.12\n 1.2.10\n 1.2.8\n 1.2.6\n 1.2.4\n 1.2.2\n 1.2.0\n 1.0.10\n 1.0.8\n 1.0.6\n 1.0.4\n 1.0.2\n 1.0.0\n 0.20.2\n 0.20.0\n 0.19.6\n 0.19.4\n 0.19.2\n \n \n \n "
 
 proc verExamples(): string =
   echo "fake version..."
