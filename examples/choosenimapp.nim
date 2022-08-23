@@ -214,6 +214,7 @@ proc chooseNimApp*(): ChooseNimApp {.appFidget.} =
           font "IBM Plex Sans", 22, 200, 0, hCenter, vCenter
 
           Dropdown:
+            disabled: self.versions.len() == 0
             items: self.versions
             defaultLabel: "Available Versions"
             selected: self.versionSelected

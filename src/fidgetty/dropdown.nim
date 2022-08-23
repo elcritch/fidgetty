@@ -10,6 +10,7 @@ proc dropdown*(
     items : seq[string],
     selected : var int,
     defaultLabel : string = "Dropdown",
+    disabled : bool = false
 ): DropdownState {.statefulFidget.} =
   ## dropdown widget 
   init:
@@ -58,12 +59,9 @@ proc dropdown*(
     var outClick = false
 
     Button:
+      disabled: disabled
       setup:
         box 0, 0, bw, bh
-        # cornerRadius theme
-        # strokeLine this
-        # shadows theme
-        # imageOf this
         clipContent true
         text "icon":
           box tw, 0, 1'em, bh
@@ -78,9 +76,6 @@ proc dropdown*(
           defaultLabel
         else:
           items[selected]
-      # onHover:
-      #   # fill "#5C8F9C"
-      #   highlight palette.highlight
       onClick:
         self.dropDownOpen = true
         self.itemsVisible = -1
