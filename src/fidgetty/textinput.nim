@@ -124,7 +124,6 @@ proc textInput*(
           font,
           current.screenBox.w.scaled,
           current.screenBox.h.scaled,
-          font.size * adjustTopTextFactor,
           current,
           hAlignMode(current.textStyle.textAlignHorizontal),
           vAlignMode(current.textStyle.textAlignVertical),

@@ -11,8 +11,8 @@ proc grayTheme*(): tuple[palette: Palette, general: GeneralTheme] =
   themePalette.success = themePalette.primary
   themePalette.warning = parseHtml("#ffdd57") # hsl(48, 100/360, 67/360).to(Color)
   themePalette.danger = themePalette.primary
-  themePalette.textLight = parseHtml("#ffffff")
-  themePalette.textDark = parseHtml("#000000")
+  themePalette.textModeLight = parseHtml("#ffffff")
+  themePalette.textModeDark = parseHtml("#000000")
 
   result.palette.foreground = parseHtml("#DDDDDD", 1.0)
   result.palette.text = parseHtml("#565555")
@@ -40,8 +40,8 @@ proc bulmaTheme*(): tuple[palette: Palette, general: GeneralTheme] =
   themePalette.success = hsl(141, 53'PHSL, 53'PHSL).to(Color)
   themePalette.warning = parseHtml("#ffdd57") # hsl(48, 100/360, 67/360).to(Color)
   themePalette.danger = hsl(348, 100'PHSL, 61'PHSL).to(Color)
-  themePalette.textLight = parseHtml("#ffffff")
-  themePalette.textDark = parseHtml("#000000")
+  themePalette.textModeLight = parseHtml("#ffffff")
+  themePalette.textModeDark = parseHtml("#000000")
 
   let fs = 16'f32
   result.general.font("IBM Plex Sans", fs, 200, 0, hCenter, vCenter)
@@ -57,7 +57,7 @@ proc bulmaTheme*(): tuple[palette: Palette, general: GeneralTheme] =
   result.palette.background = whiteColor
   result.palette.cursor = parseHtml("#77D3FF", 0.33)
 
-  result.palette.text = whiteColor
+  result.palette.text = themePalette.textModeDark
   result.palette.accent = parseHtml("#87E3FF", 0.77)
 
 proc darkNimTheme*(): tuple[palette: Palette, general: GeneralTheme] =
@@ -69,8 +69,8 @@ proc darkNimTheme*(): tuple[palette: Palette, general: GeneralTheme] =
   themePalette.success = hsl(141, 53'PHSL, 53'PHSL).to(Color)
   themePalette.warning = parseHtml("#ffdd57") # hsl(48, 100/360, 67/360).to(Color)
   themePalette.danger = hsl(348, 100'PHSL, 61'PHSL).to(Color)
-  themePalette.textLight = whiteColor
-  themePalette.textDark = blackColor
+  themePalette.textModeLight = blackColor
+  themePalette.textModeDark = whiteColor
 
   let fs = 16'f32
   result.general.font("IBM Plex Sans", fs, 200, 0, hCenter, vCenter)
@@ -106,9 +106,9 @@ template MakeDefaultPalette(name: untyped) =
     if bgDarken in accents:
       result.background = result.background.darken(0.2)
     if txtDark in accents:
-      result.text = themePalette.textDark
+      result.text = themePalette.textModeLight
     else:
-      result.text = themePalette.textLight
+      result.text = themePalette.textModeDark
     if txtHighlight in accents:
       result.text = themePalette.`name`
 

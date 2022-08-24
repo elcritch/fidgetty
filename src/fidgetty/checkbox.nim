@@ -18,22 +18,20 @@ proc checkbox*(
       checked = not checked
 
     text "label":
-      box 2'em, 0, parent.box.w - 2'em, parent.box.h
+      box 100'ph, 0, parent.box.w - 100'ph, parent.box.h
       fill palette.text
       characters label
 
     rectangle "square":
-      box 0, 0, 2'em, 2'em
-      # echo fmt"{palette.fill=}"
+      box 0, 0, 100'ph, 100'ph
       fill palette.foreground
       clipContent true
       imageOf theme.gloss
       if checked:
         highlight palette
         text "checkfil":
-          # textStyle palette.text.textStyle
-          fontSize 1.4 * fontSize()
-          box 0.15'em, 0.40'em, 1'em, 1'em
+          fontSize 1.6 * fontSize()
+          box 0.0, 0.0, 1.2 * fontSize(), 100'ph
           fill palette.text
           characters "✓"
       stroke theme.outerStroke

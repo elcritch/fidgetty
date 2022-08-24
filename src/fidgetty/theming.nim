@@ -11,8 +11,8 @@ type
     success*: Color
     warning*: Color
     danger*: Color
-    textLight*: Color
-    textDark*: Color
+    textModeLight*: Color
+    textModeDark*: Color
 
   Palette* = object
     foreground*: Color
