@@ -1,5 +1,5 @@
 
-import fidget, math, random
+import fidget_dev, math, random
 import std/strformat
 import asyncdispatch # This is what provides us with async and the dispatcher
 import times, strutils # This is to provide the timing output

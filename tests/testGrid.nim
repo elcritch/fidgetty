@@ -1,5 +1,5 @@
 
-import fidget, math, random
+import fidget_dev, math, random
 import std/strformat
 import asyncdispatch # This is what provides us with async and the dispatcher
 import times, strutils # This is to provide the timing output
@@ -8,12 +8,12 @@ import fidgetty
 import fidgetty/themes
 import fidgetty/[button, progressbar]
 
+
 loadFont("IBM Plex Sans", "IBMPlexSans-Regular.ttf")
 
 template Grid(code: untyped) =
   frame "autoFrame":
     `code`
-
 
 proc exampleApp*(
     myName : string,
@@ -78,6 +78,7 @@ proc exampleApp*(
         gridRow "middle" // "bottom"
         gridColumn "button-ra" // "button-rb"
     
+
     ## uncomment to show track lines for grid
     # gridTemplateDebugLines true
 

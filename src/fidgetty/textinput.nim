@@ -5,7 +5,7 @@ import asyncdispatch # This is what provides us with async and the dispatcher
 import re
 
 # import typography/font
-import fidget/patches/textboxes
+import fidget_dev/patches/textboxes
 
 var
   # Used for double-clicking

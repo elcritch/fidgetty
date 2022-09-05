@@ -1,5 +1,5 @@
 import chroma
-import fidget
+import fidget_dev
 import theming
 
 proc grayTheme*(): tuple[palette: Palette, general: GeneralTheme] =

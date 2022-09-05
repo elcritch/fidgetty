@@ -1,7 +1,7 @@
 import std/strformat, std/hashes
 
-import fidgets
-import fidgets/[button, progressbar, animatedProgress]
+import fidgetty
+import fidgetty/[button, progressbar, animatedProgress]
 
 loadFont("IBM Plex Sans", "IBMPlexSans-Regular.ttf")
 
@@ -31,27 +31,27 @@ proc exampleApp*(
       self.value = (self.count1.toFloat * 0.10) mod 1.0
       var delta = 0.0
 
-      vertical:
+      Vertical:
         blank: size(0,0)
         itemSpacing 1.5'em
 
-        vertical:
+        Vertical:
           itemSpacing 1.5'em
           # Trigger an animation on animatedProgress below
-          widget button:
-            text: fmt"Arg Incr {self.count1:4d}"
+          Button:
+            label: fmt"Arg Incr {self.count1:4d}"
             disabled: true
             onClick:
               self.count1.inc()
               delta = 0.02
 
-          widget button:
-            text: fmt"Evt Incr {self.count2:4d}"
+          Button:
+            label: fmt"Evt Incr {self.count2:4d}"
             onClick:
               self.count2.inc()
               currEvents["pbc1"] = IncrementBar(increment = 0.02)
       
-        let ap1 = widget animatedProgress:
+        let ap1 = AnimatedProgress:
           delta: delta
           setup:
             bindEvents "pbc1", currEvents
@@ -59,15 +59,15 @@ proc exampleApp*(
             width  100'pw - 8'em
             # box 0'em, 0'em, 18'em, 2.Em
         
-        horizontal:
-          widget button:
-            text: fmt"Animate"
+        Horizontal:
+          Button:
+            label: fmt"Animate"
             onClick:
               self.count2.inc()
               currEvents["pbc1"] = JumpToValue(target = 0.02)
 
-          widget button:
-            text: fmt"Cancel"
+          Button:
+            label: fmt"Cancel"
             onClick:
               currEvents["pbc1"] = CancelJump()
 

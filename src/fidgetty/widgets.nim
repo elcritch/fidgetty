@@ -9,8 +9,8 @@ export tables, strformat, options
 export math, random
 export variant, patty
 
-import fidget, theming
-export fidget, theming
+import fidget_dev, theming
+export fidget_dev, theming
 
 type
   WidgetProc* = proc()

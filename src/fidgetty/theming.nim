@@ -1,5 +1,5 @@
 import strutils
-import fidget
+import fidget_dev
 
 type
   Themer = proc(): tuple[palette: Palette, general: GeneralTheme]
