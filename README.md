@@ -7,7 +7,7 @@ Note: You *must* use the forked version of Fidget. You can do a `nimble install 
 ![Demo](https://i.postimg.cc/ydxbyjJ4/Kapture-2022-05-04-at-01-07-14.gif)
 
 ```sh
-nimble install
+nimble install -d
 nim c -r tests/testDemo.nim
 ```
 
