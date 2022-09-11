@@ -21,8 +21,8 @@ proc drawMain() =
         fill "#000d00"
         characters "Dropdown example: "
 
-      dropdown(dropItems, dropIndexes[0], "Dropdown", dstate)
-      dropdown(dropItems, dropIndexes[1], "Dropdown", nil)
+      dropdown(dropItems, dropIndexes[0], "Dropdown", self = dstate)
+      dropdown(dropItems, dropIndexes[1], "Dropdown", self = nil)
       text "desc":
         size 100'pw, 1'em
         fill "#000d00"
