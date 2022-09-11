@@ -38,7 +38,7 @@ proc dropdown*(
       self.itemsVisible = -1
 
     if self.itemsCount != items.len():
-      echo "new dropdowns" 
+      # echo "new dropdowns" 
       self.itemsCount = items.len()
       resetState()
 
@@ -133,7 +133,7 @@ proc dropdown*(
                   stroke theme.innerStroke
               if clicked:
                 resetState()
-                echo fmt"dropdwon: set {selected=}"
+                # echo fmt"dropdwon: set {selected=}"
                 selected = idx
 
 
