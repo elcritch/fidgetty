@@ -17,6 +17,7 @@ Example application:
 import std/strformat, std/hashes, std/sequtils
 
 import fidgetty
+import fidgetty/themes
 import fidgetty/[button, dropdown, checkbox]
 import fidgetty/[slider, progressbar, animatedProgress]
 import fidgetty/[listbox]
@@ -30,6 +31,7 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
     count1: int
     count2: int
     value: float
+    scrollValue: float
     myCheck: bool
     mySlider: float
     dropIndexes: int = -1
@@ -42,25 +44,18 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
 
     setTitle(fmt"Fidget Animated Progress Example")
     textStyle theme
-    fill "#F7F7F9"
+    fill palette.background.lighten(0.11)
 
-    Button:
-      label: "Dump"
-      setup:
-        fill "#DFDFF0"
-      onClick:
-        echo "dump: "
-        dumpTree(root)
+    # font "IBM Plex Sans", 16, 200, 0, hCenter, vCenter
 
     group "center":
       box 50, 0, 100'vw - 100, 100'vh
       orgBox 50, 0, 100'vw, 100'vw
-      fill "#DFDFE0"
+      fill palette.background.darken(1'PP)
       strokeWeight 1
 
       self.value = (self.count1.toFloat * 0.10) mod 1.0
       var delta = 0.0
-
       Vertical:
         blank: size(0, 0)
         itemSpacing 1.5'em
@@ -70,80 +65,76 @@ proc exampleApp*(): ExampleApp {.appFidget.} =
           # Trigger an animation on animatedProgress below
           Button:
             label: fmt"Arg Incr {self.count1:4d}"
+            setup:
+              onClickOutside:
+                echo "incr clicked outside"
             onClick:
               self.count1.inc()
               delta = 0.02
-
           Horizontal:
             itemSpacing 4'em
-
-            Button:
-              label: fmt"Evt Incr {self.count2:4d}"
+            Button(label = &"Evt Incr {self.count2:4d}"):
               onClick:
                 self.count2.inc()
                 currEvents["pbc1"] = IncrementBar(increment = 0.02)
+            Theme(warningPalette()):
+              Checkbox(label = fmt"Click {self.myCheck}"):
+                checked: self.myCheck
 
-            Checkbox:
-              value: self.myCheck
-              text: fmt"Click {self.myCheck}"
-
-        let ap1 = AnimatedProgress:
-          delta: delta
-          setup:
-            bindEvents "pbc1", currEvents
-            width 100'pw - 8'em
+        let ap1 =
+          AnimatedProgress:
+            delta: delta
+            setup:
+              bindEvents "pbc1", currEvents
+              width 100'pw - 8'em
 
         Horizontal:
-          Button:
-            label: fmt"Animate"
+          Button(label = "Animate"):
             onClick:
               self.count2.inc()
               currEvents["pbc1"] = JumpToValue(target = 0.01)
-
-          Button:
-            label: fmt"Cancel"
+          Button(label = "Cancel"):
             onClick:
               currEvents["pbc1"] = CancelJump()
-
           Dropdown:
             items: dropItems
             selected: self.dropIndexes
-            label: "Menu"
-            setup:
-              size 12'em, 2'em
+            defaultLabel: "Menu"
+            setup: size 12'em, 2'em
 
         text "data":
           size 60'vw, 2'em
           fill "#000000"
           # characters: fmt"AnimatedProgress value: {ap1.value:>6.2f}"
           characters: fmt"selected: {self.dropIndexes}"
-
         Slider:
           value: ap1.value
-          setup:
-            size 60'vw, 2'em
-
+          setup: size 60'vw, 2'em
         Listbox:
           items: dropItems
           selected: self.dropIndexes
           itemsVisible: 4
           setup:
             size 60'vw, 2'em
-
+            bindEvents "lstbx", currEvents
+        Slider:
+          value: self.scrollValue
+          setup: size 60'vw, 2'em
+          changed:
+            currEvents["lstbx"] = ScrollTo(self.scrollValue)
         TextInputBind:
           value: self.textInput
-          setup:
-            size 60'vw, 2'em
-
-        Button:
-          label: fmt"{self.textInput}"
+          setup: size 60'vw, 2'em
+        Button(label = &"{self.textInput}"):
           disabled: true
-          setup:
-            size 60'vw, 2'em
+          setup: size 60'vw, 2'em
+      palette.accent = parseHtml("#87E3FF", 0.67).spin(ap1.value * 36)
 
 startFidget(
   wrapApp(exampleApp, ExampleApp),
-  theme = grayTheme,
+  setup = 
+    when defined(demoBulmaTheme): setup(bulmaTheme)
+    else: setup(grayTheme),
   w = 640,
   h = 700,
   uiScale = 2.0
@@ -155,7 +146,7 @@ Example stateful widget:
 ```nim
 proc animatedProgress*(
     delta: float32 = 0.1,
-  ): AnimatedProgress {.statefulFidget.} =
+  ): AnimatedProgressState {.statefulFidget.} =
 
   init:
     box 0, 0, 100.WPerc, 2.Em
@@ -167,15 +158,11 @@ proc animatedProgress*(
       ## Create an completed "empty" future
   
   events(AnimatedEvents):
-    ## This declares an object variant using [Patty](https://github.com/andreaferretti/patty). 
     IncrementBar(increment: float)
     JumpToValue(target: float)
     CancelJump
 
   onEvents(AnimatedEvents):
-    ## Multiple `onEvents` can be defined to handle other defined events.
-    ## Events need to be defined using object variants, using Patty
-    ## makes this much easier if not using the `events` property above.  
     IncrementBar(increment):
       # echo "pbar event: ", evt.repr()
       self.value = self.value + increment
@@ -188,22 +175,21 @@ proc animatedProgress*(
     JumpToValue(target):
       echo "jump where? ", $target
 
-      proc ticker(self: AnimatedProgress) {.async.} =
+      proc ticker(self: AnimatedProgressState) {.async.} =
         ## This simple procedure will "tick" ten times delayed 1,000ms each.
         ## Every tick will increment the progress bar 10% until its done. 
-        let
-          frameDelay = 16
-          duration = 3_000
-          n = duration div frameDelay
-        for i in 1..n:
-          await sleepAsync(frameDelay)
+        let duration = 3_000
+
+        # await runEveryMillis(frameDelayMs, repeat=n) do (frame: FrameIdx) -> bool:
+        await runForMillis(duration) do (frame: FrameIdx) -> bool:
+          # echo "tick ", "frame ", frame, " ", inMilliseconds(getMonoTime() - start), "ms"
+          refresh()
           if self.cancelTicks:
             self.cancelTicks = false
-            return
-          self.value += target
-          self.value = clamp(self.value mod 1.0, 0, 1.0)
+            return true
 
-          refresh()
+          self.value += target * (1+frame.skipped).toFloat
+          self.value = clamp(self.value mod 1.0, 0, 1.0)
       
       if self.ticks.isNil or self.ticks.finished:
         echo "ticker..."
