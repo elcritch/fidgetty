@@ -1,5 +1,6 @@
 import widgets
 import button
+import std/typetraits
 
 #   events(AnimatedEvents):
 #     IncrementBar(increment: float)
@@ -29,17 +30,6 @@ proc new*(_: typedesc[DropdownProps]): DropdownProps =
   fill clearColor
   imageColor clearColor
 
-template Dropdown*(code: untyped): untyped =
-  block:
-    var item {.inject.}: DropdownProps
-    item.new()
-    proc `items`(val: seq[string]) = item.items = val
-    proc `defaultLabel`(val: string) = item.defaultLabel = val
-    proc `selected`(val: int) = item.selected = val
-    proc `disabled`(val: int) = item.selected = val
-    `code`
-    useState(DropdownState, state)
-    render(item, state)
 
 proc render*(
     args: DropdownProps,

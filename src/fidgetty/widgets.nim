@@ -71,25 +71,50 @@ type
     w is ref
     ($typeof(w)).endswith("State")
 
+# template Dropdown*(code: untyped): untyped =
+#   block:
+#     var item {.inject.}: DropdownProps
+#     item = DropdownProps.new()
+#     # proc `items`(val: seq[string]) = item.items = val
+#     # proc `defaultLabel`(val: string) = item.defaultLabel = val
+#     # proc `selected`(val: int) = item.selected = val
+#     # proc `disabled`(val: int) = item.selected = val
+#     `code`
+#     useState(DropdownState, state)
+#     render(item, state)
+
 macro fidgetty*(name, blk: untyped) =
   echo "BLK: ", treeRepr blk
   let
-    procName = name.strVal
-    procNameCap = procName.capitalizeAscii()
-    argTypeName = procNameCap & "Props"
-    stateTypeName = procNameCap & "State"
+    procName = name.strVal.capitalizeAscii()
+    propsTypeName = procName & "Props"
+    stateTypeName = procName & "State"
 
   result = newStmtList()
   for idx, attr in blk.attributes():
     case attr.name:
     of "properties":
-      let wType = argTypeName.makeType(attr.code)
+      let wType = propsTypeName.makeType(attr.code)
       echo "WTYPE:arg: ", repr wType
       result.add wType
     of "state":
       let wType = stateTypeName.makeType(attr.code)
       echo "WTYPE:prop: ", repr wType
       result.add wType
+  
+  let
+    procId = ident procName
+    propsTypeId = ident propsTypeName
+    stateTypeId = ident stateTypeName
+  
+  result.add quote do:
+    template `procId`*(code: untyped) =
+      block:
+        var item {.inject.}: `propsTypeId`
+        item = `propsTypeId`.new()
+        code
+        useState(`stateTypeId`, state)
+        render(item, state)
 
 proc makeStatefulWidget*(blk: NimNode, hasState, defaultState, wrapper: bool): NimNode =
   var

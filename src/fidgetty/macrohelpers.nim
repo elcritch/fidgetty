@@ -110,3 +110,26 @@ proc makeType*(name: string, body: NimNode): NimNode =
     rec.add newIdentDefs(pdfield, pv)
   tp[0][^1][0][^1] = rec
   result.add tp
+
+proc makeSetters*(name: string, body: NimNode): NimNode =
+  var propDefs = newTable[string, NimNode]()
+  var propTypes = newTable[string, NimNode]()
+
+  for prop in body:
+    if prop.kind == nnkCommentStmt:
+      continue # skip comment
+    prop.expectKind(nnkCall)
+    prop[0].expectKind(nnkIdent)
+
+    let pname = prop[0].strVal
+    let pHasDefault = prop[1][0].kind == nnkAsgn
+    if pHasDefault:
+      propTypes[pname] = prop[1][0][0]
+      propDefs[pname] = prop[1][0][1]
+    else:
+      propTypes[pname] = prop[1][0]
+  
+  result = newStmtList()
+  for pd, pv in propTypes:
+    echo "PD: ", pd
+    echo "PV: ", treeRepr pv
