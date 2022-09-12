@@ -23,10 +23,9 @@ proc drawMain() =
         characters "Dropdown example: "
       Dropdown:
         size 10'em, 2'em
-        item.defaultLabel= "test"
-        item.items= dropItems
-        item.selected= dropIndexes[0]
-        # echo repr(item)
+        defaultLabel "test"
+        items dropItems
+        selected dropIndexes[0]
 
 startFidget(
   drawMain,
