@@ -7,7 +7,7 @@ let dropItems = @["Nim", "UI", "in", "100%", "Nim", "to",
 var dropIndexes = [-1, -1, -1]
 
 loadFont("IBM Plex Sans", "IBMPlexSans-Regular.ttf")
-var dstate = DropdownState()
+var dstate = DropdownProps()
 
 proc drawMain() =
   frame "main":
@@ -16,7 +16,6 @@ proc drawMain() =
 
     Vertical:
       itemSpacing 1'em
-
       text "first desc":
         size 100'pw, 1'em
         fill "#000d00"

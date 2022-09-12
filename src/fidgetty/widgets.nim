@@ -112,12 +112,13 @@ macro fidgetty*(name, blk: untyped) =
   result.add quote do:
     template `procId`*(code: untyped) =
       block:
-        var item {.inject.}: `propsTypeId`
-        item = `propsTypeId`.new()
-        `setters`
-        code
-        useState(`stateTypeId`, state)
-        render(item, state)
+        component `procName`:
+          var item {.inject.}: `propsTypeId`
+          item = `propsTypeId`.new()
+          `setters`
+          code
+          useState(`stateTypeId`, state)
+          render(item, state)
   echo "result:\n", repr result
 
 proc makeStatefulWidget*(blk: NimNode, hasState, defaultState, wrapper: bool): NimNode =
