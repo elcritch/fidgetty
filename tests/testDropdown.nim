@@ -1,4 +1,5 @@
 import fidgetty
+import fidgetty/button
 import fidgetty/dropdown
   
 let dropItems = @["Nim", "UI", "in", "100%", "Nim", "to", 
@@ -21,19 +22,12 @@ proc drawMain() =
         fill "#000d00"
         characters "Dropdown example: "
 
-      dropdown(dropItems, dropIndexes[0], "Dropdown", self = dstate)
-      dropdown(dropItems, dropIndexes[1], "Dropdown", self = nil)
-      text "desc":
-        size 100'pw, 1'em
-        fill "#000d00"
-        characters "linked dropdowns: "
-      dropdown(dropItems, dropIndexes[2])
-      Dropdown:
-        items: dropItems
-        selected: dropIndexes[2]
-        setup:
-          box 0, 0, 12'em, 2'em
-      
+      DropdownMenu:
+        size 10'em, 2'em
+        defaultLabel "test"
+        items dropItems
+        selected dropIndexes[0]
+        echo repr(item)
 
 startFidget(
   drawMain,

@@ -1,65 +1,95 @@
 import widgets
 import button
 
-template dropUpY(n: Node, height: float32 = 0): bool =
-  let a = n.descaled(screenBox)
-  let b = root.descaled(screenBox)
-  not (a.y + height <= b.y + b.h)
+# mkWidget(DropdownMenu):
+#   properties:
+#     items: seq[string]
+#     selected: int
+#     defaultLabel: string
+#     disabled: bool
 
-proc dropdown*(
-    items : seq[string],
-    selected : var int,
-    defaultLabel : string = "Dropdown",
-    disabled : bool = false
-): DropdownState {.statefulFidget.} =
-  ## dropdown widget 
-  init:
-    size 8'em, 1.5'em
-    fill clearColor
-    imageColor clearColor
+#   events(AnimatedEvents):
+#     IncrementBar(increment: float)
+#     JumpToValue(target: float)
+#     CancelJump
 
-  properties:
+type
+  DropdownArgs* = ref object
+    items*: seq[string]
+    selected*: int
+    defaultLabel*: string
+    disabled*: bool
+
+  DropdownState* = ref object
     dropDownOpen: bool
     dropUp: bool
     itemsVisible: int
     itemsCount: int
 
-  render:
+static:
+  assert DropdownArgs is WidgetArgs
+  assert DropdownState is WidgetState
+
+proc new*(_: typedesc[DropdownArgs]): DropdownArgs =
+  new result
+  size 8'em, 1.5'em
+  fill clearColor
+  imageColor clearColor
+
+template DropdownMenu*(code: untyped): untyped =
+  block:
+    var item {.inject.}: DropdownArgs
+    item.new()
+    proc `items`(val: seq[string]) = item.items = val
+    proc `defaultLabel`(val: string) = item.defaultLabel = val
+    proc `selected`(val: int) = item.selected = val
+    proc `disabled`(val: int) = item.selected = val
+    `code`
+    useState(DropdownState, state)
+    render(item, state)
+
+proc render*(
+    args: DropdownArgs,
+    self: DropdownState
+) =
+  ## dropdown widget 
+  component "dropdown":
     let
       cb = current.box
       bw = cb.w
       bh = cb.h
       bih = bh * 1.0'ui
-      tw = bw - 1.5'em.UICoord
+      tw = bw - 1.5'em
 
     proc resetState() = 
       self.dropDownOpen = false
       self.dropUp = false
       self.itemsVisible = -1
 
-    if self.itemsCount != items.len():
+    if self.itemsCount != args.items.len():
       # echo "new dropdowns" 
-      self.itemsCount = items.len()
+      self.itemsCount = args.items.len()
       resetState()
 
     let
       visItems =
         if self.dropUp: 4
         elif self.dropDownOpen: self.itemsVisible
-        else: items.len()
-      itemCount = max(1, visItems).min(items.len())
+        else: args.items.len()
+      itemCount = max(1, visItems).min(args.items.len())
       bdh = min(bih * itemCount.UICoord, windowLogicalSize.descaled.y/2'ui)
 
     if itemCount <= 2:
       self.dropUp = true
-      self.itemsVisible = items.len()
+      self.itemsVisible = args.items.len()
       refresh()
 
     let this = current
     var outClick = false
 
     Button:
-      disabled: disabled
+      disabled:
+        args.disabled
       setup:
         box 0, 0, bw, bh
         clipContent true
@@ -72,10 +102,10 @@ proc dropdown*(
         onClickOutside:
           outClick = true
       label:
-        if selected < 0:
-          defaultLabel
+        if args.selected < 0:
+          args.defaultLabel
         else:
-          items[selected]
+          args.items[args.selected]
       onClick:
         self.dropDownOpen = true
         self.itemsVisible = -1
@@ -115,7 +145,7 @@ proc dropdown*(
               resetState()
 
           var itemsVisible = -1 + (if self.dropUp: -1 else: 0)
-          for idx, buttonName in pairs(items):
+          for idx, buttonName in pairs(args.items):
             group "menuBtn":
               if current.screenBox.overlaps(scrollBox):
                 itemsVisible.inc()
@@ -134,7 +164,7 @@ proc dropdown*(
               if clicked:
                 resetState()
                 # echo fmt"dropdwon: set {selected=}"
-                selected = idx
+                args.selected = idx
 
 
           # group "menuBtnBlankSpacer":
