@@ -1,13 +1,6 @@
 import widgets
 import button
 
-# mkWidget(DropdownMenu):
-#   properties:
-#     items: seq[string]
-#     selected: int
-#     defaultLabel: string
-#     disabled: bool
-
 #   events(AnimatedEvents):
 #     IncrementBar(increment: float)
 #     JumpToValue(target: float)
