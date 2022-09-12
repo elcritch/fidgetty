@@ -13,32 +13,32 @@ import button
 #     JumpToValue(target: float)
 #     CancelJump
 
-type
-  DropdownArgs* = ref object
-    items*: seq[string]
-    selected*: int
-    defaultLabel*: string
-    disabled*: bool
+fidgetty Dropdown:
+  properties:
+    items: seq[string]
+    selected: int
+    defaultLabel: string
+    disabled: bool
 
-  DropdownState* = ref object
+  state:
     dropDownOpen: bool
     dropUp: bool
     itemsVisible: int
     itemsCount: int
 
-static:
-  assert DropdownArgs is WidgetArgs
-  assert DropdownState is WidgetState
+# static:
+#   assert DropdownArgs is WidgetArgs
+#   assert DropdownState is WidgetState
 
-proc new*(_: typedesc[DropdownArgs]): DropdownArgs =
+proc new*(_: typedesc[DropdownProps]): DropdownProps =
   new result
   size 8'em, 1.5'em
   fill clearColor
   imageColor clearColor
 
-template DropdownMenu*(code: untyped): untyped =
+template Dropdown*(code: untyped): untyped =
   block:
-    var item {.inject.}: DropdownArgs
+    var item {.inject.}: DropdownProps
     item.new()
     proc `items`(val: seq[string]) = item.items = val
     proc `defaultLabel`(val: string) = item.defaultLabel = val
@@ -49,7 +49,7 @@ template DropdownMenu*(code: untyped): untyped =
     render(item, state)
 
 proc render*(
-    args: DropdownArgs,
+    args: DropdownProps,
     self: DropdownState
 ) =
   ## dropdown widget 

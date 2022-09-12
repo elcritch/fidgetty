@@ -71,40 +71,25 @@ type
     w is ref
     ($typeof(w)).endswith("State")
 
-# macro mkFidgetty*(name: untyped, blk: untyped): NimNode =
-#   var
-#     procDef = blk
-#     body = procDef.body()
-#     params = procDef.params()
-#     pragmas = procDef.pragma()
-#     preBody = newStmtList()
-#   let
-#     hasEmptyReturnType = params[0].kind == nnkEmpty
-#     procName = procDef.name().strVal
-#     procNameCap = procName.capitalizeAscii()
-#     typeName = procNameCap & "Type"
-#     preName = ident("setup")
-#     postName = ident("post")
-#     identName = ident("id")
-#   var
-#     initImpl: NimNode = newStmtList()
-#     renderImpl: NimNode
-#     evtName: string
-#     hasProperty = false
-#     onEventsImpl = newStmtList()
-#     onEventsBlocks = newTable[string, NimNode]()
-#   for idx, attr in body.attributes():
-#     body[idx] = newStmtList()
-#     case attr.name:
-#     of "init":
-#       initImpl = attr.code
-#     of "render":
-#       renderImpl = attr.code
-#     of "properties":
-#       hasProperty = true
-#       let wType = typeName.makeType(attr.code)
-#       echo "WTYPE: ", repr wType
-#       preBody.add wType
+macro fidgetty*(name, blk: untyped) =
+  echo "BLK: ", treeRepr blk
+  let
+    procName = name.strVal
+    procNameCap = procName.capitalizeAscii()
+    argTypeName = procNameCap & "Props"
+    stateTypeName = procNameCap & "State"
+
+  result = newStmtList()
+  for idx, attr in blk.attributes():
+    case attr.name:
+    of "properties":
+      let wType = argTypeName.makeType(attr.code)
+      echo "WTYPE:arg: ", repr wType
+      result.add wType
+    of "state":
+      let wType = stateTypeName.makeType(attr.code)
+      echo "WTYPE:prop: ", repr wType
+      result.add wType
 
 proc makeStatefulWidget*(blk: NimNode, hasState, defaultState, wrapper: bool): NimNode =
   var
