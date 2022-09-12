@@ -26,10 +26,10 @@ fidgetty Dropdown:
 
 proc new*(_: typedesc[DropdownProps]): DropdownProps =
   new result
+  echo "dropdown "
   size 8'em, 1.5'em
   fill clearColor
   imageColor clearColor
-
 
 proc render*(
     args: DropdownProps,
@@ -139,7 +139,7 @@ proc render*(
               setup:
                 clearShadows()
                 let ic = this.image.color
-                imageColor Color(r: 0, g: 0, b: 0, a: 0.20 * ic.a)
+                imageColor ic * 0.03
                 boxOf parent
                 cornerRadius 0
                 stroke theme.innerStroke

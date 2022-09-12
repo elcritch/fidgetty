@@ -113,8 +113,9 @@ macro fidgetty*(name, blk: untyped) =
     template `procId`*(code: untyped) =
       block:
         component `procName`:
-          var item {.inject.}: `propsTypeId`
-          item = `propsTypeId`.new()
+          useState(`propsTypeId`, item)
+          # var item {.inject.}: `propsTypeId`
+          # item = `propsTypeId`.new()
           `setters`
           code
           useState(`stateTypeId`, state)
@@ -272,10 +273,15 @@ proc makeStatefulWidget*(blk: NimNode, hasState, defaultState, wrapper: bool): N
 macro basicFidget*(blk: untyped) =
   result = makeStatefulWidget(blk, hasState=false, defaultState=false, wrapper=false)
 
+# template useState*[T](tp: typedesc[T], name: untyped) =
+#   if current.hookStates.isEmpty():
+#     current.hookStates = newVariant(tp())
+#   var `name` {.inject.} = current.hookStates.get(tp)
+
 template useState*[T](tp: typedesc[T], name: untyped) =
-  if current.hookStates.isEmpty():
-    current.hookStates = newVariant(tp())
-  var `name` {.inject.} = current.hookStates.get(tp)
+  if not current.hookStates.hasKey(tp.getTypeId()):
+    current.hookStates[tp.getTypeId()] = newVariant(new(tp))
+  var `name` {.inject.} = current.hookStates[tp.getTypeId()].get(tp)
 
 template useStateOverride*[T](tp: typedesc[T], name: untyped) =
   if current.hookStates.isEmpty():
