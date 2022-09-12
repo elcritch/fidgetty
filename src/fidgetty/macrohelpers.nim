@@ -131,5 +131,8 @@ proc makeSetters*(name: string, body: NimNode): NimNode =
   
   result = newStmtList()
   for pd, pv in propTypes:
-    echo "PD: ", pd
-    echo "PV: ", treeRepr pv
+    let field = ident pd
+    # echo "PD: ", pd
+    # echo "PV: ", treeRepr pv
+    result.add quote do:
+      proc `field`(val: `pv`) {.used.} = item.`field` = val

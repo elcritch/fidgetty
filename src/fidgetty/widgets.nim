@@ -90,12 +90,14 @@ macro fidgetty*(name, blk: untyped) =
     propsTypeName = procName & "Props"
     stateTypeName = procName & "State"
 
+  var setters: NimNode
   result = newStmtList()
   for idx, attr in blk.attributes():
     case attr.name:
     of "properties":
       let wType = propsTypeName.makeType(attr.code)
       echo "WTYPE:arg: ", repr wType
+      setters = makeSetters("test", attr.code)
       result.add wType
     of "state":
       let wType = stateTypeName.makeType(attr.code)
@@ -112,9 +114,11 @@ macro fidgetty*(name, blk: untyped) =
       block:
         var item {.inject.}: `propsTypeId`
         item = `propsTypeId`.new()
+        `setters`
         code
         useState(`stateTypeId`, state)
         render(item, state)
+  echo "result:\n", repr result
 
 proc makeStatefulWidget*(blk: NimNode, hasState, defaultState, wrapper: bool): NimNode =
   var
