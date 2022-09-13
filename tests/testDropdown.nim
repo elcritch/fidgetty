@@ -34,7 +34,6 @@ proc drawMain() =
           for event in events:
             match event:
               Selected(idx):
-                echo "selected: ", idx
                 dropIndexes[0] = idx
                 refresh()
 
