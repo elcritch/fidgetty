@@ -22,14 +22,34 @@ proc drawMain() =
         size 100'pw, 1'em
         fill "#000d00"
         characters "Dropdown example: "
-
+      
       Dropdown:
         size 10'em, 2'em
         defaultLabel "test"
         items dropItems
         selected dropIndexes[0]
       finally:
-        onEvents(BasicEvents):
+        onEvents BasicEvents:
+          Selected(idx):
+            dropIndexes[0] = idx
+            refresh()
+      
+      Dropdown:
+        size 10'em, 2'em
+        defaultLabel "test"
+        items dropItems
+        selected dropIndexes[0]
+      do:onEvents BasicEvents:
+          Selected(idx):
+            dropIndexes[0] = idx
+            refresh()
+
+      Dropdown:
+        size 10'em, 2'em
+        defaultLabel "test"
+        items dropItems
+        selected dropIndexes[0]
+      do -> BasicEvents:
           Selected(idx):
             dropIndexes[0] = idx
             refresh()
