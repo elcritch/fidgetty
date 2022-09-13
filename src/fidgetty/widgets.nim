@@ -86,6 +86,17 @@ macro printRepr*(blk: varargs[untyped]) =
   echo "PRINTREPR: ", blk.treeRepr
   result = newStmtList()
 
+macro doEvents*(blk: varargs[untyped]) =
+  let handler = blk[0]
+  let arg = handler.params[1][0]
+  let body = handler.body
+  arg.expectKind nnkIdent
+  echo "DOEVENTS: ", handler.body.treeRepr
+  result = newStmtList()
+  result.add quote do:
+    `body`
+
+
 macro fidgetty*(name, blk: untyped) =
   echo "BLK: ", treeRepr blk
   let
@@ -114,14 +125,15 @@ macro fidgetty*(name, blk: untyped) =
   
   result.add quote do:
     template `procId`*(code: untyped, handlers: varargs[untyped]) =
-      printRepr(handlers)
+      # printRepr(handlers)
       block:
         component `procName`:
           useState(`propsTypeId`, item)
           useState(`stateTypeId`, state)
           `setters`
           code
-          let evts {.inject.} = render(item, state)
+          let res {.inject.} = render(item, state)
+          doEvents(handlers)
   echo "result:\n", repr result
 
 proc makeStatefulWidget*(blk: NimNode, hasState, defaultState, wrapper: bool): NimNode =

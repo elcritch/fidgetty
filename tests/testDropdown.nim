@@ -2,6 +2,8 @@ import fidgetty
 import fidgetty/button
 import fidgetty/dropdown
   
+import print
+
 let dropItems = @["Nim", "UI", "in", "100%", "Nim", "to", 
                   "OpenGL", "Immediate", "mode"]
 var dropIndexes = [-1, -1, -1]
@@ -26,19 +28,15 @@ proc drawMain() =
         defaultLabel "test"
         items dropItems
         selected dropIndexes[0]
-      do(onMouse):
-        evClick:
-          # echo "pbar event: ", evt.repr()
-          self.value = self.value + increment
-          refresh()
-
-      Dropdown:
-        size 10'em, 2'em
-        defaultLabel "test"
-        items dropItems
-        selected dropIndexes[0]
-      elif onClick:
-        echo "click"
+      do(BasicEvents):
+        var events: seq[BasicEvents]
+        if res.popEvents(events):
+          for event in events:
+            match event:
+              Selected(idx):
+                echo "selected: ", idx
+                dropIndexes[0] = idx
+                refresh()
 
 startFidget(
   drawMain,

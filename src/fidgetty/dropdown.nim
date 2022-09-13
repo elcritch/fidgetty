@@ -1,6 +1,9 @@
 import widgets
 import button
 import std/typetraits
+import std/strformat
+
+import print
 
 #   events(AnimatedEvents):
 #     IncrementBar(increment: float)
@@ -149,7 +152,7 @@ proc render*(
                 stroke theme.innerStroke
             if clicked:
               resetState()
-              # echo fmt"dropdwon: set {selected=}"
+              echo fmt"dropdwon: set {idx=}"
               dispatchEvent Selected(idx)
 
 
