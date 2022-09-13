@@ -86,7 +86,27 @@ macro printRepr*(blk: varargs[untyped]) =
   echo "PRINTREPR: ", blk.treeRepr
   result = newStmtList()
 
+macro onEvents*(tp: typedesc, body: untyped) =
+  let code = body[0] # fixup for patty match
+  result = quote do:
+    var events: seq[`tp`]
+    if res.popEvents(events):
+      for event {.inject.} in events:
+        match event:
+          `code`
+
+macro finallyEvents*(blk: varargs[untyped]) =
+  echo "DOEVENTS: ", blk.treeRepr
+  if blk.len() == 0:
+    return newStmtList()
+  let body = blk[0][0]
+  result = newStmtList()
+  result.add quote do:
+    `body`
+
+
 macro doEvents*(blk: varargs[untyped]) =
+  echo "DOEVENTS: ", blk.treeRepr
   if blk.len() == 0:
     return newStmtList()
   let handler = blk[0]
@@ -139,7 +159,7 @@ macro fidgetty*(name, blk: untyped) =
           `setters`
           code
           let res {.inject.} = render(item, state)
-          doEvents(handlers)
+          finallyEvents(handlers)
   echo "result:\n", repr result
 
 proc makeStatefulWidget*(blk: NimNode, hasState, defaultState, wrapper: bool): NimNode =
