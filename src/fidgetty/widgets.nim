@@ -91,7 +91,7 @@ macro doEvents*(blk: varargs[untyped]) =
     return newStmtList()
   let handler = blk[0]
   let arg = handler.params[1][0]
-  let body = handler.body
+  let body = handler.body[0]
   arg.expectKind nnkIdent
   echo "DOEVENTS: ", handler.body.treeRepr
   result = newStmtList()
@@ -99,7 +99,8 @@ macro doEvents*(blk: varargs[untyped]) =
     var events: seq[`arg`]
     if res.popEvents(events):
       for event {.inject.} in events:
-        `body`
+        match event:
+          `body`
 
 
 macro fidgetty*(name, blk: untyped) =
