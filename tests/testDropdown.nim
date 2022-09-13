@@ -29,6 +29,7 @@ proc drawMain() =
         items dropItems
         selected dropIndexes[0]
       do -> BasicEvents:
+        # handle any BasicEvents from widget
         Selected(idx):
           dropIndexes[0] = idx
           refresh()
