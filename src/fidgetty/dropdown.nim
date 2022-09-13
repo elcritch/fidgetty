@@ -7,6 +7,10 @@ import std/typetraits
 #     JumpToValue(target: float)
 #     CancelJump
 
+variants BasicEvents:
+  ## variant case types for scroll events
+  Selected(index: int)
+
 fidgetty Dropdown:
   properties:
     items: seq[string]
@@ -34,7 +38,7 @@ proc new*(_: typedesc[DropdownProps]): DropdownProps =
 proc render*(
     args: DropdownProps,
     self: DropdownState
-) =
+): Events =
   ## dropdown widget 
   let
     cb = current.box
@@ -139,14 +143,14 @@ proc render*(
               setup:
                 clearShadows()
                 let ic = this.image.color
-                imageColor ic * 0.03
+                imageColor ic * 0.9
                 boxOf parent
                 cornerRadius 0
                 stroke theme.innerStroke
             if clicked:
               resetState()
               # echo fmt"dropdwon: set {selected=}"
-              args.selected = idx
+              dispatchEvent Selected(idx)
 
 
         # group "menuBtnBlankSpacer":

@@ -20,11 +20,25 @@ proc drawMain() =
         size 100'pw, 1'em
         fill "#000d00"
         characters "Dropdown example: "
+
       Dropdown:
         size 10'em, 2'em
         defaultLabel "test"
         items dropItems
         selected dropIndexes[0]
+      do(onMouse):
+        evClick:
+          # echo "pbar event: ", evt.repr()
+          self.value = self.value + increment
+          refresh()
+
+      Dropdown:
+        size 10'em, 2'em
+        defaultLabel "test"
+        items dropItems
+        selected dropIndexes[0]
+      elif onClick:
+        echo "click"
 
 startFidget(
   drawMain,

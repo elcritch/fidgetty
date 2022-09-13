@@ -82,6 +82,9 @@ type
 #     `code`
 #     useState(DropdownState, state)
 #     render(item, state)
+macro printRepr*(blk: varargs[untyped]) =
+  echo "PRINTREPR: ", blk.treeRepr
+  result = newStmtList()
 
 macro fidgetty*(name, blk: untyped) =
   echo "BLK: ", treeRepr blk
@@ -110,16 +113,15 @@ macro fidgetty*(name, blk: untyped) =
     stateTypeId = ident stateTypeName
   
   result.add quote do:
-    template `procId`*(code: untyped) =
+    template `procId`*(code: untyped, handlers: varargs[untyped]) =
+      printRepr(handlers)
       block:
         component `procName`:
           useState(`propsTypeId`, item)
-          # var item {.inject.}: `propsTypeId`
-          # item = `propsTypeId`.new()
+          useState(`stateTypeId`, state)
           `setters`
           code
-          useState(`stateTypeId`, state)
-          render(item, state)
+          let evts {.inject.} = render(item, state)
   echo "result:\n", repr result
 
 proc makeStatefulWidget*(blk: NimNode, hasState, defaultState, wrapper: bool): NimNode =
@@ -279,18 +281,20 @@ macro basicFidget*(blk: untyped) =
 #   var `name` {.inject.} = current.hookStates.get(tp)
 
 template useState*[T](tp: typedesc[T], name: untyped) =
+  if current.hookStates == nil:
+    current.hookStates = newTable[TypeId, Variant]()
   if not current.hookStates.hasKey(tp.getTypeId()):
     current.hookStates[tp.getTypeId()] = newVariant(new(tp))
   var `name` {.inject.} = current.hookStates[tp.getTypeId()].get(tp)
 
-template useStateOverride*[T](tp: typedesc[T], name: untyped) =
-  if current.hookStates.isEmpty():
-    current.hookStates = newVariant(tp())
-  var `name` {.inject.} =
-    if `name`.isNil:
-      current.hookStates.get(tp)
-    else:
-      `name`
+# template useStateOverride*[T](tp: typedesc[T], name: untyped) =
+#   if current.hookStates.isEmpty():
+#     current.hookStates = newVariant(tp())
+#   var `name` {.inject.} =
+#     if `name`.isNil:
+#       current.hookStates.get(tp)
+#     else:
+#       `name`
 
 macro statefulFidget*(blk: untyped) =
   result = makeStatefulWidget(blk, hasState=true, defaultState=true, wrapper=false)
