@@ -87,6 +87,8 @@ macro printRepr*(blk: varargs[untyped]) =
   result = newStmtList()
 
 macro doEvents*(blk: varargs[untyped]) =
+  if blk.len() == 0:
+    return newStmtList()
   let handler = blk[0]
   let arg = handler.params[1][0]
   let body = handler.body
@@ -94,7 +96,10 @@ macro doEvents*(blk: varargs[untyped]) =
   echo "DOEVENTS: ", handler.body.treeRepr
   result = newStmtList()
   result.add quote do:
-    `body`
+    var events: seq[`arg`]
+    if res.popEvents(events):
+      for event {.inject.} in events:
+        `body`
 
 
 macro fidgetty*(name, blk: untyped) =

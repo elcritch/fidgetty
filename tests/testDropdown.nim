@@ -29,13 +29,10 @@ proc drawMain() =
         items dropItems
         selected dropIndexes[0]
       do(BasicEvents):
-        var events: seq[BasicEvents]
-        if res.popEvents(events):
-          for event in events:
-            match event:
-              Selected(idx):
-                dropIndexes[0] = idx
-                refresh()
+        match event:
+          Selected(idx):
+            dropIndexes[0] = idx
+            refresh()
 
 startFidget(
   drawMain,
