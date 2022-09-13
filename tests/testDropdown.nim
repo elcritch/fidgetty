@@ -28,31 +28,10 @@ proc drawMain() =
         defaultLabel "test"
         items dropItems
         selected dropIndexes[0]
-      finally:
-        onEvents BasicEvents:
-          Selected(idx):
-            dropIndexes[0] = idx
-            refresh()
-      
-      Dropdown:
-        size 10'em, 2'em
-        defaultLabel "test"
-        items dropItems
-        selected dropIndexes[0]
-      do:onEvents BasicEvents:
-          Selected(idx):
-            dropIndexes[0] = idx
-            refresh()
-
-      Dropdown:
-        size 10'em, 2'em
-        defaultLabel "test"
-        items dropItems
-        selected dropIndexes[0]
       do -> BasicEvents:
-          Selected(idx):
-            dropIndexes[0] = idx
-            refresh()
+        Selected(idx):
+          dropIndexes[0] = idx
+          refresh()
 
 startFidget(
   drawMain,

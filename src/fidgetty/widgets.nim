@@ -110,9 +110,10 @@ macro doEvents*(blk: varargs[untyped]) =
   if blk.len() == 0:
     return newStmtList()
   let handler = blk[0]
-  let arg = handler.params[1][0]
+  let arg = handler.params[0]
   let body = handler.body[0]
   arg.expectKind nnkIdent
+  echo "DOEVENTS:ARGS: ", arg.treeRepr
   echo "DOEVENTS: ", handler.body.treeRepr
   result = newStmtList()
   result.add quote do:
@@ -159,7 +160,7 @@ macro fidgetty*(name, blk: untyped) =
           `setters`
           code
           let res {.inject.} = render(item, state)
-          finallyEvents(handlers)
+          doEvents(handlers)
   echo "result:\n", repr result
 
 proc makeStatefulWidget*(blk: NimNode, hasState, defaultState, wrapper: bool): NimNode =
