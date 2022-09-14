@@ -162,7 +162,7 @@ macro fidgetty*(name, blk: untyped) =
           useState(`stateTypeId`, state)
           `setters`
           code
-          let events {.inject.} = render(item, state)
+          let events {.inject, used.} = render(item, state)
           doBlocks(handlers)
   echo "result:\n", repr result
 
