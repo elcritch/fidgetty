@@ -5,9 +5,8 @@ fidgetty Button:
     label: string
     isActive: bool
     disabled: bool
-
   state:
-    count: int
+    empty: void
 
 proc new*(_: typedesc[ButtonProps]): ButtonProps =
   new result
