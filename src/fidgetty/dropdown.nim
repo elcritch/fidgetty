@@ -79,7 +79,6 @@ proc render*(
 
   Button:
     disabled props.disabled
-
     box 0, 0, bw, bh
     clipContent true
     text "icon":
@@ -88,19 +87,20 @@ proc render*(
       if self.dropDownOpen: rotation -90
       else: rotation 0
       characters ">"
-    onClickOutside:
-      outClick = true
-
     label if props.selected < 0:
             props.defaultLabel
           else:
             props.items[props.selected]
+    # onClickOutside:
+    #   outClick = true
   finally:
     forEvents(MouseEventType):
       case event:
       of evClick:
         self.dropDownOpen = true
         self.itemsVisible = -1
+      of evClickOut:
+        outClick = true
       else:
         discard
     # drop downs

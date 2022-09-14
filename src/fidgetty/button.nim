@@ -42,3 +42,4 @@ proc render*(
     onClick:
       highlight palette
       dispatchEvent evClick
+    dispatchMouseEvents()

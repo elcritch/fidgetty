@@ -86,6 +86,10 @@ template forEvents*(tp, body: untyped): untyped =
     for event {.inject.} in evts:
       `body`
 
+template dispatchMouseEvents*(): untyped =
+  for evt in current.events.mouse:
+    dispatchEvent evt
+
 macro doBlocks*(blks: varargs[untyped]) =
   # echo "DOEVENTS: ", blks.treeRepr
   result = newStmtList()
