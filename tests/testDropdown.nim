@@ -39,8 +39,6 @@ proc drawMain() =
         items dropItems
         selected dropIndexes[0]
       finally:
-        static:
-          echo "BasicEvents: ", repr type BasicEvents
         processEvents(BasicEvents):
           Selected(idx):
             dropIndexes[0] = idx
@@ -51,10 +49,11 @@ proc drawMain() =
         defaultLabel "test"
         items dropItems
         selected dropIndexes[0]
-        processEvents(BasicEvents):
-          Selected(idx):
-            dropIndexes[0] = idx
-            refresh()
+        defer:
+          processEvents(BasicEvents):
+            Selected(idx):
+              dropIndexes[0] = idx
+              refresh()
 
 startFidget(
   drawMain,
