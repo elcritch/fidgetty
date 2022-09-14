@@ -55,7 +55,7 @@ proc eventsMacro*(tp: string, blks: TableRef[string, NimNode]): NimNode =
 
 
 ## ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-##             Widgets
+##             New Widgets
 ## ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ## 
 ## These APIs provide the basic functionality for
@@ -71,59 +71,27 @@ type
     w is ref
     ($typeof(w)).endswith("State")
 
-# template Dropdown*(code: untyped): untyped =
-#   block:
-#     var item {.inject.}: DropdownProps
-#     item = DropdownProps.new()
-#     # proc `items`(val: seq[string]) = item.items = val
-#     # proc `defaultLabel`(val: string) = item.defaultLabel = val
-#     # proc `selected`(val: int) = item.selected = val
-#     # proc `disabled`(val: int) = item.selected = val
-#     `code`
-#     useState(DropdownState, state)
-#     render(item, state)
-macro printRepr*(blk: varargs[untyped]) =
-  echo "PRINTREPR: ", blk.treeRepr
-  result = newStmtList()
-
-macro onEvents*(tp: typedesc, body: untyped) =
-  let code = body[0] # fixup for patty match
-  result = quote do:
-    var events: seq[`tp`]
-    if res.popEvents(events):
-      for event {.inject.} in events:
-        match event:
-          `code`
-
-macro finallyEvents*(blk: varargs[untyped]) =
-  echo "DOEVENTS: ", blk.treeRepr
-  if blk.len() == 0:
-    return newStmtList()
-  let body = blk[0][0]
-  result = newStmtList()
-  result.add quote do:
-    `body`
-
-proc handleEventsTp*(events, tp, body: NimNode): NimNode =
+macro processEvents*(tp, body: untyped): untyped =
+  let code = body[0]
   result = quote do:
     var evts: seq[`tp`]
-    if `events`.popEvents(evts):
+    if events.popEvents(evts):
       for evt {.inject.} in evts:
         match evt:
-          `body`
+          `code`
 
 macro doBlocks*(blks: varargs[untyped]) =
-  echo "DOEVENTS: ", blks.treeRepr
-  if blks.len() == 0:
-    return newStmtList()
-  let events = ident "events"
+  # echo "DOEVENTS: ", blks.treeRepr
   result = newStmtList()
+  if blks.len() == 0:
+    return 
   for blk in blks:
     if blk.kind == nnkDo:
       let arg = blk.params[0]
-      let body = blk.body[0]
+      let body = blk.body
       arg.expectKind nnkIdent
-      result.add handleEventsTp(events, arg, body)
+      result.add quote do:
+        processEvents(`arg`, `body`)
     elif blk.kind == nnkFinally:
       result.add blk[0]
 
@@ -160,11 +128,20 @@ macro fidgetty*(name, blk: untyped) =
         component `procName`:
           useState(`propsTypeId`, item)
           useState(`stateTypeId`, state)
+          var events {.inject, used.}: Events
           `setters`
           code
-          let events {.inject, used.} = render(item, state)
+          events = render(item, state)
           doBlocks(handlers)
   echo "result:\n", repr result
+
+## ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+##             Widgets
+## ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+## 
+## These APIs provide the basic functionality for
+## setting up layouts and constraingts. 
+## 
 
 proc makeStatefulWidget*(blk: NimNode, hasState, defaultState, wrapper: bool): NimNode =
   var
