@@ -33,6 +33,15 @@ proc drawMain() =
           dropIndexes[0] = idx
           refresh()
 
+      Dropdown:
+        size 10'em, 2'em
+        defaultLabel "test"
+        items dropItems
+        selected dropIndexes[0]
+      finally:
+        # echo "done"
+        discard
+
 startFidget(
   drawMain,
   setup = 

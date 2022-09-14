@@ -104,25 +104,28 @@ macro finallyEvents*(blk: varargs[untyped]) =
   result.add quote do:
     `body`
 
-
-macro doEvents*(blk: varargs[untyped]) =
-  echo "DOEVENTS: ", blk.treeRepr
-  if blk.len() == 0:
-    return newStmtList()
-  let handler = blk[0]
-  let arg = handler.params[0]
-  let body = handler.body[0]
-  arg.expectKind nnkIdent
-  echo "DOEVENTS:ARGS: ", arg.treeRepr
-  echo "DOEVENTS: ", handler.body.treeRepr
-  result = newStmtList()
-  result.add quote do:
-    var events: seq[`arg`]
-    if res.popEvents(events):
-      for event {.inject.} in events:
-        match event:
+proc handleEventsTp*(events, tp, body: NimNode): NimNode =
+  result = quote do:
+    var evts: seq[`tp`]
+    if `events`.popEvents(evts):
+      for evt {.inject.} in evts:
+        match evt:
           `body`
 
+macro doBlocks*(blks: varargs[untyped]) =
+  echo "DOEVENTS: ", blks.treeRepr
+  if blks.len() == 0:
+    return newStmtList()
+  let events = ident "events"
+  result = newStmtList()
+  for blk in blks:
+    if blk.kind == nnkDo:
+      let arg = blk.params[0]
+      let body = blk.body[0]
+      arg.expectKind nnkIdent
+      result.add handleEventsTp(events, arg, body)
+    elif blk.kind == nnkFinally:
+      result.add blk[0]
 
 macro fidgetty*(name, blk: untyped) =
   echo "BLK: ", treeRepr blk
@@ -159,8 +162,8 @@ macro fidgetty*(name, blk: untyped) =
           useState(`stateTypeId`, state)
           `setters`
           code
-          let res {.inject.} = render(item, state)
-          doEvents(handlers)
+          let events {.inject.} = render(item, state)
+          doBlocks(handlers)
   echo "result:\n", repr result
 
 proc makeStatefulWidget*(blk: NimNode, hasState, defaultState, wrapper: bool): NimNode =
