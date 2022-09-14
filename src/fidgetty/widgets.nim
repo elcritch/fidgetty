@@ -80,6 +80,12 @@ macro processEvents*(tp, body: untyped): untyped =
         match evt:
           `code`
 
+template forEvents*(tp, body: untyped): untyped =
+  var evts: seq[`tp`]
+  if events.popEvents(evts):
+    for event {.inject.} in evts:
+      `body`
+
 macro doBlocks*(blks: varargs[untyped]) =
   # echo "DOEVENTS: ", blks.treeRepr
   result = newStmtList()
@@ -96,7 +102,7 @@ macro doBlocks*(blks: varargs[untyped]) =
       result.add blk[0]
 
 macro fidgetty*(name, blk: untyped) =
-  echo "BLK: ", treeRepr blk
+  # echo "BLK: ", treeRepr blk
   let
     procName = name.strVal.capitalizeAscii()
     propsTypeName = procName & "Props"
@@ -108,12 +114,12 @@ macro fidgetty*(name, blk: untyped) =
     case attr.name:
     of "properties":
       let wType = propsTypeName.makeType(attr.code)
-      echo "WTYPE:arg: ", repr wType
+      # echo "WTYPE:arg: ", repr wType
       setters = makeSetters("test", attr.code)
       result.add wType
     of "state":
       let wType = stateTypeName.makeType(attr.code)
-      echo "WTYPE:prop: ", repr wType
+      # echo "WTYPE:prop: ", repr wType
       result.add wType
   
   let
@@ -131,9 +137,9 @@ macro fidgetty*(name, blk: untyped) =
           var events {.inject, used.}: Events
           `setters`
           code
-          events = render(item, state)
+          events = item.render(state)
           doBlocks(handlers)
-  echo "result:\n", repr result
+  # echo "result:\n", repr result
 
 ## ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ##             Widgets
@@ -185,7 +191,7 @@ proc makeStatefulWidget*(blk: NimNode, hasState, defaultState, wrapper: bool): N
         error("'properties' requires a Stateful Fidget type. ", attr.code)
       hasProperty = true
       let wType = typeName.makeType(attr.code)
-      echo "WTYPE: ", repr wType
+      # echo "WTYPE: ", repr wType
       preBody.add wType
     of "events":
       attr.code.expectKind(nnkStmtList)

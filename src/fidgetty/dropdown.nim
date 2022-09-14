@@ -4,6 +4,7 @@ import std/typetraits
 import std/strformat
 
 import print
+export button
 
 #   events(AnimatedEvents):
 #     IncrementBar(increment: float)
@@ -39,7 +40,7 @@ proc new*(_: typedesc[DropdownProps]): DropdownProps =
   imageColor clearColor
 
 proc render*(
-    args: DropdownProps,
+    props: DropdownProps,
     self: DropdownState
 ): Events =
   ## dropdown widget 
@@ -55,52 +56,56 @@ proc render*(
     self.dropUp = false
     self.itemsVisible = -1
 
-  if self.itemsCount != args.items.len():
+  if self.itemsCount != props.items.len():
     # echo "new dropdowns" 
-    self.itemsCount = args.items.len()
+    self.itemsCount = props.items.len()
     resetState()
 
   let
     visItems =
       if self.dropUp: 4
       elif self.dropDownOpen: self.itemsVisible
-      else: args.items.len()
-    itemCount = max(1, visItems).min(args.items.len())
+      else: props.items.len()
+    itemCount = max(1, visItems).min(props.items.len())
     bdh = min(bih * itemCount.UICoord, windowLogicalSize.descaled.y/2'ui)
 
   if itemCount <= 2:
     self.dropUp = true
-    self.itemsVisible = args.items.len()
+    self.itemsVisible = props.items.len()
     refresh()
 
   let this = current
   var outClick = false
 
   Button:
-    disabled:
-      args.disabled
-    setup:
-      box 0, 0, bw, bh
-      clipContent true
-      text "icon":
-        box tw, 0, 1'em, bh
-        fill palette.text
-        if self.dropDownOpen: rotation -90
-        else: rotation 0
-        characters ">"
-      onClickOutside:
-        outClick = true
-    label:
-      if args.selected < 0:
-        args.defaultLabel
+    disabled props.disabled
+
+    box 0, 0, bw, bh
+    clipContent true
+    text "icon":
+      box tw, 0, 1'em, bh
+      fill palette.text
+      if self.dropDownOpen: rotation -90
+      else: rotation 0
+      characters ">"
+    onClickOutside:
+      outClick = true
+
+    label if props.selected < 0:
+            props.defaultLabel
+          else:
+            props.items[props.selected]
+  finally:
+    forEvents(MouseEventType):
+      case event:
+      of evClick:
+        self.dropDownOpen = true
+        self.itemsVisible = -1
       else:
-        args.items[args.selected]
-    onClick:
-      self.dropDownOpen = true
-      self.itemsVisible = -1
-    post:
-      if self.dropDownOpen:
-        highlight palette.highlight
+        discard
+    # drop downs
+    if self.dropDownOpen:
+      highlight palette.highlight
 
   let spad = 1.0'f32
   if self.dropDownOpen:
@@ -134,27 +139,30 @@ proc render*(
             resetState()
 
         var itemsVisible = -1 + (if self.dropUp: -1 else: 0)
-        for idx, buttonName in pairs(args.items):
+        for idx, buttonName in pairs(props.items):
           group "menuBtn":
             if current.screenBox.overlaps(scrollBox):
               itemsVisible.inc()
             box 0, 0, bw, bih
             layoutAlign laCenter
 
-            let clicked = Button:
-              label: buttonName
-              setup:
-                clearShadows()
-                let ic = this.image.color
-                imageColor ic * 0.9
-                boxOf parent
-                cornerRadius 0
-                stroke theme.innerStroke
-            if clicked:
-              resetState()
-              echo fmt"dropdwon: set {idx=}"
-              dispatchEvent Selected(idx)
-
+            Button:
+              clearShadows()
+              let ic = this.image.color
+              imageColor ic * 0.9
+              boxOf parent
+              cornerRadius 0
+              stroke theme.innerStroke
+              label buttonName
+            finally:
+              forEvents(MouseEventType):
+                case event:
+                of evClick:
+                  resetState()
+                  echo fmt"dropdwon: set {idx=}"
+                  dispatchEvent Selected(idx)
+                else:
+                  discard
 
         # group "menuBtnBlankSpacer":
           # box 0, 0, bw, this.cornerRadius[0]

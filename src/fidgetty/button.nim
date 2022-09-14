@@ -1,38 +1,45 @@
 import widgets
 
-proc button*(
-    label : string,
-    doClick : WidgetProc = proc () = discard,
-    isActive : bool = false,
-    disabled : bool = false
-): bool {.basicFidget, discardable.} =
-  # Draw a progress bars
-  init:
-    box 0, 0, 8.Em, 2.Em
-    cornerRadius theme
-    shadows theme
-    stroke theme.outerStroke
-    imageOf theme.gloss
-    fill palette.foreground
+fidgetty Button:
+  properties:
+    label: string
+    isActive: bool
+    disabled: bool
 
-  render:
-    text "text":
-      boxSizeOf parent
-      fill palette.text
-      characters label
-      textAutoResize tsHeight
+  state:
+    count: int
 
-    clipContent true
-    if disabled:
-      imageColor palette.disabled
-      fill palette.disabled
-    else:
-      onHover:
-        highlight palette
-      if isActive:
-        highlight palette
-      onClick:
-        highlight palette
-        if not doClick.isNil:
-          doClick()
-        result = true
+proc new*(_: typedesc[ButtonProps]): ButtonProps =
+  new result
+  # setup code
+  box 0, 0, 8.Em, 2.Em
+  cornerRadius theme
+  shadows theme
+  stroke theme.outerStroke
+  imageOf theme.gloss
+  fill palette.foreground
+
+proc render*(
+    props: ButtonProps,
+    self: ButtonState
+): Events =
+  # button widget!
+  text "button text":
+    boxSizeOf parent
+    fill palette.text
+    characters props.label
+    textAutoResize tsHeight
+
+  clipContent true
+
+  if props.disabled:
+    imageColor palette.disabled
+    fill palette.disabled
+  else:
+    onHover:
+      highlight palette
+    if props.isActive:
+      highlight palette
+    onClick:
+      highlight palette
+      dispatchEvent evClick
