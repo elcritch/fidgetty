@@ -30,7 +30,6 @@ fidgetty Dropdown:
 
 proc new*(_: typedesc[DropdownProps]): DropdownProps =
   new result
-  echo "dropdown "
   size 8'em, 1.5'em
   fill clearColor
   imageColor clearColor

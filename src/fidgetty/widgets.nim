@@ -249,7 +249,8 @@ proc makeStatefulWidget*(blk: NimNode, hasState, defaultState, wrapper: bool): N
     else:
       if defaultState:
         quote do:
-          useStateOverride(`typeNameSym`, self)
+          discard
+          # useStateOverride(`typeNameSym`, self)
       else:
         quote do:
           if self == nil:
