@@ -67,6 +67,8 @@ proc render*(
 
   self.value = self.value + props.delta
 
-  progressbar(self.value, fmt"{self.value:4.2}") do:
+  ProgressBar:
+    value self.value
+    label fmt"{self.value:4.2}"
     boxOf parent
 
