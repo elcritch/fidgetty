@@ -336,7 +336,7 @@ template useState*[T](tp: typedesc[T], name: untyped) =
   if current.hookStates == nil:
     current.hookStates = newTable[TypeId, Variant]()
   if not current.hookStates.hasKey(tp.getTypeId()):
-    current.hookStates[tp.getTypeId()] = newVariant(new(tp))
+    current.hookStates[tp.getTypeId()] = newVariant(tp.new())
   var `name` {.inject.} = current.hookStates[tp.getTypeId()].get(tp)
 
 # template useStateOverride*[T](tp: typedesc[T], name: untyped) =

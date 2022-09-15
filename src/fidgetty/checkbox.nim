@@ -12,6 +12,7 @@ fidgetty Checkbox:
 
 proc new*(_: typedesc[CheckboxProps]): CheckboxProps =
   new result
+  echo "new checkbox"
   box 0, 0, 8.Em, 2.Em
 
 proc render*(

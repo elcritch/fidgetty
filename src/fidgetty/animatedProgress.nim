@@ -6,25 +6,48 @@ import progressbar
 
 loadFont("IBM Plex Sans", "IBMPlexSans-Regular.ttf")
 
-proc animatedProgress*(
-    delta: float32 = 0.1,
-  ): AnimatedProgressState {.statefulFidget.} =
+variants AnimatedEvents:
+  IncrementBar(increment: float)
+  JumpToValue(target: float)
+  CancelJump
 
-  init:
-    box 0, 0, 100.WPerc, 2.Em
-
+fidgetty AnimatedProgress:
   properties:
+    delta: float32
+    events: Events
+    target: float
+  state:
     value: float
     cancelTicks: bool
     ticks: Future[void] = emptyFuture() ##\
       ## Create an completed "empty" future
-  
-  events(AnimatedEvents):
-    IncrementBar(increment: float)
-    JumpToValue(target: float)
-    CancelJump
 
-  onEvents(AnimatedEvents):
+proc new*(_: typedesc[AnimatedProgressProps]): AnimatedProgressProps =
+  new result
+
+proc ticker(props: AnimatedProgressProps, self: AnimatedProgressState) {.async.} =
+  ## This simple procedure will "tick" ten times delayed 1,000ms each.
+  ## Every tick will increment the progress bar 10% until its done. 
+  let duration = 3_000
+
+  # await runEveryMillis(frameDelayMs, repeat=n) do (frame: FrameIdx) -> bool:
+  await runForMillis(duration) do (frame: FrameIdx) -> bool:
+    # echo "tick ", "frame ", frame, " ", inMilliseconds(getMonoTime() - start), "ms"
+    refresh()
+    if self.cancelTicks:
+      self.cancelTicks = false
+      return true
+
+    self.value += props.target * (1+frame.skipped).toFloat
+    self.value = clamp(self.value mod 1.0, 0, 1.0)
+
+proc render*(
+    props: AnimatedProgressProps,
+    self: AnimatedProgressState
+): Events =
+  let events = props.events
+
+  processEvents(AnimatedEvents):
     IncrementBar(increment):
       # echo "pbar event: ", evt.repr()
       self.value = self.value + increment
@@ -36,31 +59,14 @@ proc animatedProgress*(
                           not self.ticks.finished
     JumpToValue(target):
       echo "jump where? ", $target
+      props.target = target
 
-      proc ticker(self: AnimatedProgressState) {.async.} =
-        ## This simple procedure will "tick" ten times delayed 1,000ms each.
-        ## Every tick will increment the progress bar 10% until its done. 
-        let duration = 3_000
-
-        # await runEveryMillis(frameDelayMs, repeat=n) do (frame: FrameIdx) -> bool:
-        await runForMillis(duration) do (frame: FrameIdx) -> bool:
-          # echo "tick ", "frame ", frame, " ", inMilliseconds(getMonoTime() - start), "ms"
-          refresh()
-          if self.cancelTicks:
-            self.cancelTicks = false
-            return true
-
-          self.value += target * (1+frame.skipped).toFloat
-          self.value = clamp(self.value mod 1.0, 0, 1.0)
-      
       if self.ticks.isNil or self.ticks.finished:
         echo "ticker..."
-        self.ticks = ticker(self)
+        self.ticks = ticker(props, self)
 
-  
-  render:
-    self.value = self.value + delta
+  self.value = self.value + props.delta
 
-    progressbar(self.value, fmt"{self.value:4.2}") do:
-      boxOf parent
+  progressbar(self.value, fmt"{self.value:4.2}") do:
+    boxOf parent
 
