@@ -43,7 +43,7 @@ proc drawMain() =
           Selected(idx):
             dropIndexes[0] = idx
             refresh()
-
+      
       Dropdown:
         size 10'em, 2'em
         defaultLabel "test"

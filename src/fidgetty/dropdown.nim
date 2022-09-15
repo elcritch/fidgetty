@@ -91,19 +91,13 @@ proc render*(
             props.defaultLabel
           else:
             props.items[props.selected]
-    # onClickOutside:
-    #   outClick = true
+  do -> MouseEvent: # handle events from widget
+    evClick:
+      self.dropDownOpen = true
+      self.itemsVisible = -1
+    evClickOut:
+      outClick = true
   finally:
-    forEvents(MouseEventType):
-      case event:
-      of evClick:
-        self.dropDownOpen = true
-        self.itemsVisible = -1
-      of evClickOut:
-        outClick = true
-      else:
-        discard
-    # drop downs
     if self.dropDownOpen:
       highlight palette.highlight
 
@@ -154,15 +148,11 @@ proc render*(
               cornerRadius 0
               stroke theme.innerStroke
               label buttonName
-            finally:
-              forEvents(MouseEventType):
-                case event:
-                of evClick:
-                  resetState()
-                  echo fmt"dropdwon: set {idx=}"
-                  dispatchEvent Selected(idx)
-                else:
-                  discard
+            do -> MouseEvent: # handle events from widget
+              evClick:
+                resetState()
+                echo fmt"dropdwon: set {idx=}"
+                dispatchEvent Selected(idx)
 
         # group "menuBtnBlankSpacer":
           # box 0, 0, bw, this.cornerRadius[0]

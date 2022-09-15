@@ -71,14 +71,32 @@ type
     w is ref
     ($typeof(w)).endswith("State")
 
-macro processEvents*(tp, body: untyped): untyped =
-  let code = body[0]
+proc processEventsImpl(tp, body: NimNode): NimNode =
+  let code = body
+  let hasOther = code.mapIt(it[0].repr).anyIt(it == "_")
+  echo "PROCESSEVENTS:hasOther: ", hasOther
+  echo "PROCESSEVENTS: ", body.treeRepr
+  if not hasOther:
+    code.add nnkCommand.newTree(
+      ident "_",
+      nnkDiscardStmt.newTree(nnkEmpty.newNimNode()),
+    )
+  let match = nnkCommand.newTree(
+    ident "match",
+    ident "evt",
+    code
+  )
   result = quote do:
     var evts: seq[`tp`]
+    {.push warning[UnreachableElse]: off.}
     if events.popEvents(evts):
       for evt {.inject.} in evts:
-        match evt:
-          `code`
+        `match`
+    {.pop.}
+  echo "res: ", result.treeRepr
+
+macro processEvents*(tp, body: untyped): untyped =
+  result = processEventsImpl(tp, body)
 
 template forEvents*(tp, body: untyped): untyped =
   var evts: seq[`tp`]
@@ -88,7 +106,7 @@ template forEvents*(tp, body: untyped): untyped =
 
 template dispatchMouseEvents*(): untyped =
   for evt in current.events.mouse:
-    dispatchEvent evt
+    dispatchEvent MouseEvent(kind: evt)
 
 macro doBlocks*(blks: varargs[untyped]) =
   # echo "DOEVENTS: ", blks.treeRepr
@@ -100,8 +118,7 @@ macro doBlocks*(blks: varargs[untyped]) =
       let arg = blk.params[0]
       let body = blk.body
       arg.expectKind nnkIdent
-      result.add quote do:
-        processEvents(`arg`, `body`)
+      result = processEventsImpl(arg, body)
     elif blk.kind == nnkFinally:
       result.add blk[0]
 
