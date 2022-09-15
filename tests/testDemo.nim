@@ -72,7 +72,7 @@ proc testDemo() =
       AnimatedProgress:
         # delta delta
         # bindEvents "pbc1", currEvents
-        width 100'pw - 8'em
+        size 100.WPerc - 8'em, 2.Em
 
     #   Horizontal:
     #     Button(label = "Animate"):
