@@ -19,12 +19,12 @@ fidgetty DemoApp:
     mySlider: float
     dropIndexes: int
     textInput: string
+    evts: Events
 
 var self = DemoAppProps.new()
 
 proc testDemo() =
   ## defines a stateful app widget
-  let currEvents = useEvents()
   let dropItems = @["Nim", "UI", "in", "100%", "Nim", "to",
                     "OpenGL", "Immediate", "mode"]
 
@@ -60,7 +60,8 @@ proc testDemo() =
             label &"Evt Incr {self.count2:4d}"
             onClick:
               self.count2.inc()
-              # currEvents["pbc1"] = IncrementBar(increment = 0.02)
+              self.evts.add IncrementBar(increment = 0.02)
+              refresh()
           Theme(warningPalette()):
             Checkbox:
               size 10'em, 2'em
@@ -72,21 +73,34 @@ proc testDemo() =
       AnimatedProgress:
         # delta delta
         # bindEvents "pbc1", currEvents
+        triggers self.evts
         size 100.WPerc - 8'em, 2.Em
 
-    #   Horizontal:
-    #     Button(label = "Animate"):
-    #       onClick:
-    #         self.count2.inc()
-    #         currEvents["pbc1"] = JumpToValue(target = 0.01)
-    #     Button(label = "Cancel"):
-    #       onClick:
-    #         currEvents["pbc1"] = CancelJump()
-    #     Dropdown:
-    #       items: dropItems
-    #       selected: self.dropIndexes
-    #       defaultLabel: "Menu"
-    #       setup: size 12'em, 2'em
+      Horizontal:
+        itemSpacing 0.5'em
+
+        Button:
+          size 6'em, 2'em
+          label "Animate"
+          onClick:
+            self.count2.inc()
+            self.evts.add JumpToValue(target = 0.01)
+            refresh()
+        Button:
+          size 6'em, 2'em
+          label "Cancel"
+          onClick:
+            self.evts.add CancelJump()
+            refresh()
+        Dropdown:
+          size 12'em, 2'em
+          items dropItems
+          selected self.dropIndexes
+          defaultLabel "Menu"
+        do -> BasicEvents: # handle events from widget
+          ItemSelected(idx):
+            self.dropIndexes = idx
+            refresh()
 
     #   text "data":
     #     size 60'vw, 2'em

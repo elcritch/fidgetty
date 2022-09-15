@@ -95,19 +95,6 @@ proc processEventsImpl(tp, body: NimNode): NimNode =
     {.pop.}
   echo "res: ", result.treeRepr
 
-macro processEvents*(tp, body: untyped): untyped =
-  result = processEventsImpl(tp, body)
-
-template forEvents*(tp, body: untyped): untyped =
-  var evts: seq[`tp`]
-  if events.popEvents(evts):
-    for event {.inject.} in evts:
-      `body`
-
-template dispatchMouseEvents*(): untyped =
-  for evt in current.events.mouse:
-    dispatchEvent MouseEvent(kind: evt)
-
 macro doBlocks*(blks: varargs[untyped]) =
   # echo "DOEVENTS: ", blks.treeRepr
   result = newStmtList()
@@ -166,6 +153,19 @@ variants BasicEvents:
   ## variant case types for scroll events
   ItemSelected(index: int)
   Activated(value: bool)
+
+macro processEvents*(tp, body: untyped): untyped =
+  result = processEventsImpl(tp, body)
+
+template forEvents*(tp, body: untyped): untyped =
+  var evts: seq[`tp`]
+  if events.popEvents(evts):
+    for event {.inject.} in evts:
+      `body`
+
+template dispatchMouseEvents*(): untyped =
+  for evt in current.events.mouse:
+    dispatchEvent MouseEvent(kind: evt)
 
 ## ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ##             Widgets
