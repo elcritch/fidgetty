@@ -11,10 +11,6 @@ export button
 #     JumpToValue(target: float)
 #     CancelJump
 
-variants BasicEvents:
-  ## variant case types for scroll events
-  Selected(index: int)
-
 fidgetty Dropdown:
   properties:
     items: seq[string]
@@ -152,7 +148,7 @@ proc render*(
               evClick:
                 resetState()
                 echo fmt"dropdwon: set {idx=}"
-                dispatchEvent Selected(idx)
+                dispatchEvent ItemSelected(idx)
 
         # group "menuBtnBlankSpacer":
           # box 0, 0, bw, this.cornerRadius[0]

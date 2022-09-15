@@ -9,7 +9,6 @@ let dropItems = @["Nim", "UI", "in", "100%", "Nim", "to",
 var dropIndexes = [-1, -1, -1]
 
 loadFont("IBM Plex Sans", "IBMPlexSans-Regular.ttf")
-var dstate = DropdownProps()
 
 proc drawMain() =
   frame "main":
@@ -23,13 +22,15 @@ proc drawMain() =
         fill "#000d00"
         characters "Dropdown example: "
       
+      ## we have a few forms of widget event and post widget
+      ## handling 
       Dropdown:
         size 10'em, 2'em
         defaultLabel "test"
         items dropItems
         selected dropIndexes[0]
       do -> BasicEvents: # handle events from widget
-        Selected(idx):
+        ItemSelected(idx):
           dropIndexes[0] = idx
           refresh()
 
@@ -40,7 +41,7 @@ proc drawMain() =
         selected dropIndexes[0]
       finally:
         processEvents(BasicEvents):
-          Selected(idx):
+          ItemSelected(idx):
             dropIndexes[0] = idx
             refresh()
       
@@ -51,7 +52,7 @@ proc drawMain() =
         selected dropIndexes[0]
         defer:
           processEvents(BasicEvents):
-            Selected(idx):
+            ItemSelected(idx):
               dropIndexes[0] = idx
               refresh()
 

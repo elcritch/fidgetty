@@ -1,12 +1,16 @@
 import fidget_dev
 import widgets
 
+fidgetty Checkbox:
+  properties:
+    checked: bool
+    label: string
+    isActive: bool
+    disabled: bool
+  state:
+    empty: void
+
 proc checkbox*(
-    checked : var bool,
-    label : string,
-    clicker : WidgetProc = proc () = discard,
-    isActive : bool = false,
-    disabled : bool = false
 ): bool {.basicFidget, discardable.} =
   # Draw a progress bars
   init:

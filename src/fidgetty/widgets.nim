@@ -162,6 +162,11 @@ macro fidgetty*(name, blk: untyped) =
           doBlocks(handlers)
   # echo "result:\n", repr result
 
+variants BasicEvents:
+  ## variant case types for scroll events
+  ItemSelected(index: int)
+  Activated(value: bool)
+
 ## ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ##             Widgets
 ## ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
