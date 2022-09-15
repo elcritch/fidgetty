@@ -3,7 +3,7 @@ import std/strformat, std/hashes, std/sequtils
 import fidgetty
 import fidgetty/themes
 import fidgetty/[button, dropdown, checkbox]
-# import fidgetty/[slider, progressbar, animatedProgress]
+import fidgetty/[progressbar, animatedProgress]
 # import fidgetty/[listbox]
 # import fidgetty/[textinput]
 
@@ -17,7 +17,7 @@ fidgetty DemoApp:
     scrollValue: float
     myCheck: bool
     mySlider: float
-    dropIndexes: int = -1
+    dropIndexes: int
     textInput: string
 
 var self = DemoAppProps.new()
@@ -31,8 +31,6 @@ proc testDemo() =
   setTitle(fmt"Fidget Animated Progress Example")
   textStyle theme
   fill palette.background.lighten(0.11)
-
-  # font "IBM Plex Sans", 16, 200, 0, hCenter, vCenter
 
   group "center":
     box 50, 0, 100'vw - 100, 100'vh
@@ -71,12 +69,10 @@ proc testDemo() =
               onClick:
                 self.myCheck = not self.myCheck
 
-    #   let ap1 =
-    #     AnimatedProgress:
-    #       delta: delta
-    #       setup:
-    #         bindEvents "pbc1", currEvents
-    #         width 100'pw - 8'em
+      AnimatedProgress:
+        # delta delta
+        # bindEvents "pbc1", currEvents
+        width 100'pw - 8'em
 
     #   Horizontal:
     #     Button(label = "Animate"):

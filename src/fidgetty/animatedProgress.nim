@@ -14,8 +14,7 @@ variants AnimatedEvents:
 fidgetty AnimatedProgress:
   properties:
     delta: float32
-    events: Events
-    target: float
+    triggers: Events
   state:
     value: float
     cancelTicks: bool
@@ -30,7 +29,6 @@ proc ticker(props: AnimatedProgressProps, self: AnimatedProgressState) {.async.}
   ## Every tick will increment the progress bar 10% until its done. 
   let duration = 3_000
 
-  # await runEveryMillis(frameDelayMs, repeat=n) do (frame: FrameIdx) -> bool:
   await runForMillis(duration) do (frame: FrameIdx) -> bool:
     # echo "tick ", "frame ", frame, " ", inMilliseconds(getMonoTime() - start), "ms"
     refresh()
@@ -38,15 +36,16 @@ proc ticker(props: AnimatedProgressProps, self: AnimatedProgressState) {.async.}
       self.cancelTicks = false
       return true
 
-    self.value += props.target * (1+frame.skipped).toFloat
+    self.value += props.delta * (1+frame.skipped).toFloat
     self.value = clamp(self.value mod 1.0, 0, 1.0)
 
 proc render*(
     props: AnimatedProgressProps,
     self: AnimatedProgressState
 ): Events =
-  let events = props.events
+  let events = props.triggers
 
+  var nextTarget = 0.0
   processEvents(AnimatedEvents):
     IncrementBar(increment):
       # echo "pbar event: ", evt.repr()
@@ -59,13 +58,13 @@ proc render*(
                           not self.ticks.finished
     JumpToValue(target):
       echo "jump where? ", $target
-      props.target = target
+      nextTarget = target
 
       if self.ticks.isNil or self.ticks.finished:
         echo "ticker..."
         self.ticks = ticker(props, self)
 
-  self.value = self.value + props.delta
+  self.value = self.value + nextTarget
 
   ProgressBar:
     value self.value
