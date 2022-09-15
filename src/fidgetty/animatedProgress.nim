@@ -30,7 +30,9 @@ proc ticker(props: AnimatedProgressProps, self: AnimatedProgressState) {.async.}
   let duration = 3_000
 
   await runForMillis(duration) do (frame: FrameIdx) -> bool:
-    # echo "tick ", "frame ", frame, " ", inMilliseconds(getMonoTime() - start), "ms"
+    # echo "tick ", "frame ", repr frame
+    # echo "tick ", "frame ", frame, " ", $inMilliseconds(getMonoTime() - starts), "ms"
+    # starts = getMonoTime()
     refresh()
     if self.cancelTicks:
       self.cancelTicks = false
@@ -38,6 +40,7 @@ proc ticker(props: AnimatedProgressProps, self: AnimatedProgressState) {.async.}
 
     self.value += props.delta * (1+frame.skipped).toFloat
     self.value = clamp(self.value mod 1.0, 0, 1.0)
+    # echo "value: ", self.value, " @ ", cast[pointer](self).repr
 
 proc render*(
     props: AnimatedProgressProps,
@@ -64,6 +67,7 @@ proc render*(
         echo "ticker..."
         self.ticks = ticker(props, self)
 
+  # echo "render animated: ", self.value, " ", cast[pointer](self).repr
   self.value = self.value + nextTarget
 
   ProgressBar:

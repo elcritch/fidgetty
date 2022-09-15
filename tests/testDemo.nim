@@ -71,7 +71,7 @@ proc testDemo() =
                 self.myCheck = not self.myCheck
 
       AnimatedProgress:
-        # delta delta
+        delta 0.02
         # bindEvents "pbc1", currEvents
         triggers self.evts
         size 100.WPerc - 8'em, 2.Em
