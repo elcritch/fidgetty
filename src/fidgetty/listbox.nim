@@ -90,4 +90,4 @@ proc render*(
           label buttonName
           isActive idx == props.selected
           onClick:
-            dispatchEvent ItemSelected(idx)
+            dispatchEvent Index(idx)

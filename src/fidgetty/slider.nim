@@ -44,7 +44,7 @@ proc render*(
     self.value = float32(calc.clamp(0'ui, 1.0'ui))
     self.pipDrag = buttonDown[MOUSE_LEFT]
     if props.value != self.value:
-      dispatchEvent FloatChanged(self.value)
+      dispatchEvent Float(self.value)
 
   let pipPos = UICoord(bww.float32*clamp(props.value, 0, 1.0))
 

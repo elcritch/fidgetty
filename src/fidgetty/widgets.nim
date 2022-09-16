@@ -149,11 +149,11 @@ macro fidgetty*(name, blk: untyped) =
           doBlocks(handlers)
   # echo "result:\n", repr result
 
-variants BasicEvents:
+variants OnChanges:
   ## variant case types for scroll events
-  ItemSelected(index: int)
-  BoolChanged(bval: bool)
-  FloatChanged(fval: float)
+  Index(index: int)
+  Bool(bval: bool)
+  Float(fval: float)
 
 macro processEvents*(tp, body: untyped): untyped =
   result = processEventsImpl(tp, body)

@@ -146,7 +146,7 @@ proc render*(
             do -> MouseEvent: # handle events from widget
               evClick:
                 resetState()
-                dispatchEvent ItemSelected(idx)
+                dispatchEvent Index(idx)
 
         # group "menuBtnBlankSpacer":
           # box 0, 0, bw, this.cornerRadius[0]

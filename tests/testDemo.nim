@@ -102,8 +102,8 @@ proc testDemo() =
           items dropItems
           selected self.dropIndexes
           defaultLabel "Menu"
-        do -> BasicEvents:
-          ItemSelected(idx):
+        do -> OnChanges:
+          Index(idx):
             self.dropIndexes = idx
             refresh()
 
@@ -115,8 +115,8 @@ proc testDemo() =
       Slider:
         size 60'vw, 2'em
         value self.mySlider
-      do -> BasicEvents:
-        FloatChanged(val):
+      do -> OnChanges:
+        Float(val):
           self.mySlider = val
       
       Listbox:
@@ -125,15 +125,15 @@ proc testDemo() =
         itemsVisible 4
         triggers self.evts
         size 60'vw, 2'em
-      do -> BasicEvents:
-        ItemSelected(val):
+      do -> OnChanges:
+        Index(val):
           self.dropIndexes = val
       
       Slider:
         value self.scrollValue
         size 60'vw, 2'em
-      do -> BasicEvents:
-        FloatChanged(val):
+      do -> OnChanges:
+        Float(val):
           self.evts.add ScrollTo(val)
           self.scrollValue = val
           refresh()
