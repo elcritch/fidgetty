@@ -73,7 +73,6 @@ proc testDemo() =
 
       AnimatedProgress:
         delta 0.02
-        # bindEvents "pbc1", currEvents
         triggers self.evts
         size 100.WPerc - 8'em, 2.Em
 
@@ -98,7 +97,7 @@ proc testDemo() =
           items dropItems
           selected self.dropIndexes
           defaultLabel "Menu"
-        do -> BasicEvents: # handle events from widget
+        do -> BasicEvents:
           ItemSelected(idx):
             self.dropIndexes = idx
             refresh()
@@ -106,12 +105,11 @@ proc testDemo() =
       text "data":
         size 60'vw, 2'em
         fill "#000000"
-        # characters: fmt"AnimatedProgress value: {ap1.value:>6.2f}"
         characters: fmt"selected: {self.dropIndexes}"
       Slider:
         size 60'vw, 2'em
         value self.mySlider
-      do -> BasicEvents: # handle events from widget
+      do -> BasicEvents:
         FloatChanged(val):
           self.mySlider = val
       Listbox:
@@ -119,17 +117,15 @@ proc testDemo() =
         selected self.dropIndexes
         itemsVisible 4
         triggers self.evts
-
         size 60'vw, 2'em
-        # bindEvents "lstbx", currEvents
-      do -> BasicEvents: # handle events from widget
+      do -> BasicEvents:
         ItemSelected(val):
           self.dropIndexes = val
       
       Slider:
         value self.scrollValue
         size 60'vw, 2'em
-      do -> BasicEvents: # handle events from widget
+      do -> BasicEvents:
         FloatChanged(val):
           self.evts.add ScrollTo(val)
           self.scrollValue = val
