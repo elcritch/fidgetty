@@ -154,6 +154,7 @@ variants OnChanges:
   Index(index: int)
   Bool(bval: bool)
   Float(fval: float)
+  Strings(sval: string)
 
 macro processEvents*(tp, body: untyped): untyped =
   result = processEventsImpl(tp, body)

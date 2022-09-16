@@ -118,6 +118,7 @@ proc testDemo() =
       do -> OnChanges:
         Float(val):
           self.mySlider = val
+          refresh()
       
       Listbox:
         items dropItems
@@ -128,6 +129,7 @@ proc testDemo() =
       do -> OnChanges:
         Index(val):
           self.dropIndexes = val
+          refresh()
       
       Slider:
         value self.scrollValue
