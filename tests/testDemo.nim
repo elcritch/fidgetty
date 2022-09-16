@@ -4,6 +4,7 @@ import fidgetty
 import fidgetty/themes
 import fidgetty/[button, dropdown, checkbox]
 import fidgetty/[progressbar, animatedProgress]
+import fidgetty/[slider]
 # import fidgetty/[listbox]
 # import fidgetty/[textinput]
 
@@ -14,9 +15,9 @@ fidgetty DemoApp:
     count1: int
     count2: int
     value: float
+    mySlider: float
     scrollValue: float
     myCheck: bool
-    mySlider: float
     dropIndexes: int
     textInput: string
     evts: Events
@@ -102,14 +103,17 @@ proc testDemo() =
             self.dropIndexes = idx
             refresh()
 
-    #   text "data":
-    #     size 60'vw, 2'em
-    #     fill "#000000"
-    #     # characters: fmt"AnimatedProgress value: {ap1.value:>6.2f}"
-    #     characters: fmt"selected: {self.dropIndexes}"
-    #   Slider:
-    #     value: ap1.value
-    #     setup: size 60'vw, 2'em
+      text "data":
+        size 60'vw, 2'em
+        fill "#000000"
+        # characters: fmt"AnimatedProgress value: {ap1.value:>6.2f}"
+        characters: fmt"selected: {self.dropIndexes}"
+      Slider:
+        size 60'vw, 2'em
+        value self.mySlider
+      do -> BasicEvents: # handle events from widget
+        FloatChanged(val):
+          self.mySlider = val
     #   Listbox:
     #     items: dropItems
     #     selected: self.dropIndexes

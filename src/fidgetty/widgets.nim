@@ -152,7 +152,8 @@ macro fidgetty*(name, blk: untyped) =
 variants BasicEvents:
   ## variant case types for scroll events
   ItemSelected(index: int)
-  Activated(value: bool)
+  BoolChanged(bval: bool)
+  FloatChanged(fval: float)
 
 macro processEvents*(tp, body: untyped): untyped =
   result = processEventsImpl(tp, body)

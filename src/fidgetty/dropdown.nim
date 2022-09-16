@@ -146,7 +146,6 @@ proc render*(
             do -> MouseEvent: # handle events from widget
               evClick:
                 resetState()
-                echo fmt"dropdwon: set {idx=}"
                 dispatchEvent ItemSelected(idx)
 
         # group "menuBtnBlankSpacer":
