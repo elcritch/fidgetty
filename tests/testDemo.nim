@@ -5,7 +5,7 @@ import fidgetty/themes
 import fidgetty/[button, dropdown, checkbox]
 import fidgetty/[progressbar, animatedProgress]
 import fidgetty/[slider]
-# import fidgetty/[listbox]
+import fidgetty/[listbox]
 # import fidgetty/[textinput]
 
 loadFont("IBM Plex Sans", "IBMPlexSans-Regular.ttf")
@@ -114,25 +114,33 @@ proc testDemo() =
       do -> BasicEvents: # handle events from widget
         FloatChanged(val):
           self.mySlider = val
-    #   Listbox:
-    #     items: dropItems
-    #     selected: self.dropIndexes
-    #     itemsVisible: 4
-    #     setup:
-    #       size 60'vw, 2'em
-    #       bindEvents "lstbx", currEvents
-    #   Slider:
-    #     value: self.scrollValue
-    #     setup: size 60'vw, 2'em
-    #     changed:
-    #       currEvents["lstbx"] = ScrollTo(self.scrollValue)
-    #   TextInputBind:
-    #     value: self.textInput
-    #     setup: size 60'vw, 2'em
-    #   Button(label = &"{self.textInput}"):
-    #     disabled: true
-    #     setup: size 60'vw, 2'em
-    # palette.accent = parseHtml("#87E3FF", 0.67).spin(ap1.value * 36)
+      Listbox:
+        items dropItems
+        selected self.dropIndexes
+        itemsVisible 4
+        triggers self.evts
+
+        size 60'vw, 2'em
+        # bindEvents "lstbx", currEvents
+      do -> BasicEvents: # handle events from widget
+        ItemSelected(val):
+          self.dropIndexes = val
+      
+      Slider:
+        value self.scrollValue
+        size 60'vw, 2'em
+      do -> BasicEvents: # handle events from widget
+        FloatChanged(val):
+          self.evts.add ScrollTo(val)
+          self.scrollValue = val
+          refresh()
+      # TextInputBind:
+      #   value: self.textInput
+      #   setup: size 60'vw, 2'em
+      Button:
+        label &"{self.textInput}"
+        disabled true
+        size 60'vw, 2'em
 
 startFidget(
   testDemo,
