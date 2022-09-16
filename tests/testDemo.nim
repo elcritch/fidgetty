@@ -102,7 +102,7 @@ proc testDemo() =
           items dropItems
           selected self.dropIndexes
           defaultLabel "Menu"
-        do -> OnChanges:
+        do -> ValueChange:
           Index(idx):
             self.dropIndexes = idx
             refresh()
@@ -115,7 +115,7 @@ proc testDemo() =
       Slider:
         size 60'vw, 2'em
         value self.mySlider
-      do -> OnChanges:
+      do -> ValueChange:
         Float(val):
           self.mySlider = val
           refresh()
@@ -126,7 +126,7 @@ proc testDemo() =
         itemsVisible 4
         triggers self.evts
         size 60'vw, 2'em
-      do -> OnChanges:
+      do -> ValueChange:
         Index(val):
           self.dropIndexes = val
           refresh()
@@ -134,7 +134,7 @@ proc testDemo() =
       Slider:
         value self.scrollValue
         size 60'vw, 2'em
-      do -> OnChanges:
+      do -> ValueChange:
         Float(val):
           self.evts.add ScrollTo(val)
           self.scrollValue = val

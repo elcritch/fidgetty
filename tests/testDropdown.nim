@@ -29,7 +29,7 @@ proc drawMain() =
         defaultLabel "test"
         items dropItems
         selected dropIndexes[0]
-      do -> OnChanges: # handle events from widget
+      do -> ValueChange: # handle events from widget
         Index(idx):
           dropIndexes[0] = idx
           refresh()
@@ -40,7 +40,7 @@ proc drawMain() =
         items dropItems
         selected dropIndexes[0]
       finally:
-        processEvents(OnChanges):
+        processEvents(ValueChange):
           Index(idx):
             dropIndexes[0] = idx
             refresh()
@@ -51,7 +51,7 @@ proc drawMain() =
         items dropItems
         selected dropIndexes[0]
         defer:
-          processEvents(OnChanges):
+          processEvents(ValueChange):
             Index(idx):
               dropIndexes[0] = idx
               refresh()

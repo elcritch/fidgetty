@@ -149,7 +149,7 @@ macro fidgetty*(name, blk: untyped) =
           doBlocks(handlers)
   # echo "result:\n", repr result
 
-variants OnChanges:
+variants ValueChange:
   ## variant case types for scroll events
   Index(index: int)
   Bool(bval: bool)
