@@ -41,12 +41,14 @@ proc testDemo() =
 
     self.value = (self.count1.toFloat * 0.10) mod 1.0
     var delta = 0.0
+
     Vertical:
       blank: size(0, 0)
       itemSpacing 1.5'em
 
       Vertical:
         itemSpacing 1.5'em
+
         # Trigger an animation on animatedProgress below
         Button:
           size 10'em, 2'em
@@ -54,11 +56,12 @@ proc testDemo() =
           onClick:
             self.count1.inc()
             delta = 0.02
+        
         Horizontal:
           itemSpacing 4'em
           Button:
             size 10'em, 2'em
-            label &"Evt Incr {self.count2:4d}"
+            label fmt"Evt Incr {self.count2:4d}"
             onClick:
               self.count2.inc()
               self.evts.add IncrementBar(increment = 0.02)
@@ -86,12 +89,14 @@ proc testDemo() =
             self.count2.inc()
             self.evts.add JumpToValue(target = 0.01)
             refresh()
+        
         Button:
           size 6'em, 2'em
           label "Cancel"
           onClick:
             self.evts.add CancelJump()
             refresh()
+        
         Dropdown:
           size 12'em, 2'em
           items dropItems
@@ -106,12 +111,14 @@ proc testDemo() =
         size 60'vw, 2'em
         fill "#000000"
         characters: fmt"selected: {self.dropIndexes}"
+      
       Slider:
         size 60'vw, 2'em
         value self.mySlider
       do -> BasicEvents:
         FloatChanged(val):
           self.mySlider = val
+      
       Listbox:
         items dropItems
         selected self.dropIndexes
@@ -130,9 +137,11 @@ proc testDemo() =
           self.evts.add ScrollTo(val)
           self.scrollValue = val
           refresh()
+      
       # TextInputBind:
       #   value: self.textInput
       #   setup: size 60'vw, 2'em
+
       Button:
         label &"{self.textInput}"
         disabled true
