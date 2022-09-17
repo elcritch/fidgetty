@@ -10,8 +10,8 @@ import fidgetty/[textinput]
 
 loadFont("IBM Plex Sans", "IBMPlexSans-Regular.ttf")
 
-fidgetty DemoApp:
-  properties:
+type
+  DemoApp = object
     count1: int
     count2: int
     value: float
@@ -22,7 +22,7 @@ fidgetty DemoApp:
     textInput: string
     evts: Events
 
-var self = DemoAppProps.new()
+var self = DemoApp.new()
 
 proc testDemo() =
   ## defines a stateful app widget
