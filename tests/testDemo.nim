@@ -140,9 +140,9 @@ proc testDemo() =
           self.scrollValue = val
           refresh()
       
-      # TextInputBind:
-      #   value: self.textInput
-      #   setup: size 60'vw, 2'em
+      TextInputBind:
+        value self.textInput
+        size 60'vw, 2'em
 
       Button:
         label &"{self.textInput}"
