@@ -19,6 +19,7 @@ type
     scrollValue: float
     myCheck: bool
     dropIndexes: int
+    dropName: string
     textInput: string
     evts: Events
 
@@ -110,7 +111,7 @@ proc testDemo() =
       text "data":
         size 60'vw, 2'em
         fill "#000000"
-        characters: fmt"selected: {self.dropIndexes}"
+        characters self.dropName
       
       Slider:
         size 60'vw, 2'em
@@ -126,10 +127,16 @@ proc testDemo() =
         itemsVisible 4
         triggers self.evts
         size 60'vw, 2'em
-      do -> ValueChange:
-        Index(val):
-          self.dropIndexes = val
-          refresh()
+      finally:
+        # instead of `do -> ValueChange` we can
+        # use a `finally` block and process events.
+        processEvents(ValueChange):
+          Index(val):
+            self.dropIndexes = val
+            refresh()
+        # this lets us do other things after the widget 
+        # has run. 
+        self.dropName = fmt"selected: {self.dropIndexes}"
       
       Slider:
         value self.scrollValue

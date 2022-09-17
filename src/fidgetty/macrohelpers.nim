@@ -134,5 +134,7 @@ proc makeSetters*(name: string, body: NimNode): NimNode =
     let field = ident pd
     # echo "PD: ", pd
     # echo "PV: ", treeRepr pv
+    if pv.repr == "void":
+      continue
     result.add quote do:
       proc `field`(val: `pv`) {.used.} = item.`field` = val

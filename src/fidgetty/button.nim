@@ -41,5 +41,4 @@ proc render*(
       highlight palette
     onClick:
       highlight palette
-      dispatchEvent MouseEvent(kind: evClick)
     dispatchMouseEvents()
