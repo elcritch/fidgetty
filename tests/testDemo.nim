@@ -6,7 +6,7 @@ import fidgetty/[button, dropdown, checkbox]
 import fidgetty/[progressbar, animatedProgress]
 import fidgetty/[slider]
 import fidgetty/[listbox]
-# import fidgetty/[textinput]
+import fidgetty/[textinput]
 
 loadFont("IBM Plex Sans", "IBMPlexSans-Regular.ttf")
 
@@ -133,16 +133,20 @@ proc testDemo() =
       
       Slider:
         value self.scrollValue
-        size 60'vw, 2'em
+        size 55.0'vw, 1.5'em
       do -> ValueChange:
         Float(val):
           self.evts.add ScrollTo(val)
           self.scrollValue = val
           refresh()
       
-      TextInputBind:
+      TextInput:
         value self.textInput
         size 60'vw, 2'em
+      do -> ValueChange:
+        Strings(val):
+          self.textInput = val
+          refresh()
 
       Button:
         label &"{self.textInput}"
