@@ -11,24 +11,18 @@ import fidgetty/[button, progressbar]
 
 loadFont("IBM Plex Sans", "IBMPlexSans-Regular.ttf")
 
-template Grid(code: untyped) =
-  frame "autoFrame":
-    `code`
-
-proc exampleApp*(
-    myName : string,
-): ExampleAppState {.appFidget.} =
-  ## defines a stateful app widget
-  ## 
-  
-  properties:
+type
+  GridApp = ref object
     ## this creates a new ref object type name using the
     ## capitalized proc name which is `ExampleApp` in this example. 
     ## This will be customizable in the future. 
     count: int
     value: float
 
-  render:
+proc drawMain() =
+  frame "main":
+    useState(GridApp, self)
+  
     setWindowBounds(vec2(400, 200), vec2(800, 600))
     setTitle(fmt"Grid Example")
     font "IBM Plex Sans", 16, 200, 0, hCenter, vCenter
@@ -39,6 +33,7 @@ proc exampleApp*(
     gridTemplateRows  ["edge-t"] auto \
                       ["header"] 70'ui \
                       ["top"]    70'ui \
+                      ["middle-top"] 30'ui \ 
                       ["middle"] 30'ui \ 
                       ["bottom"] 1'fr \ 
                       ["footer"] auto \
@@ -52,49 +47,39 @@ proc exampleApp*(
                         ["button-rb", "outer-r"] 40'ui \
                         ["edge-r"]
 
-    boxOf parent
-
     rectangle "bar":
-      # size 80'pw, 2.Em
-      offset 10'pw, 10'ph
-      gridRow "top" // "middle"
+      gridRow "top" // "middle-top"
       gridColumn "outer-l" // "outer-r"
 
       self.value = (self.count.toFloat * 0.10) mod 1.0001
-      Progressbar:
+
+      ProgressBar:
         value: self.value
 
-    Button:
-      label: fmt"Clicked1: {self.count:4d}"
-      onClick: self.count.inc()
-      setup:
-        gridRow "middle" // "bottom"
-        gridColumn "button-la" // "button-lb"
+    rectangle "btn":
+      # currently rendering sub-text with css grids
+      # is a bit broken due to the order constraints
+      # are computed. There's a fix for this 
+      # that should simplify this. 
+      gridRow "middle" // "bottom"
+      gridColumn "button-la" // "button-lb"
 
-    Button:
-      label: fmt"Clicked2: {self.count:4d}"
-      onClick: self.count.inc()
-      setup:
-        gridRow "middle" // "bottom"
-        gridColumn "button-ra" // "button-rb"
+      Button:
+        # boxSizeOf parent
+        label fmt"Clicked1: {self.count:4d}"
+        onClick:
+          self.count.inc()
+
+    rectangle "btn":
+      gridRow "middle" // "bottom"
+      gridColumn "button-ra" // "button-rb"
+      Button:
+        boxSizeOf parent
+        label fmt"Clicked2: {self.count:4d}"
+        onClick: self.count.inc()
     
-
-    ## uncomment to show track lines for grid
-    # gridTemplateDebugLines true
-
-var state = ExampleAppState(count: 2, value: 0.33)
-
-proc drawMain() =
-  frame "main":
-    # we call exampleApp with a pre-made state
-    # the `statefulWidget` always takes a `self` paramter
-    # that that widgets state reference 
-    # alternatively:
-    #   exampleApp("basic widgets", state)
-    ExampleApp:
-      myName: "basic widgets"
-      self: state
-
+    gridTemplateDebugLines true
+      
 
 startFidget(
   drawMain,

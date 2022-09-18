@@ -11,7 +11,7 @@ fidgetty Button:
 proc new*(_: typedesc[ButtonProps]): ButtonProps =
   new result
   # setup code
-  box 0, 0, 8.Em, 2.Em
+  # box 0, 0, 8.Em, 2.Em
   cornerRadius theme
   shadows theme
   stroke theme.outerStroke
@@ -27,7 +27,7 @@ proc render*(
     boxSizeOf parent
     fill palette.text
     characters props.label
-    textAutoResize tsHeight
+    # textAutoResize tsHeight
 
   clipContent true
 
