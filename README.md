@@ -10,7 +10,7 @@ Example found in `tests/testDemo.nim`:
 
 ```sh
 nimble install -d
-nim c -r tests/testDemo.nim
+nim c -r examples/demo.nim
 ```
 
 Example widget and application: 
