@@ -1,6 +1,6 @@
 # Package
 
-version       = "0.1.0"
+version       = "0.2.0"
 author        = "Jaremy Creechley"
 description   = "Widget library built on Fidget written in pure Nim and OpenGL rendered"
 license       = "MIT"

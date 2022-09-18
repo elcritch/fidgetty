@@ -1,6 +1,6 @@
 import macros, tables, strutils, strformat, math, random, options
+import std/[macrocache, tables]
 import variant, patty
-import std/macrocache
 
 import macrohelpers
 import cdecl/applies
@@ -10,7 +10,7 @@ export math, random
 export variant, patty
 
 import fidget_dev, theming
-export fidget_dev, theming
+export fidget_dev, theming, tables
 
 type
   WidgetProc* = proc()
@@ -132,7 +132,7 @@ template dispatchMouseEvents*(): untyped =
     dispatchEvent MouseEvent(kind: evt)
 
 template useState*[T](tp: typedesc[T], name: untyped) =
-  if current.hookStates == nil:
+  if current.hookStates.isNil:
     current.hookStates = newTable[TypeId, Variant]()
   if not current.hookStates.hasKey(tp.getTypeId()):
     current.hookStates[tp.getTypeId()] = newVariant(tp.new())
