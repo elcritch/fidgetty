@@ -1,3 +1,5 @@
 --path:"../src"
---define:debug
+--gc:arc
+--define:release
+# --define:debug
 # --define:debugExample
