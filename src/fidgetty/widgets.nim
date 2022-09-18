@@ -58,7 +58,7 @@ proc processEventsImpl(tp, body: NimNode): NimNode =
   echo "res: ", result.treeRepr
 
 macro doBlocks*(blks: varargs[untyped]) =
-  # echo "DOEVENTS: ", blks.treeRepr
+  echo "DOEVENTS: ", blks.treeRepr
   result = newStmtList()
   if blks.len() == 0:
     return 
@@ -66,7 +66,7 @@ macro doBlocks*(blks: varargs[untyped]) =
     if blk.kind == nnkDo:
       let arg = blk.params[0]
       let body = blk.body
-      arg.expectKind nnkIdent
+      # arg.expectKind nnkIdent
       result = processEventsImpl(arg, body)
     elif blk.kind == nnkFinally:
       result.add blk[0]

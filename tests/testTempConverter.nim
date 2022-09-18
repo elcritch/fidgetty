@@ -45,13 +45,12 @@ proc labeledTextInput[T](
     size 5'em, 2'em
     pattern re"[0-9\.]"
     ignorePostfix true
-  finally:
-    processEvents(ValueChange):
-      Strings(val):
-        var res: float
-        if parseFloat(val.strip(), res, 0) > 0:
-          self.temp = T(res).toC()
-          refresh()
+  do -> ValueChange: # handle events from widget
+    Strings(val):
+      var res: float
+      if parseFloat(val.strip(), res, 0) > 0:
+        self.temp = T(res).toC()
+        refresh()
 
 proc exampleApp*() =
   ## defines a stateful app widget
