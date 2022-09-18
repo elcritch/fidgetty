@@ -10,7 +10,7 @@ srcDir        = "src"
 # Dependencies
 
 requires "nim >= 1.6.5"
-requires "https://github.com/elcritch/fidget.git#head >= 1.7.9"
+requires "https://github.com/elcritch/fidget.git#head"
 requires "pixie >= 5.0.1"
 requires "memo"
 requires "patty"
