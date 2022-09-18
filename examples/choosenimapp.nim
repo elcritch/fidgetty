@@ -27,6 +27,7 @@ type
     versionSelected: int
     listPid: Future[void] 
     runPid: Future[void]
+    initialized: bool
 
 proc runInstall(self: AppStatus, version: string) {.async.}
 proc doInstallNim(self: AppStatus)
@@ -34,153 +35,145 @@ proc listVersions(self: AppStatus) {.async.}
 
 loadFont("IBM Plex Sans", "IBMPlexSans-Regular.ttf")
 
-proc chooseNimApp*(): ChooseNimApp {.appFidget.} =
+proc new*(_: typedesc[AppStatus]): AppStatus =
+  new result
+  result.versionSelected = -1
+  result.log "getting versions..."
+  result.runPid = emptyFuture() 
+  result.listPid = listVersions(result)
+
+proc chooseNimApp*() =
   ## defines a stateful app widget
-  properties:
-    status: AppStatus
-    initialized: bool
+  useState(AppStatus, self)
 
-  render:
+  setTitle(fmt"Fidget Animated Progress Example")
+  textStyle theme
+  fill palette.background.lighten(0.02)
+  strokeWeight 1
 
-    # let currEvents = useEvents()
-    if not self.initialized:
-      self.initialized = true
-      self.status = AppStatus()
-      self.status.versionSelected = -1
-      self.status.log "getting versions..."
-      self.status.listPid = listVersions(self.status)
-      self.status.runPid = emptyFuture() 
+  font "IBM Plex Sans", 16, 200, 0, hCenter, vCenter
 
-    setTitle(fmt"Fidget Animated Progress Example")
-    textStyle theme
-    fill palette.background.lighten(0.02)
-    strokeWeight 1
+  frame "autoLayout":
+    # setup frame for css grid
+    setWindowBounds(vec2(440, 460), vec2(1200, 800))
+    centeredXY 98'pw, 98'ph
+    fill clearColor
+    cornerRadius 0.5'em
+    # clipContent true
+    
+    # Setup CSS Grid Template
+    gridTemplateColumns ["edge-l"]  40'ui \
+                        ["outer-l"] 50'ui \
+                        ["inner-l"] 1'fr \
+                        ["inner-r"] 50'ui \
+                        ["outer-r"] 40'ui \
+                        ["edge-r"]
 
-    font "IBM Plex Sans", 16, 200, 0, hCenter, vCenter
+    gridTemplateRows  ["header"] 30'ui \
+                      ["top"]    70'ui \
+                      ["middle"] 1'fr \ 
+                      ["footer"] 200'ui \
+                      ["bottom"]
 
-    frame "autoLayout":
-      # setup frame for css grid
-      setWindowBounds(vec2(440, 460), vec2(1200, 800))
-      centeredXY 98'pw, 98'ph
-      fill clearColor
-      cornerRadius 0.5'em
-      # clipContent true
-      
-      # Setup CSS Grid Template
-      gridTemplateColumns ["edge-l"]  40'ui \
-                          ["outer-l"] 50'ui \
-                          ["inner-l"] 1'fr \
-                          ["inner-r"] 50'ui \
-                          ["outer-r"] 40'ui \
-                          ["edge-r"]
+    # draw debug lines
+    # gridTemplateDebugLines true
 
-      gridTemplateRows  ["header"] 30'ui \
-                        ["top"]    70'ui \
-                        ["middle"] 1'fr \ 
-                        ["footer"] 200'ui \
-                        ["bottom"]
-
-      # draw debug lines
-      # gridTemplateDebugLines true
-
-      Theme(infoPalette({txtHighlight, bgDarken})):
-        rectangle "banner":
-          fill palette.background
-          cornerRadius 1'em
-          gridColumn "outer-l" // "outer-r"
-          gridRow "top" // "middle"
-          # echo "banner: box: ", current.box.repr
-          text "header":
-            font "IBM Plex Sans", 32, 200, 0, hCenter, vCenter
-            paddingXY 1'em, 1'em
-            fill palette.text
-            characters "Choose Nim!"
-            textAutoResize tsHeight
-
-      frame "footer-box":
-        font "IBM Plex Sans", 12, 200, 0, hCenter, vCenter
-        gridColumn "outer-l" // "outer-r"
-        gridRow "footer" // "bottom"
-        size 80'vw, 200'ui
-        # echo "footer-box: box: ", current.box.repr
-
-        rectangle "footer":
-          fill palette.background.lighten(0.03)
-          cornerRadius 1'em
-          clipContent true
-          scrollBars true
-          size 100'pw, self.status.output.len().UICoord * 22'ui
-          # echo "footer: box: ", current.box.repr
-
-          if self.status.updateLines == 2:
-            current.offset.y =
-              (current.screenBox.h - parent.screenBox.h) * 1.0.UICoord
-            self.status.updateLines = 0
-            refresh()
-
-          text "footer-txt":
-            paddingXY 1'em, 1'em
-            fill palette.text
-            textAutoResize tsHeight
-            size 100'pw, self.status.output.len().UICoord * lineHeight().UICoord
-            if self.status.updateLines == 1:
-              self.status.updateLines = 2
-              characters self.status.output.join("\n")
-              refresh()
-            # echo "footer-txt: box: ", current.box.repr
-
-      rectangle "css grid item":
-        # Setup CSS Grid Template
+    Theme(infoPalette({txtHighlight, bgDarken})):
+      rectangle "banner":
+        fill palette.background
         cornerRadius 1'em
         gridColumn "outer-l" // "outer-r"
-        gridRow "middle" // "footer"
-        # some color stuff
-        fill palette.background
+        gridRow "top" // "middle"
+        # echo "banner: box: ", current.box.repr
+        text "header":
+          font "IBM Plex Sans", 32, 200, 0, hCenter, vCenter
+          paddingXY 1'em, 1'em
+          fill palette.text
+          characters "Choose Nim!"
+          textAutoResize tsHeight
 
-        frame "options":
-          centeredXY 90'pw, 90'ph
-          gridTemplateColumns 1'fr 3'fr 250'ui 3'fr 1'fr
-          gridTemplateRows 16'ui 4'fr 2'fr 40'ui 1'fr 40'ui 1'fr 40'ui 1'fr 1'fr
-          # gridTemplateDebugLines true
+    frame "footer-box":
+      font "IBM Plex Sans", 12, 200, 0, hCenter, vCenter
+      gridColumn "outer-l" // "outer-r"
+      gridRow "footer" // "bottom"
+      size 80'vw, 200'ui
+      # echo "footer-box: box: ", current.box.repr
 
-          font "IBM Plex Sans", 22, 200, 0, hCenter, vCenter
+      rectangle "footer":
+        fill palette.background.lighten(0.03)
+        cornerRadius 1'em
+        clipContent true
+        scrollBars true
+        size 100'pw, self.output.len().UICoord * 22'ui
+        # echo "footer: box: ", current.box.repr
 
-          Dropdown:
-            disabled: self.status.versions.len() == 0
-            items: self.status.versions
-            defaultLabel: "Available Versions"
-            selected: self.status.versionSelected
-            setup:
-              gridColumn 3 // 4
-              gridRow 4 // 5
-              size 250'ui, 40'ui
+        if self.updateLines == 2:
+          current.offset.y =
+            (current.screenBox.h - parent.screenBox.h) * 1.0.UICoord
+          self.updateLines = 0
+          refresh()
 
-          Button:
-            label: fmt"Install Nim"
-            disabled: self.status.versionSelected < 0
-            onClick:
-              self.status.doInstallNim()
-            setup:
-              gridColumn 3 // 4
-              gridRow 6 // 7
-              size 250'ui, 40'ui
+        text "footer-txt":
+          paddingXY 1'em, 1'em
+          fill palette.text
+          textAutoResize tsHeight
+          size 100'pw, self.output.len().UICoord * lineHeight().UICoord
+          if self.updateLines == 1:
+            self.updateLines = 2
+            characters self.output.join("\n")
+            refresh()
+          # echo "footer-txt: box: ", current.box.repr
 
-          # make a textbox behind the above
-          rectangle "button-bg":
-            height 6'em
-            gridColumn 2 // 5
-            gridRow 3 // 10
-            fill palette.background
+    rectangle "css grid item":
+      # Setup CSS Grid Template
+      cornerRadius 1'em
+      gridColumn "outer-l" // "outer-r"
+      gridRow "middle" // "footer"
+      # some color stuff
+      fill palette.background
 
-          text "info":
-            font "IBM Plex Sans", 14, 200, 0, hCenter, vCenter
-            height 6'em
-            gridColumn 2 // 5
-            gridRow 2 // 3
-            fill palette.text
-            characters """
-            ChooseNimApp installs the Nim programming language from official downloads and sources, enabling you to easily switch between stable and development compilers.
-            """
+      frame "options":
+        centeredXY 90'pw, 90'ph
+        gridTemplateColumns 1'fr 3'fr 250'ui 3'fr 1'fr
+        gridTemplateRows 16'ui 4'fr 2'fr 40'ui 1'fr 40'ui 1'fr 40'ui 1'fr 1'fr
+        # gridTemplateDebugLines true
+
+        font "IBM Plex Sans", 22, 200, 0, hCenter, vCenter
+
+        Dropdown:
+          disabled: self.versions.len() == 0
+          items: self.versions
+          defaultLabel: "Available Versions"
+          selected: self.versionSelected
+          gridColumn 3 // 4
+          gridRow 4 // 5
+          size 250'ui, 40'ui
+
+        Button:
+          label: fmt"Install Nim"
+          disabled: self.versionSelected < 0
+          onClick:
+            self.doInstallNim()
+          gridColumn 3 // 4
+          gridRow 6 // 7
+          size 250'ui, 40'ui
+
+        # make a textbox behind the above
+        rectangle "button-bg":
+          height 6'em
+          gridColumn 2 // 5
+          gridRow 3 // 10
+          fill palette.background
+
+        text "info":
+          font "IBM Plex Sans", 14, 200, 0, hCenter, vCenter
+          height 6'em
+          gridColumn 2 // 5
+          gridRow 2 // 3
+          fill palette.text
+          characters """
+          ChooseNimApp installs the Nim programming language from official downloads and sources, enabling you to easily switch between stable and development compilers.
+          """
 
 proc runInstall(self: AppStatus, version: string) {.async.} =
   self.log "installing version: " & version
@@ -251,7 +244,7 @@ proc listVersions(self: AppStatus) {.async.} =
 
 
 startFidget(
-  wrapApp(chooseNimApp, ChooseNimApp),
+  chooseNimApp,
   setup = 
     setup(darkNimTheme),
   w = 800,
