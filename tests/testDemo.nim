@@ -3,119 +3,165 @@ import std/strformat, std/hashes, std/sequtils
 import fidgetty
 import fidgetty/themes
 import fidgetty/[button, dropdown, checkbox]
-import fidgetty/[slider, progressbar, animatedProgress]
+import fidgetty/[progressbar, animatedProgress]
+import fidgetty/[slider]
 import fidgetty/[listbox]
 import fidgetty/[textinput]
 
 loadFont("IBM Plex Sans", "IBMPlexSans-Regular.ttf")
 
-proc exampleApp*(): ExampleApp {.appFidget.} =
-  ## defines a stateful app widget
-  properties:
+type
+  DemoApp = object
     count1: int
     count2: int
     value: float
+    mySlider: float
     scrollValue: float
     myCheck: bool
-    mySlider: float
-    dropIndexes: int = -1
+    dropIndexes: int
+    dropName: string
     textInput: string
+    evts: Events
 
-  render:
-    let currEvents = useEvents()
-    let dropItems = @["Nim", "UI", "in", "100%", "Nim", "to",
-                      "OpenGL", "Immediate", "mode"]
+var self = DemoApp.new()
 
-    setTitle(fmt"Fidget Animated Progress Example")
-    textStyle theme
-    fill palette.background.lighten(0.11)
+proc testDemo() =
+  ## defines a stateful app widget
+  let dropItems = @["Nim", "UI", "in", "100%", "Nim", "to",
+                    "OpenGL", "Immediate", "mode"]
 
-    # font "IBM Plex Sans", 16, 200, 0, hCenter, vCenter
+  setTitle(fmt"Fidget Animated Progress Example")
+  textStyle theme
+  fill palette.background.lighten(0.11)
 
-    group "center":
-      box 50, 0, 100'vw - 100, 100'vh
-      orgBox 50, 0, 100'vw, 100'vw
-      fill palette.background.darken(1'PP)
-      strokeWeight 1
+  group "center":
+    box 50, 0, 100'vw - 100, 100'vh
+    orgBox 50, 0, 100'vw, 100'vw
+    fill palette.background.darken(1'PP)
+    strokeWeight 1
 
-      self.value = (self.count1.toFloat * 0.10) mod 1.0
-      var delta = 0.0
+    self.value = (self.count1.toFloat * 0.10) mod 1.0
+    var delta = 0.0
+
+    Vertical:
+      blank: size(0, 0)
+      itemSpacing 1.5'em
+
       Vertical:
-        blank: size(0, 0)
         itemSpacing 1.5'em
 
-        Vertical:
-          itemSpacing 1.5'em
-          # Trigger an animation on animatedProgress below
-          Button:
-            label: fmt"Arg Incr {self.count1:4d}"
-            setup:
-              onClickOutside:
-                echo "incr clicked outside"
-            onClick:
-              self.count1.inc()
-              delta = 0.02
-          Horizontal:
-            itemSpacing 4'em
-            Button(label = &"Evt Incr {self.count2:4d}"):
-              onClick:
-                self.count2.inc()
-                currEvents["pbc1"] = IncrementBar(increment = 0.02)
-            Theme(warningPalette()):
-              Checkbox(label = fmt"Click {self.myCheck}"):
-                checked: self.myCheck
-
-        let ap1 =
-          AnimatedProgress:
-            delta: delta
-            setup:
-              bindEvents "pbc1", currEvents
-              width 100'pw - 8'em
-
+        # Trigger an animation on animatedProgress below
+        Button:
+          size 10'em, 2'em
+          label fmt"Arg Incr {self.count1:4d}"
+          onClick:
+            self.count1.inc()
+            delta = 0.02
+        
         Horizontal:
-          Button(label = "Animate"):
+          itemSpacing 4'em
+          Button:
+            size 10'em, 2'em
+            label fmt"Evt Incr {self.count2:4d}"
             onClick:
               self.count2.inc()
-              currEvents["pbc1"] = JumpToValue(target = 0.01)
-          Button(label = "Cancel"):
-            onClick:
-              currEvents["pbc1"] = CancelJump()
-          Dropdown:
-            items: dropItems
-            selected: self.dropIndexes
-            defaultLabel: "Menu"
-            setup: size 12'em, 2'em
+              self.evts.add IncrementBar(increment = 0.02)
+              refresh()
+          Theme(warningPalette()):
+            Checkbox:
+              size 10'em, 2'em
+              label fmt"Click {self.myCheck}"
+              checked self.myCheck
+              onClick:
+                self.myCheck = not self.myCheck
 
-        text "data":
-          size 60'vw, 2'em
-          fill "#000000"
-          # characters: fmt"AnimatedProgress value: {ap1.value:>6.2f}"
-          characters: fmt"selected: {self.dropIndexes}"
-        Slider:
-          value: ap1.value
-          setup: size 60'vw, 2'em
-        Listbox:
-          items: dropItems
-          selected: self.dropIndexes
-          itemsVisible: 4
-          setup:
-            size 60'vw, 2'em
-            bindEvents "lstbx", currEvents
-        Slider:
-          value: self.scrollValue
-          setup: size 60'vw, 2'em
-          changed:
-            currEvents["lstbx"] = ScrollTo(self.scrollValue)
-        TextInputBind:
-          value: self.textInput
-          setup: size 60'vw, 2'em
-        Button(label = &"{self.textInput}"):
-          disabled: true
-          setup: size 60'vw, 2'em
-      palette.accent = parseHtml("#87E3FF", 0.67).spin(ap1.value * 36)
+      AnimatedProgress:
+        delta 0.02
+        triggers self.evts
+        size 100.WPerc - 8'em, 2.Em
+
+      Horizontal:
+        itemSpacing 0.5'em
+
+        Button:
+          size 6'em, 2'em
+          label "Animate"
+          onClick:
+            self.count2.inc()
+            self.evts.add JumpToValue(target = 0.01)
+            refresh()
+        
+        Button:
+          size 6'em, 2'em
+          label "Cancel"
+          onClick:
+            self.evts.add CancelJump()
+            refresh()
+        
+        Dropdown:
+          size 12'em, 2'em
+          items dropItems
+          selected self.dropIndexes
+          defaultLabel "Menu"
+        do -> ValueChange:
+          Index(idx):
+            self.dropIndexes = idx
+            refresh()
+
+      text "data":
+        size 60'vw, 2'em
+        fill "#000000"
+        characters self.dropName
+      
+      Slider:
+        size 60'vw, 2'em
+        value self.mySlider
+      do -> ValueChange:
+        Float(val):
+          self.mySlider = val
+          refresh()
+      
+      Listbox:
+        items dropItems
+        selected self.dropIndexes
+        itemsVisible 4
+        triggers self.evts
+        size 60'vw, 2'em
+      finally:
+        # instead of `do -> ValueChange` we can
+        # use a `finally` block and process events.
+        processEvents(ValueChange):
+          Index(val):
+            self.dropIndexes = val
+            refresh()
+        # this lets us do other things after the widget 
+        # has run. 
+        self.dropName = fmt"selected: {self.dropIndexes}"
+      
+      Slider:
+        value self.scrollValue
+        size 55.0'vw, 1.5'em
+      do -> ValueChange:
+        Float(val):
+          self.evts.add ScrollTo(val)
+          self.scrollValue = val
+          refresh()
+      
+      TextInput:
+        value self.textInput
+        size 60'vw, 2'em
+      do -> ValueChange:
+        Strings(val):
+          self.textInput = val
+          refresh()
+
+      Button:
+        label &"{self.textInput}"
+        disabled true
+        size 60'vw, 2'em
 
 startFidget(
-  wrapApp(exampleApp, ExampleApp),
+  testDemo,
   setup = 
     when defined(demoBulmaTheme): setup(bulmaTheme)
     else: setup(grayTheme),

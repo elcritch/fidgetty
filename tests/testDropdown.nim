@@ -1,12 +1,14 @@
 import fidgetty
+import fidgetty/button
 import fidgetty/dropdown
   
+import print
+
 let dropItems = @["Nim", "UI", "in", "100%", "Nim", "to", 
                   "OpenGL", "Immediate", "mode"]
 var dropIndexes = [-1, -1, -1]
 
 loadFont("IBM Plex Sans", "IBMPlexSans-Regular.ttf")
-var dstate = DropdownState()
 
 proc drawMain() =
   frame "main":
@@ -15,25 +17,44 @@ proc drawMain() =
 
     Vertical:
       itemSpacing 1'em
-
       text "first desc":
         size 100'pw, 1'em
         fill "#000d00"
         characters "Dropdown example: "
-
-      dropdown(dropItems, dropIndexes[0], "Dropdown", dstate)
-      dropdown(dropItems, dropIndexes[1], "Dropdown", nil)
-      text "desc":
-        size 100'pw, 1'em
-        fill "#000d00"
-        characters "linked dropdowns: "
-      dropdown(dropItems, dropIndexes[2])
-      Dropdown:
-        items: dropItems
-        selected: dropIndexes[2]
-        setup:
-          box 0, 0, 12'em, 2'em
       
+      ## we have a few forms of widget event and post widget
+      ## handling 
+      Dropdown:
+        size 10'em, 2'em
+        defaultLabel "test"
+        items dropItems
+        selected dropIndexes[0]
+      do -> ValueChange: # handle events from widget
+        Index(idx):
+          dropIndexes[0] = idx
+          refresh()
+
+      Dropdown:
+        size 10'em, 2'em
+        defaultLabel "test"
+        items dropItems
+        selected dropIndexes[0]
+      finally:
+        processEvents(ValueChange):
+          Index(idx):
+            dropIndexes[0] = idx
+            refresh()
+      
+      Dropdown:
+        size 10'em, 2'em
+        defaultLabel "test"
+        items dropItems
+        selected dropIndexes[0]
+        defer:
+          processEvents(ValueChange):
+            Index(idx):
+              dropIndexes[0] = idx
+              refresh()
 
 startFidget(
   drawMain,

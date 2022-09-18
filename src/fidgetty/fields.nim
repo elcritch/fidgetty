@@ -1,21 +1,28 @@
-import fidget_dev
-import fidgetty/theming
+import widgets
 import cdecl/applies
 
-proc basicLabel*(
-    label: string,
-    width = 2'em,
-    height = 2'em,
-    padding = 0.68'em,
-    align = hCenter,
-) =
-  let lw = max(width, label.len().float32.Em) * 0.5
-  size lw, height
+fidgetty BasicLabel:
+  properties:
+    label: string
+    width: UICoord
+    height: UICoord
+    padding: UICoord
+    align: HAlign
+  state:
+    empty: void
+
+proc render*(
+    props: BasicLabelProps,
+    self: BasicLabelState,
+): Events =
+  ## labels
+  let lw = max(props.width, props.label.len().float32.Em) * 0.5
+  size lw, props.height
   text "label":
-    size lw, height
+    size lw, props.height
     fill palette.text
-    current.textStyle.textAlignHorizontal = align
-    characters label
+    current.textStyle.textAlignHorizontal = props.align
+    characters props.label
 
 template fieldRight*(
     label: string,

@@ -1,146 +1,157 @@
 import widgets
 import button
+import std/typetraits
+import std/strformat
 
-template dropUpY(n: Node, height: float32 = 0): bool =
-  let a = n.descaled(screenBox)
-  let b = root.descaled(screenBox)
-  not (a.y + height <= b.y + b.h)
+import print
+export button
 
-proc dropdown*(
-    items : seq[string],
-    selected : var int,
-    defaultLabel : string = "Dropdown",
-    disabled : bool = false
-): DropdownState {.statefulFidget.} =
-  ## dropdown widget 
-  init:
-    size 8'em, 1.5'em
-    fill clearColor
-    imageColor clearColor
+#   events(AnimatedEvents):
+#     IncrementBar(increment: float)
+#     JumpToValue(target: float)
+#     CancelJump
 
+fidgetty Dropdown:
   properties:
+    items: seq[string]
+    selected: int
+    defaultLabel: string
+    disabled: bool
+
+  state:
     dropDownOpen: bool
     dropUp: bool
     itemsVisible: int
     itemsCount: int
 
-  render:
-    let
-      cb = current.box
-      bw = cb.w
-      bh = cb.h
-      bih = bh * 1.0'ui
-      tw = bw - 1.5'em.UICoord
+# static:
+#   assert DropdownArgs is WidgetArgs
+#   assert DropdownState is WidgetState
 
-    proc resetState() = 
-      self.dropDownOpen = false
-      self.dropUp = false
-      self.itemsVisible = -1
+proc new*(_: typedesc[DropdownProps]): DropdownProps =
+  new result
+  size 8'em, 1.5'em
+  fill clearColor
+  imageColor clearColor
 
-    if self.itemsCount != items.len():
-      # echo "new dropdowns" 
-      self.itemsCount = items.len()
-      resetState()
+proc render*(
+    props: DropdownProps,
+    self: DropdownState
+): Events =
+  ## dropdown widget 
+  let
+    cb = current.box
+    bw = cb.w
+    bh = cb.h
+    bih = bh * 1.0'ui
+    tw = bw - 1.5'em
 
-    let
-      visItems =
-        if self.dropUp: 4
-        elif self.dropDownOpen: self.itemsVisible
-        else: items.len()
-      itemCount = max(1, visItems).min(items.len())
-      bdh = min(bih * itemCount.UICoord, windowLogicalSize.descaled.y/2'ui)
+  proc resetState() = 
+    self.dropDownOpen = false
+    self.dropUp = false
+    self.itemsVisible = -1
 
-    if itemCount <= 2:
-      self.dropUp = true
-      self.itemsVisible = items.len()
-      refresh()
+  if self.itemsCount != props.items.len():
+    # echo "new dropdowns" 
+    self.itemsCount = props.items.len()
+    resetState()
 
-    let this = current
-    var outClick = false
+  let
+    visItems =
+      if self.dropUp: 4
+      elif self.dropDownOpen: self.itemsVisible
+      else: props.items.len()
+    itemCount = max(1, visItems).min(props.items.len())
+    bdh = min(bih * itemCount.UICoord, windowLogicalSize.descaled.y/2'ui)
 
-    Button:
-      disabled: disabled
-      setup:
-        box 0, 0, bw, bh
-        clipContent true
-        text "icon":
-          box tw, 0, 1'em, bh
-          fill palette.text
-          if self.dropDownOpen: rotation -90
-          else: rotation 0
-          characters ">"
-        onClickOutside:
-          outClick = true
-      label:
-        if selected < 0:
-          defaultLabel
-        else:
-          items[selected]
-      onClick:
-        self.dropDownOpen = true
-        self.itemsVisible = -1
-      post:
-        if self.dropDownOpen:
-          highlight palette.highlight
+  if itemCount <= 2:
+    self.dropUp = true
+    self.itemsVisible = props.items.len()
+    refresh()
 
-    let spad = 1.0'f32
-    if self.dropDownOpen:
+  let this = current
+  var outClick = false
 
-      group "dropDownScroller":
-        if self.dropUp:
-          box 0, bh-bdh-bh, bw, bdh
-        else:
-          box 0, bh, bw, bdh
-
-        clipContent true
-        zlevel ZLevelRaised
-        cornerRadius theme
-        strokeLine this
-
-        group "menuoutline":
-          box 0, 0, bw, bdh
-          cornerRadius theme
-          stroke theme.outerStroke
-
-        group "menu":
-          box 0, 0, bw, bdh
-          layout lmVertical
-          counterAxisSizingMode csAuto
-          itemSpacing theme.itemSpacing
-          scrollBars true
-
-          onClickOutside:
-            # echo "outClick: ", outClick
-            if outClick == true:
-              resetState()
-
-          var itemsVisible = -1 + (if self.dropUp: -1 else: 0)
-          for idx, buttonName in pairs(items):
-            group "menuBtn":
-              if current.screenBox.overlaps(scrollBox):
-                itemsVisible.inc()
-              box 0, 0, bw, bih
-              layoutAlign laCenter
-
-              let clicked = Button:
-                label: buttonName
-                setup:
-                  clearShadows()
-                  let ic = this.image.color
-                  imageColor Color(r: 0, g: 0, b: 0, a: 0.20 * ic.a)
-                  boxOf parent
-                  cornerRadius 0
-                  stroke theme.innerStroke
-              if clicked:
-                resetState()
-                # echo fmt"dropdwon: set {selected=}"
-                selected = idx
-
-
-          # group "menuBtnBlankSpacer":
-            # box 0, 0, bw, this.cornerRadius[0]
-          
-          if self.itemsVisible >= 0:
-            self.itemsVisible = min(itemsVisible, self.itemsVisible)
+  Button:
+    disabled props.disabled
+    box 0, 0, bw, bh
+    clipContent true
+    text "icon":
+      box tw, 0, 1'em, bh
+      fill palette.text
+      if self.dropDownOpen: rotation -90
+      else: rotation 0
+      characters ">"
+    label if props.selected < 0:
+            props.defaultLabel
           else:
-            self.itemsVisible = itemsVisible
+            props.items[props.selected]
+  do -> MouseEvent: # handle events from widget
+    evClick:
+      self.dropDownOpen = true
+      self.itemsVisible = -1
+    evClickOut:
+      outClick = true
+  finally:
+    if self.dropDownOpen:
+      highlight palette.highlight
+
+  let spad = 1.0'f32
+  if self.dropDownOpen:
+
+    group "dropDownScroller":
+      if self.dropUp:
+        box 0, bh-bdh-bh, bw, bdh
+      else:
+        box 0, bh, bw, bdh
+
+      clipContent true
+      zlevel ZLevelRaised
+      cornerRadius theme
+      strokeLine this
+
+      group "menuoutline":
+        box 0, 0, bw, bdh
+        cornerRadius theme
+        stroke theme.outerStroke
+
+      group "menu":
+        box 0, 0, bw, bdh
+        layout lmVertical
+        counterAxisSizingMode csAuto
+        itemSpacing theme.itemSpacing
+        scrollBars true
+
+        onClickOutside:
+          # echo "outClick: ", outClick
+          if outClick == true:
+            resetState()
+
+        var itemsVisible = -1 + (if self.dropUp: -1 else: 0)
+        for idx, buttonName in pairs(props.items):
+          group "menuBtn":
+            if current.screenBox.overlaps(scrollBox):
+              itemsVisible.inc()
+            box 0, 0, bw, bih
+            layoutAlign laCenter
+
+            Button:
+              clearShadows()
+              let ic = this.image.color
+              imageColor ic * 0.9
+              boxOf parent
+              cornerRadius 0
+              stroke theme.innerStroke
+              label buttonName
+            do -> MouseEvent: # handle events from widget
+              evClick:
+                resetState()
+                dispatchEvent Index(idx)
+
+        # group "menuBtnBlankSpacer":
+          # box 0, 0, bw, this.cornerRadius[0]
+        
+        if self.itemsVisible >= 0:
+          self.itemsVisible = min(itemsVisible, self.itemsVisible)
+        else:
+          self.itemsVisible = itemsVisible
