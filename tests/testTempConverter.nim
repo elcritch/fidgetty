@@ -5,7 +5,7 @@ import re
 import fidgetty
 import fidgetty/themes
 import fidgetty/textinput
-import fidgetty/fields
+import fidgetty/text
 
 loadFont("IBM Plex Sans", "IBMPlexSans-Regular.ttf")
 
@@ -52,7 +52,6 @@ proc labeledTextInput[T](
       Strings(val):
         var res: float
         if parseFloat(val.strip(), res, 0) > 0:
-          print "update: ", T(res)
           self.temp = T(res).toC()
           refresh()
 
@@ -66,35 +65,24 @@ proc exampleApp*() =
   box 0, 0, 100'vw, 100'vh
   setWindowBounds(vec2(400, 200), vec2(600, 400))
 
-  Centered:
-    rectangle:
-      box 0, 0, 400, 200
-      fill "#DEDEDE"
-      cornerRadius 0.5'em
+  rectangle:
+    box 0, 0, 400, 200
+    fill "#DEDEDE"
+    cornerRadius 0.5'em
 
-      Centered:
-        Horizontal:
-          # deg C
-          text:
-            fill palette.text
-            let lbl1 = "Celsius: "
-            characters lbl1
-            size lbl1.len().float.Em/2.0, 2'em
-          labeledTextInput[Celsius](self)
-          # cVal.parseTemp(Celsius)
-          text:
-            fill palette.text
-            characters " = "
-            size 3'em, 2'em
-
-          # deg F
-          text:
-            fill palette.text
-            let lbl2 = "Fahrenheit: "
-            characters lbl2
-            size lbl2.len().float.Em/2.0, 2'em
-          labeledTextInput[Fahrenheit](self)
-          # fVal.parseTemp(Fahrenheit)
+    Centered:
+      Horizontal:
+        # deg C
+        TextBox:
+          label "Celsius: "
+        labeledTextInput[Celsius](self)
+        TextBox:
+          label " = "
+        # deg F
+        TextBox:
+          label "Fahrenheit: "
+        
+        labeledTextInput[Fahrenheit](self)
 
 
 startFidget(
