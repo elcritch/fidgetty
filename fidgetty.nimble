@@ -11,6 +11,7 @@ srcDir        = "src"
 
 requires "nim >= 1.6.5"
 requires "https://github.com/elcritch/fidget.git#head >= 1.7.9"
+requires "pixie >= 5.0.1"
 requires "memo"
 requires "patty"
 requires "macroutils"
