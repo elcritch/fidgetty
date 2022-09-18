@@ -9,6 +9,9 @@ import fidgetty/text
 
 loadFont("IBM Plex Sans", "IBMPlexSans-Regular.ttf")
 
+## Some basics for handling temp conversions between
+## Celsius and Fahrenheit. 
+## 
 type
   Fahrenheit = distinct float
   Celsius = distinct float
@@ -23,21 +26,16 @@ func toC*(val: Fahrenheit): Celsius =
 func toC*(val: Celsius): Celsius =
   val
 
-# template parseTemp(val, kind: untyped) =
-#   if `val`.updated.isSome():
-#     var res: float
-#     if parseFloat(`val`.updated.get().strip(), res, 0) > 0:
-#       self.temp = `kind`(res).toC()
-
 type
   ExampleApp = ref object
     temp: Celsius
 
-import print
-
 proc labeledTextInput[T](
     self: ExampleApp,
 ) =
+  ## setup a textinput and then when it's
+  ## updated parse the string and set the
+  ## new value
   let sval =
     when T is Fahrenheit: toF(self.temp).float
     else: self.temp.float
