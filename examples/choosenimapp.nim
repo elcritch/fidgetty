@@ -148,6 +148,10 @@ proc chooseNimApp*() =
           gridColumn 3 // 4
           gridRow 4 // 5
           size 250'ui, 40'ui
+        do -> ValueChange: # handle events from widget
+          Index(idx):
+            self.versionSelected = idx
+            refresh()
 
         Button:
           label: fmt"Install Nim"
