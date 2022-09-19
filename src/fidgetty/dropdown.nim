@@ -74,7 +74,7 @@ proc render*(
 
   Button:
     disabled props.disabled
-    box 0, 0, bw, bh
+    size bw, bh
     clipContent true
     text "icon":
       box tw, 0, 1'em, bh
@@ -118,7 +118,7 @@ proc render*(
       group "menu":
         box 0, 0, bw, bdh
         layout lmVertical
-        counterAxisSizingMode csAuto
+        counterAxisSizingMode CounterAxisSizingMode.csAuto
         itemSpacing theme.itemSpacing
         scrollBars true
 

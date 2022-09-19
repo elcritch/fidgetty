@@ -25,7 +25,7 @@ proc render*(
   # button widget!
   text "button text":
     # boxSizeOf parent
-    current.constraint = [csAuto(), csAuto()]
+    size csAuto(), csAuto()
     fill palette.text
     characters props.label
     # textAutoResize tsHeight

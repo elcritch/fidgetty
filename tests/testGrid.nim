@@ -67,19 +67,18 @@ proc drawMain() =
 
       Button:
         label fmt"Clicked1: {self.count:4d}"
-        current.constraint = [csAuto(), csAuto()]
+        size csAuto(), csAuto()
 
         onClick:
           self.count.inc()
 
     Button:
-      current.constraint = [csNone(), csNone()]
       gridRow "middle" // "bottom"
       gridColumn "button-ra" // "button-rb"
       label fmt"Clicked2: {self.count:4d}"
       onClick: self.count.inc()
   
-    # gridTemplateDebugLines true
+    gridTemplateDebugLines true
       
 
 startFidget(

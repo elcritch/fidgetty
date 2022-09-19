@@ -66,7 +66,7 @@ proc render*(
   group "menu":
     box 0, 0, bw, bdh
     layout lmVertical
-    counterAxisSizingMode csAuto
+    counterAxisSizingMode CounterAxisSizingMode.csAuto
     itemSpacing theme.itemSpacing
     scrollBars true
 

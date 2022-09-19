@@ -36,8 +36,7 @@ proc testDemo() =
 
   group "center":
     box 50, 0, 100'vw - 100, 100'vh
-    orgBox 50, 0, 100'vw, 100'vw
-    fill palette.background.darken(1'PP)
+    fill palette.background.darken(1'CPP)
     strokeWeight 1
 
     self.value = (self.count1.toFloat * 0.10) mod 1.0
