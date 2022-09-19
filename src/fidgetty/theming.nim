@@ -160,7 +160,7 @@ proc colorsWith*(
   push th
   defer: pop(Palette)
 
-proc `'PP`*(n: string): float32 =
+proc `'CPP`*(n: string): float32 =
   ## numeric literal view height unit
   result = parseFloat(n) / 100.0
 

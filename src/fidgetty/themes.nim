@@ -32,7 +32,7 @@ proc grayTheme*(): tuple[palette: Palette, general: GeneralTheme] =
 
 
 proc bulmaTheme*(): tuple[palette: Palette, general: GeneralTheme] =
-  # pallete.primary = hsl(171, 100'PP, 41'PP).to(Color)
+  # pallete.primary = hsl(171, 100'CPP, 41'CPP).to(Color)
   # themePalette.primary = parseHtml("#87E3FF", 1.0).saturate(0.3)
   themePalette.link = hsl(27, 100'PHSL, 41'PHSL).to(Color) # parseHtml("#00d1b2")
   themePalette.primary = parseHtml("#3273dc").desaturate(0.25) * 0.87 # hsl(217, 71'PHSL, 53'PHSL).to(Color)
@@ -53,7 +53,7 @@ proc bulmaTheme*(): tuple[palette: Palette, general: GeneralTheme] =
   result.general.textCorner = common.uiScale * 3.2'f32
 
   result.palette.foreground = themePalette.primary * 1.0
-  result.palette.highlight = themePalette.primary.saturate(10'PP) * 1.0
+  result.palette.highlight = themePalette.primary.saturate(10'CPP) * 1.0
   result.palette.background = whiteColor
   result.palette.cursor = parseHtml("#77D3FF", 0.33)
 
@@ -61,7 +61,7 @@ proc bulmaTheme*(): tuple[palette: Palette, general: GeneralTheme] =
   result.palette.accent = parseHtml("#87E3FF", 0.77)
 
 proc darkNimTheme*(): tuple[palette: Palette, general: GeneralTheme] =
-  # pallete.primary = hsl(171, 100'PP, 41'PP).to(Color)
+  # pallete.primary = hsl(171, 100'CPP, 41'CPP).to(Color)
   # themePalette.primary = parseHtml("#87E3FF", 1.0).saturate(0.3)
   themePalette.link = hsl(27, 100'PHSL, 41'PHSL).to(Color) # parseHtml("#00d1b2")
   themePalette.primary = rgba(27,29,38,255).color

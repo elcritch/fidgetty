@@ -20,6 +20,7 @@ type
     value: float
 
 proc drawMain() =
+  echo "\n\n=================================\n"
   frame "main":
     useState(GridApp, self)
   
@@ -31,20 +32,20 @@ proc drawMain() =
 
     # Setup CSS Grid Template
     gridTemplateRows  ["edge-t"] auto \
-                      ["header"] 70'ui \
-                      ["top"]    70'ui \
-                      ["middle-top"] 30'ui \ 
-                      ["middle"] 30'ui \ 
+                      ["header"] 70'ux \
+                      ["top"]    70'ux \
+                      ["middle-top"] 30'ux \ 
+                      ["middle"] 30'ux \ 
                       ["bottom"] 1'fr \ 
                       ["footer"] auto \
                       ["edge-b"]
 
-    gridTemplateColumns ["edge-l"]  40'ui \
-                        ["button-la", "outer-l"] 150'ui \
+    gridTemplateColumns ["edge-l"]  40'ux \
+                        ["button-la", "outer-l"] 150'ux \
                         ["button-lb"] 1'fr \
                         ["inner-m"] 1'fr \
-                        ["button-ra"] 150'ui \
-                        ["button-rb", "outer-r"] 40'ui \
+                        ["button-ra"] 150'ux \
+                        ["button-rb", "outer-r"] 40'ux \
                         ["edge-r"]
 
     rectangle "bar":
@@ -65,20 +66,20 @@ proc drawMain() =
       gridColumn "button-la" // "button-lb"
 
       Button:
-        # boxSizeOf parent
         label fmt"Clicked1: {self.count:4d}"
+        current.constraint = [csAuto(), csAuto()]
+
         onClick:
           self.count.inc()
 
-    rectangle "btn":
+    Button:
+      current.constraint = [csNone(), csNone()]
       gridRow "middle" // "bottom"
       gridColumn "button-ra" // "button-rb"
-      Button:
-        boxSizeOf parent
-        label fmt"Clicked2: {self.count:4d}"
-        onClick: self.count.inc()
-    
-    gridTemplateDebugLines true
+      label fmt"Clicked2: {self.count:4d}"
+      onClick: self.count.inc()
+  
+    # gridTemplateDebugLines true
       
 
 startFidget(
