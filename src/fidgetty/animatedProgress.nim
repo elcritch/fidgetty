@@ -16,6 +16,8 @@ fidgetty AnimatedProgress:
     delta: float32
     triggers: Events
   state:
+    pbProps: ProgressBarProps
+    pbState: ProgressBarState
     value: float
     cancelTicks: bool
     ticks: Future[void] = emptyFuture() ##\
@@ -23,6 +25,11 @@ fidgetty AnimatedProgress:
 
 proc new*(_: typedesc[AnimatedProgressProps]): AnimatedProgressProps =
   new result
+
+proc new*(_: typedesc[AnimatedProgressState]): AnimatedProgressState =
+  new result
+  new result.pbProps
+  new result.pbState
 
 proc ticker(props: AnimatedProgressProps, self: AnimatedProgressState) {.async.} =
   ## This simple procedure will "tick" ten times delayed 1,000ms each.
@@ -51,7 +58,7 @@ proc render*(
   var nextTarget = 0.0
   processEvents(AnimatedEvents):
     IncrementBar(increment):
-      # echo "pbar event: ", evt.repr()
+      echo "pbar event: ", evt.repr()
       self.value = self.value + increment
       refresh()
     CancelJump():
@@ -70,8 +77,10 @@ proc render*(
   # echo "render animated: ", self.value, " ", cast[pointer](self).repr
   self.value = self.value + nextTarget
 
-  ProgressBar:
-    value self.value
-    label fmt"{self.value:4.2}"
-    boxOf parent
+  self.pbProps.value = self.value
+  result.add self.pbProps.render(self.pbState)
+  # ProgressBar:
+  #   value self.value
+  #   label fmt"{self.value:4.2}"
+  #   boxOf parent
 

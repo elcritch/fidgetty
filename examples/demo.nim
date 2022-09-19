@@ -75,9 +75,9 @@ proc testDemo() =
                 self.myCheck = not self.myCheck
 
       AnimatedProgress:
-        delta 0.02
+        delta 0.01
         triggers self.evts
-        size 100.WPerc - 8'em, 2.Em
+        size 75'pp, 2'em
 
       Horizontal:
         itemSpacing 0.5'em
