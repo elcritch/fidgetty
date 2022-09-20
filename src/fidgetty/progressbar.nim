@@ -24,8 +24,6 @@ proc render*(
   gridTemplateRows csFixed(0.4'em) 1'fr csFixed(0.4'em)
   gridTemplateColumns csFixed(0.4'em) 1'fr csFixed(0.4'em)
 
-  let
-    cbarW = (100.0 * props.value.clamp(0, 1.0)).csPerc()
 
   if props.label.len() > 0:
     text "text":
@@ -43,9 +41,10 @@ proc render*(
   rectangle "bar holder":
     gridRow 2 // 3
     gridColumn 2 // 3
-    rectangle "bar":
+    rectangle "bar filling":
       # Draw the bar itself.
-      size cbarW, 100'pp
+      let bw = (100.0 * props.value.clamp(0, 1.0)).csPerc()
+      size bw, 100'pp
       fill palette.accent
       cornerRadius 0.80 * theme.cornerRadius[0]
       imageOf theme.gloss, 0.67
