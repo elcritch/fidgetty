@@ -78,8 +78,7 @@ proc drawMain() =
       label fmt"Clicked2: {self.count:4d}"
       onClick: self.count.inc()
   
-    gridTemplateDebugLines true
-      
+    # gridTemplateDebugLines true
 
 startFidget(
   drawMain,
