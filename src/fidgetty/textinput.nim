@@ -122,17 +122,19 @@ proc render*(
     # echo "mouseDown"
     let font = common.fonts[current.textStyle.fontFamily]
     # let evts = current.currentEvents()
-    self.textBox = newTextBox[Node](
-        font,
-        current.screenBox.w.scaled,
-        current.screenBox.h.scaled,
-        current,
-        hAlignMode(current.textStyle.textAlignHorizontal),
-        vAlignMode(current.textStyle.textAlignVertical),
-        current.multiline,
-        worldWrap = true,
-        pattern = props.pattern
-    )
+    # self.textBox = evts.mgetOrPut("$textbox",
+    if self.textBox.isNil:
+      self.textBox = newTextBox[Node](
+          font,
+          current.screenBox.w.scaled,
+          current.screenBox.h.scaled,
+          current,
+          hAlignMode(current.textStyle.textAlignHorizontal),
+          vAlignMode(current.textStyle.textAlignVertical),
+          current.multiline,
+          worldWrap = true,
+          pattern = props.pattern
+          )
     
     let curr = $current.text
 

@@ -20,7 +20,7 @@ type
     value: float
 
 proc drawMain() =
-  echo "\n\n=================================\n"
+  # echo "\n\n=================================\n"
   frame "main":
     useState(GridApp, self)
   

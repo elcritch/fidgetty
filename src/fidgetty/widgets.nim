@@ -61,7 +61,7 @@ macro doBlocks*(blks: varargs[untyped]) =
   # echo "DOEVENTS: ", blks.treeRepr
   result = newStmtList()
   if blks.len() == 0:
-    return 
+    return
   for blk in blks:
     if blk.kind == nnkDo:
       let arg = blk.params[0]
