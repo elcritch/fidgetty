@@ -20,27 +20,22 @@ proc render*(
     self: ProgressBarState,
 ): Events =
   ## Draw a progress bars 
-
   gridTemplateRows csFixed(0.4'em) 1'fr csFixed(0.4'em)
   gridTemplateColumns csFixed(0.4'em) 1'fr csFixed(0.4'em)
 
-
   if props.label.len() > 0:
     text "text":
-      gridRow 2 // 3
-      gridColumn 2 // 3
+      gridArea 2 // 3, 2 // 3
       fill palette.text
       characters props.label
 
   rectangle "barFgTexture":
-    gridRow 2 // 3
-    gridColumn 2 // 3
+    gridArea 2 // 3, 2 // 3
     cornerRadius 0.80 * theme.cornerRadius[0]
     clipContent true
 
   rectangle "bar holder":
-    gridRow 2 // 3
-    gridColumn 2 // 3
+    gridArea 2 // 3, 2 // 3
     rectangle "bar filling":
       # Draw the bar itself.
       let bw = (100.0 * props.value.clamp(0, 1.0)).csPerc()
@@ -52,8 +47,7 @@ proc render*(
       stroke theme.innerStroke
 
   rectangle "bar bg":
-    gridRow 1 // 4
-    gridColumn 1 // 4
+    gridArea 1 // 4, 1 // 4
     stroke theme.outerStroke
     fill palette.foreground
     cornerRadius 1.0 * theme.cornerRadius[0]
