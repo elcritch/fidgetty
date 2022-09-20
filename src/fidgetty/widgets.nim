@@ -131,13 +131,6 @@ template dispatchMouseEvents*(): untyped =
   for evt in current.events.mouse:
     dispatchEvent MouseEvent(kind: evt)
 
-template useState*[T](tp: typedesc[T], name: untyped) =
-  if current.hookStates.isNil:
-    current.hookStates = newTable[TypeId, Variant]()
-  if not current.hookStates.hasKey(tp.getTypeId()):
-    current.hookStates[tp.getTypeId()] = newVariant(tp.new())
-  var `name` {.inject.} = current.hookStates[tp.getTypeId()].get(tp)
-
 macro reverseStmts*(body: untyped) =
   result = newStmtList()
   var stmts = newSeq[NimNode]()
