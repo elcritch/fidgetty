@@ -36,8 +36,8 @@ type
 proc processEventsImpl(tp, body: NimNode): NimNode =
   let code = body
   let hasOther = code.mapIt(it[0].repr).anyIt(it == "_")
-  echo "PROCESSEVENTS:hasOther: ", hasOther
-  echo "PROCESSEVENTS: ", body.treeRepr
+  # echo "PROCESSEVENTS:hasOther: ", hasOther
+  # echo "PROCESSEVENTS: ", body.treeRepr
   if not hasOther:
     code.add nnkCommand.newTree(
       ident "_",
@@ -55,10 +55,10 @@ proc processEventsImpl(tp, body: NimNode): NimNode =
       for evt {.inject.} in evts:
         `match`
     {.pop.}
-  echo "res: ", result.treeRepr
+  # echo "res: ", result.treeRepr
 
 macro doBlocks*(blks: varargs[untyped]) =
-  echo "DOEVENTS: ", blks.treeRepr
+  # echo "DOEVENTS: ", blks.treeRepr
   result = newStmtList()
   if blks.len() == 0:
     return 
