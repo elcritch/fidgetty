@@ -1,6 +1,6 @@
 import widgets
 import times
-import strutils
+import unicode
 import asyncdispatch # This is what provides us with async and the dispatcher
 import re
 

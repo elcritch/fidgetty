@@ -1,5 +1,5 @@
 import std/strformat, std/hashes, std/sequtils
-import parseutils, memo
+import parseutils
 import re
 
 import fidgetty
@@ -54,7 +54,7 @@ proc labeledTextInput[T](
 
 proc exampleApp*() =
   ## defines a stateful app widget
-  useState(ExampleApp, self)
+  useState[ExampleApp](self)
 
   setTitle(fmt"Fidget Animated Progress Example")
   textStyle theme

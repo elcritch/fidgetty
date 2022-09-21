@@ -44,7 +44,7 @@ proc new*(_: typedesc[AppStatus]): AppStatus =
 
 proc chooseNimApp*() =
   ## defines a stateful app widget
-  useState(AppStatus, self)
+  useState[AppStatus](self)
 
   setTitle(fmt"Fidget Animated Progress Example")
   textStyle theme

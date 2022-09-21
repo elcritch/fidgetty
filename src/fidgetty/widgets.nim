@@ -214,7 +214,7 @@ template HSpacer*(w: UICoord) =
 
 template wrapApp*(fidgetName: typed, fidgetType: typedesc): proc() =
   proc `fidgetName Main`() =
-    useState(`fidgetType`, state)
+    useState[`fidgetType`](state)
     fidgetName(state)
   
   `fidgetName Main`

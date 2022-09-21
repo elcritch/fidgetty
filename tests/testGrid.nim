@@ -22,7 +22,7 @@ type
 proc drawMain() =
   # echo "\n\n=================================\n"
   frame "main":
-    useState(GridApp, self)
+    useState[GridApp](self)
   
     setWindowBounds(vec2(400, 200), vec2(800, 600))
     setTitle(fmt"Grid Example")
