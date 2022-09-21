@@ -48,8 +48,8 @@ proc render*(
     let popBtnWidth = height()
     let popTrackWidth = width() - popBtnWidth
     if self.pipDrag:
-      let pos = (mouseRelative().x - popBtnWidth/2.0)/popTrackWidth 
-      self.value = pos.float32.clamp(0.0, 1.0)
+      let rel = current.mouseRatio(pad=popBtnWidth, clamped=true)
+      self.value = rel.x.float32
       if props.value != self.value:
         dispatchEvent Float(self.value)
 
