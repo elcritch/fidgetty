@@ -120,7 +120,7 @@ proc render*(
         layout lmVertical
         counterAxisSizingMode CounterAxisSizingMode.csAuto
         itemSpacing theme.itemSpacing
-        scrollBars true
+        scrollpane true
 
         onClickOutside:
           # echo "outClick: ", outClick
