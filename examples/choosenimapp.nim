@@ -62,17 +62,17 @@ proc chooseNimApp*() =
     # clipContent true
     
     # Setup CSS Grid Template
-    gridTemplateColumns ["edge-l"]  40'ui \
-                        ["outer-l"] 50'ui \
+    gridTemplateColumns ["edge-l"]  40'ux \
+                        ["outer-l"] 50'ux \
                         ["inner-l"] 1'fr \
-                        ["inner-r"] 50'ui \
-                        ["outer-r"] 40'ui \
+                        ["inner-r"] 50'ux \
+                        ["outer-r"] 40'ux \
                         ["edge-r"]
 
-    gridTemplateRows  ["header"] 30'ui \
-                      ["top"]    70'ui \
+    gridTemplateRows  ["header"] 30'ux \
+                      ["top"]    70'ux \
                       ["middle"] 1'fr \ 
-                      ["footer"] 200'ui \
+                      ["footer"] 1'fr \
                       ["bottom"]
 
     # draw debug lines
@@ -87,7 +87,7 @@ proc chooseNimApp*() =
         # echo "banner: box: ", current.box.repr
         text "header":
           font "IBM Plex Sans", 32, 200, 0, hCenter, vCenter
-          paddingXY 1'em, 1'em
+          size 100'pp, 100'pp
           fill palette.text
           characters "Choose Nim!"
           textAutoResize tsHeight
@@ -96,7 +96,7 @@ proc chooseNimApp*() =
       font "IBM Plex Sans", 12, 200, 0, hCenter, vCenter
       gridColumn "outer-l" // "outer-r"
       gridRow "footer" // "bottom"
-      size 80'vw, 200'ui
+      # size 80'vw, 200'ui
       # echo "footer-box: box: ", current.box.repr
 
       rectangle "footer":
@@ -104,8 +104,7 @@ proc chooseNimApp*() =
         cornerRadius 1'em
         clipContent true
         scrollBars true
-        size 100'pw, self.output.len().UICoord * 22'ui
-        # echo "footer: box: ", current.box.repr
+        size 100'pp, self.output.len().UICoord * 22'ui
 
         if self.updateLines == 2:
           current.offset.y =
@@ -114,7 +113,7 @@ proc chooseNimApp*() =
           refresh()
 
         text "footer-txt":
-          paddingXY 1'em, 1'em
+          size 100'pp, 100'pp
           fill palette.text
           textAutoResize tsHeight
           size 100'pw, self.output.len().UICoord * lineHeight().UICoord
@@ -133,9 +132,9 @@ proc chooseNimApp*() =
       fill palette.background
 
       frame "options":
-        centeredXY 90'pw, 90'ph
-        gridTemplateColumns 1'fr 3'fr 250'ui 3'fr 1'fr
-        gridTemplateRows 16'ui 4'fr 2'fr 40'ui 1'fr 40'ui 1'fr 40'ui 1'fr 1'fr
+        # centeredXY 90'pw, 90'ph
+        gridTemplateColumns 1'fr 3'fr 250'ux 3'fr 1'fr
+        gridTemplateRows 16'ux 4'fr 2'fr 40'ux 1'fr 40'ux 1'fr 40'ux 1'fr 1'fr
         # gridTemplateDebugLines true
 
         font "IBM Plex Sans", 22, 200, 0, hCenter, vCenter
