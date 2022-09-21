@@ -17,9 +17,7 @@ fidgetty Slider:
 
 proc new*(_: typedesc[SliderProps]): SliderProps =
   new result
-  # box 0, 0, 100'pp, 2.Em
-  # textAutoResize tsHeight
-  # layoutAlign laStretch
+  size 100'pp, 2'em
   cornerRadius theme
 
 proc render*(
@@ -35,16 +33,13 @@ proc render*(
 
   if self.pipDrag:
     self.pipDrag = buttonDown[MOUSE_LEFT]
-    echo "pipDrag: ", self.pipDrag 
   
   text "text":
-    # box 0, 0, bw, bh
     gridArea 2 // 3, 2 // 3
     fill palette.text
     characters props.label
   rectangle "bar holder":
     gridArea 2 // 3, 2 // 3
-    # box barOuter, barOuter, pipPos+bh/2, bh-barOuter*2
     fill palette.accent
     cornerRadius theme
     clipContent true
@@ -55,15 +50,12 @@ proc render*(
     if self.pipDrag:
       let pos = (mouseRelative().x - popBtnWidth/2.0)/popTrackWidth 
       self.value = pos.float32.clamp(0.0, 1.0)
-      print self.value, pos, mouseRelative()
       if props.value != self.value:
         dispatchEvent Float(self.value)
 
     rectangle "pop button":
-      let pipPos =
-          UICoord(popTrackWidth.float32*clamp(props.value, 0, 1.0))
-
-      # echo "pipPos: ", pipPos
+      let pipFrac = UICoord(props.value).clamp(0'ui, 1'ui)
+      let pipPos = popTrackWidth*pipFrac
       box pipPos, 0, parent.box.h, parent.box.h
       fill palette.cursor
       cornerRadius theme
