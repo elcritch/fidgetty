@@ -102,8 +102,8 @@ macro fidgetty*(name, blk: untyped) =
       # printRepr(handlers)
       block:
         component `procName`:
-          useState(`propsTypeId`, item)
-          useState(`stateTypeId`, state)
+          useState[`propsTypeId`](item)
+          useState[`stateTypeId`](state)
           var events {.inject, used.}: Events
           `setters`
           code

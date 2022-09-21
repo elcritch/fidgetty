@@ -38,7 +38,7 @@ proc exampleApp*() =
   ## defines a stateful app widget
   frame "main":
     font "IBM Plex Sans", 16, 200, 0, hCenter, vCenter
-    useState(AppState, self)
+    let self = withState(AppState)
 
     CounterButton:
       centeredXY 8'em, 2'em

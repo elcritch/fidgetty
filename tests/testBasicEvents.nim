@@ -33,7 +33,7 @@ proc exampleApp*() =
   ## defines a stateful app widget
   frame "main":
     font "IBM Plex Sans", 16, 200, 0, hCenter, vCenter
-    useState(AppState, self)
+    let self = withState(AppState)
     let currEvents = useEvents()
 
     ButtonEvt:

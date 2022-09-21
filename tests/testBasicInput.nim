@@ -19,7 +19,7 @@ type
 proc exampleApp*() =
   ## defines a stateful app widget
   ## 
-  useState(AppState, self)
+  useState[AppState](self)
 
   setTitle(fmt"Fidget  Progress Example")
   textStyle theme
