@@ -123,9 +123,9 @@ proc render*(
         scrollpane true
 
         onClickOutside:
-          # echo "outClick: ", outClick
-          if outClick == true:
-            resetState()
+          echo "outClick: ", outClick
+          # if outClick == true:
+          resetState()
 
         var itemsVisible = -1 + (if self.dropUp: -1 else: 0)
         for idx, buttonName in pairs(props.items):
