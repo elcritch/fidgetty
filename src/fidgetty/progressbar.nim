@@ -10,7 +10,7 @@ fidgetty ProgressBar:
 
 proc new*(_: typedesc[ProgressBarProps]): ProgressBarProps =
   new result
-  box 0, 0, 100.WPerc, 2.Em
+  box 0, 0, 100'pp, 2.Em
   textAutoResize tsHeight
   layoutAlign laStretch
   stroke theme.outerStroke

@@ -139,7 +139,7 @@ proc testDemo() =
       
       Slider:
         value self.scrollValue
-        size 55.0'vw, 1.5'em
+        box 0, 0, 55.0'pp, 1.5'em
       do -> ValueChange:
         Float(val):
           self.evts.add ScrollTo(val)

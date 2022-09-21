@@ -1,6 +1,7 @@
 import std/strformat
 
 import widgets
+import print
 
 fidgetty Slider:
   properties:
@@ -16,59 +17,64 @@ fidgetty Slider:
 
 proc new*(_: typedesc[SliderProps]): SliderProps =
   new result
-  box 0, 0, 100.WPerc, 2.Em
-  textAutoResize tsHeight
-  layoutAlign laStretch
+  # box 0, 0, 100'pp, 2.Em
+  # textAutoResize tsHeight
+  # layoutAlign laStretch
   cornerRadius theme
 
 proc render*(
     props: SliderProps,
     self: SliderState
 ): Events =
-  let
-    # some basic calcs
-    sb = 0.3'em
-    sbb = sb*2
-    barOuter = 0.5'em
-    bh = current.box.h
-    bw = current.box.w
-    bww = bw - bh
+  ## Draw a progress bars 
+  gridTemplateRows csFixed(0.4'em) 1'fr csFixed(0.4'em)
+  gridTemplateColumns csFixed(0.4'em) 1'fr csFixed(0.4'em)
 
   onClick:
     self.pipDrag = true
 
   if self.pipDrag:
-    let mpx = mouse.x
-    let sbx = current.screenBox.x
-    let calc = (mpx - sbx - bh/2'ui)/bww
-    self.value = float32(calc.clamp(0'ui, 1.0'ui))
     self.pipDrag = buttonDown[MOUSE_LEFT]
-    if props.value != self.value:
-      dispatchEvent Float(self.value)
-
-  let pipPos = UICoord(bww.float32*clamp(props.value, 0, 1.0))
-
+    echo "pipDrag: ", self.pipDrag 
+  
   text "text":
-    box 0, 0, bw, bh
+    # box 0, 0, bw, bh
+    gridArea 2 // 3, 2 // 3
     fill palette.text
     characters props.label
-  rectangle "pip":
-    box sb+pipPos, sb, bh-2*sb, bh-2*sb
-    fill palette.cursor
-    cornerRadius theme
-    stroke theme.outerStroke
-    clipContent true
-    imageOf theme.gloss
-  rectangle "fg-bar":
-    box barOuter, barOuter, pipPos+bh/2, bh-barOuter*2
+  rectangle "bar holder":
+    gridArea 2 // 3, 2 // 3
+    # box barOuter, barOuter, pipPos+bh/2, bh-barOuter*2
     fill palette.accent
     cornerRadius theme
     clipContent true
     imageOf theme.gloss, 0.77
-  rectangle "bg":
+
+    let popBtnWidth = height()
+    let popTrackWidth = width() - popBtnWidth
+    if self.pipDrag:
+      let pos = (mouseRelative().x - popBtnWidth/2.0)/popTrackWidth 
+      self.value = pos.float32.clamp(0.0, 1.0)
+      print self.value, pos, mouseRelative()
+      if props.value != self.value:
+        dispatchEvent Float(self.value)
+
+    rectangle "pop button":
+      let pipPos =
+          UICoord(popTrackWidth.float32*clamp(props.value, 0, 1.0))
+
+      # echo "pipPos: ", pipPos
+      box pipPos, 0, parent.box.h, parent.box.h
+      fill palette.cursor
+      cornerRadius theme
+      stroke theme.outerStroke
+      clipContent true
+      imageOf theme.gloss
+
+  rectangle "bar bg":
+    gridArea 1 // 4, 1 // 4
     imageOf theme.gloss
     rotation 180
-    box 0, 0, bw, bh
     fill palette.foreground
     cornerRadius theme
     clipContent true
