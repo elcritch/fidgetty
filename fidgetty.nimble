@@ -6,7 +6,6 @@ description   = "Widget library built on Fidget written in pure Nim and OpenGL r
 license       = "MIT"
 srcDir        = "src"
 
-
 # Dependencies
 
 requires "nim >= 1.6.5"
