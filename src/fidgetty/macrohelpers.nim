@@ -1,7 +1,5 @@
 
-import macros, tables, strutils, strformat, math, random, options
-import bumpy, variant, patty
-import std/macrocache
+import macros, tables
 
 import macroutils
 

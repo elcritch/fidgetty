@@ -1,9 +1,9 @@
-import std/strformat, std/hashes, std/sequtils
+import std/strformat
 
 import fidgetty
 import fidgetty/themes
 import fidgetty/[button, dropdown, checkbox]
-import fidgetty/[progressbar, animatedProgress]
+import fidgetty/[animatedProgress]
 import fidgetty/[slider]
 import fidgetty/[listbox]
 import fidgetty/[textinput]

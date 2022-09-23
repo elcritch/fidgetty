@@ -1,9 +1,7 @@
 import widgets
 import button
 import std/typetraits
-import std/strformat
 
-import print
 export button
 
 #   events(AnimatedEvents):
@@ -96,9 +94,7 @@ proc render*(
     if self.dropDownOpen:
       highlight palette.highlight
 
-  let spad = 1.0'f32
   if self.dropDownOpen:
-
     group "dropDownScroller":
       if self.dropUp:
         box 0, bh-bdh-bh, bw, bdh

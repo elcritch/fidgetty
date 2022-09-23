@@ -1,9 +1,8 @@
-import macros, tables, strutils, strformat, math, random, options
-import std/[macrocache, tables]
+import std/[macros, tables, strutils, strformat, math, random, options]
+import std/macrocache
 import variant, patty
 
 import macrohelpers
-import cdecl/applies
 
 export tables, strformat, options
 export math, random

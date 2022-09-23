@@ -1,7 +1,4 @@
-import std/strformat
-
 import widgets
-import print
 
 fidgetty Slider:
   properties:
