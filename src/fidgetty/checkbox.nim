@@ -24,14 +24,15 @@ proc render*(
   #   props.checked = not props.checked
   #   dispatchEvent Activated(props.checked)
 
+  let bsize = height()
   text "label":
-    box parent.box.h, 0, parent.box.w - parent.box.h, parent.box.h
+    # box bwidth, 0, parent.box.w - bwidth, bwidth
+    box bsize, 0, csSum(100.0'pp, -bsize.UiScalar), bsize
     fill palette.text
     characters props.label
 
   rectangle "square":
     size parent.box.h, parent.box.h
-    boxSizeOf parent
     fill palette.foreground
     clipContent true
     imageOf theme.gloss
