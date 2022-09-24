@@ -1,5 +1,4 @@
 import fidget_dev, random
-import fidget_dev/grids
 
 setTitle("Auto Layout Vertical")
 
@@ -24,9 +23,9 @@ proc drawMain() =
       clipContent true
       
       # Setup CSS Grid Template
-      gridTemplateColumns 60'ui 60'ui 60'ui 60'ui 60'ui
-      gridTemplateRows 90'ui 90'ui
-      justifyContent gcCenter
+      gridTemplateColumns 60'ux 60'ux 60'ux 60'ux 60'ux
+      gridTemplateRows 90'ux 90'ux
+      justifyContent CxCenter
 
       rectangle "item a":
         # Setup CSS Grid Template
@@ -39,7 +38,7 @@ proc drawMain() =
       for i in 1..4:
         rectangle "item b" & $i:
           # Setup CSS Grid Template
-          size 30'ui, 30'ui
+          size 30'ux, 30'ux
           cornerRadius 1'em
           
           # some color stuff
@@ -47,7 +46,7 @@ proc drawMain() =
 
       rectangle "item e":
         # Setup CSS Grid Template
-        size 30'ui, 30'ui
+        size 30'ux, 30'ux
         cornerRadius 1'em
         gridColumn 5 // 6
         gridRow 1 // 3
