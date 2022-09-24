@@ -56,7 +56,7 @@ proc chooseNimApp*() =
   frame "autoLayout":
     # setup frame for css grid
     setWindowBounds(vec2(440, 460), vec2(1200, 800))
-    centeredXY 98'pw, 98'ph
+    box 2'pp, 2'pp, 98'pp, 98'pp
     fill clearColor
     cornerRadius 0.5'em
     # clipContent true
@@ -116,7 +116,7 @@ proc chooseNimApp*() =
           size 100'pp, 100'pp
           fill palette.text
           textAutoResize tsHeight
-          size 100'pw, self.output.len().UICoord * lineHeight().UICoord
+          size 100'pp, self.output.len().float * lineHeight()
           if self.updateLines == 1:
             self.updateLines = 2
             characters self.output.join("\n")
