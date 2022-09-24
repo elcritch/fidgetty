@@ -34,7 +34,6 @@ proc exampleApp*() =
   frame "main":
     font "IBM Plex Sans", 16, 200, 0, hCenter, vCenter
     let self = withState(AppState)
-    let currEvents = useEvents()
 
     ButtonEvt:
       fill palette.foreground

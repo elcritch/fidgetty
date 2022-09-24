@@ -16,3 +16,11 @@ requires "patty >= 0.3.4"
 requires "macroutils >= 1.2.0"
 requires "cdecl >= 0.5.10"
 requires "asynctools >= 0.1.1"
+
+import strutils, strformat
+
+task test, "Run tests":
+  for fl in "tests/".listFiles():
+    if fl.startsWith("t") and fl.endsWith(".nim"):
+      echo "tests: ", fl
+      exec fmt"nim c {fl}"
