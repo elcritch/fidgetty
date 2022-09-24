@@ -15,9 +15,7 @@ proc drawMain() =
       # if current.gridTemplate != nil:
       #   echo "grid template: ", repr current.gridTemplate
       # setup frame for css grid
-      box 0, 0, 80'pw, 80'ph
-      centeredX 80'pw
-      centeredY 80'ph
+      box 10'pp, 10'pp, 80'pp, 80'pp
       fill "#FFFFFF"
       cornerRadius 0.5'em
       clipContent true

@@ -30,12 +30,12 @@ proc exampleApp*() =
   stroke theme.outerStroke
 
   rectangle "box":
-    centeredXY 90'pw, 90'ph
+    box 5'pp, 5'pp, 90'pp, 90'pp
     stroke theme.outerStroke
 
     TextInput:
       value self.textInput
-      box 20'pw, 20'ph, 40'pw, 40'ph
+      box 20'pp, 20'pp, 40'pp, 40'pp
     do -> ValueChange:
       Strings(val):
         self.textInput = val
