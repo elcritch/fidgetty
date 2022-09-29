@@ -45,6 +45,7 @@ proc drawMain() =
                       ["bar-end", "area-col"] 2'fr \
                       ["right"] csFixed(Em(1))
 
+
     rectangle "bar":
       cornerRadius 0.2'em
       gridRow "main-row" // "bottom"
@@ -52,6 +53,7 @@ proc drawMain() =
       stroke 0.1'em.float32, blackColor
 
     rectangle "bar":
+      cornerRadius 0.2'em
       gridRow "main-row" // "bottom"
       gridColumn "menu-col" // "bar-start"
 
