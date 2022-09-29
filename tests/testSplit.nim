@@ -46,13 +46,13 @@ proc drawMain() =
                       ["right"] csFixed(Em(1))
 
 
-    rectangle "bar":
+    rectangle "border":
       cornerRadius 0.2'em
       gridRow "main-row" // "bottom"
       gridColumn "menu-col" // "right"
       stroke 0.1'em.float32, blackColor
 
-    rectangle "bar":
+    rectangle "gutter":
       cornerRadius 0.2'em
       gridRow "main-row" // "bottom"
       gridColumn "menu-col" // "bar-start"
@@ -88,15 +88,10 @@ proc drawMain() =
         self.pipDrag = buttonDown[MOUSE_LEFT]
         self.barOffset = self.pipPos.mouseRelativeDiff().x.float32
 
-    rectangle "btn":
-      # currently rendering sub-text with css grids
-      # is a bit broken due to the order constraints
-      # are computed. There's a fix for this 
-      # that should simplify this. 
+    rectangle "area":
+      fill rgba(66, 177, 44, 167).to(Color).spin(100.0)
       gridRow "main-row" // span "main-row"
       gridColumn "area-col" // span "area-col"
-
-      fill rgba(66, 177, 44, 167).to(Color).spin(100.0)
 
       Vertical:
         self.value = (self.count.toFloat * 0.10) mod 1.0001
