@@ -251,8 +251,7 @@ startFidget(
   setup = 
     setup(darkNimTheme),
   w = 800,
-  h = 600,
-  uiScale = 2.0
+  h = 600
 )
 
 const verExample = " Channel: stable\n \n Installed:  \n * 1.6.6 (latest)\n \n Available:  \n 1.6.4\n 1.6.2\n 1.6.0\n 1.4.8\n 1.4.6\n 1.4.4\n 1.4.2\n 1.4.0\n 1.2.18\n 1.2.16\n 1.2.14\n 1.2.12\n 1.2.10\n 1.2.8\n 1.2.6\n 1.2.4\n 1.2.2\n 1.2.0\n 1.0.10\n 1.0.8\n 1.0.6\n 1.0.4\n 1.0.2\n 1.0.0\n 0.20.2\n 0.20.0\n 0.19.6\n 0.19.4\n 0.19.2\n \n \n \n "
