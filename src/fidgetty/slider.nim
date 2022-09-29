@@ -44,13 +44,13 @@ proc render*(
     if sliderPos.updated:
       dispatchEvent Float(self.dragger.value)
     
-    # rectangle "pop button":
-    #   box sliderPos.value, 0, parent.box.h, parent.box.h
-    #   fill palette.cursor
-    #   cornerRadius theme
-    #   stroke theme.outerStroke
-    #   clipContent true
-    #   imageOf theme.gloss
+    rectangle "pop button":
+      box sliderPos.value, 0, parent.box.h, parent.box.h
+      fill palette.cursor
+      cornerRadius theme
+      stroke theme.outerStroke
+      clipContent true
+      imageOf theme.gloss
 
     rectangle "bar filling":
       # Draw the bar itself.

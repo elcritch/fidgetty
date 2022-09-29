@@ -1,5 +1,4 @@
 import fidget_dev
-import widgets
 
 type
   Dragger* = ref object
