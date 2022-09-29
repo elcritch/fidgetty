@@ -1,74 +1,71 @@
+import fidget_dev
 import widgets
+import behaviors
 
 fidgetty Slider:
   properties:
     value: float
     label: string
-    disabled: bool
-
-  ## Draw a progress bars 
   state:
-    pipDrag: bool
-    pipValue: float
-    value: float
+    dragger: Dragger
 
 proc new*(_: typedesc[SliderProps]): SliderProps =
   new result
-  size 100'pp, 2'em
-  cornerRadius theme
+  size 100'pp, 2.Em
+  # textAutoResize tsHeight
+  # layoutAlign laStretch
+  stroke theme.outerStroke
 
 proc render*(
     props: SliderProps,
-    self: SliderState
+    self: SliderState,
 ): Events =
   ## Draw a progress bars 
   gridTemplateRows csFixed(0.4'em) 1'fr csFixed(0.4'em)
   gridTemplateColumns csFixed(0.4'em) 1'fr csFixed(0.4'em)
 
-  onClick:
-    self.pipDrag = true
+  setup self.dragger
 
-  if self.pipDrag:
-    self.pipDrag = buttonDown[MOUSE_LEFT]
-  
-  text "text":
+  if props.label.len() > 0:
+    text "text":
+      gridArea 2 // 3, 2 // 3
+      fill palette.text
+      characters props.label
+
+  rectangle "barFgTexture":
     gridArea 2 // 3, 2 // 3
-    fill palette.text
-    characters props.label
+    cornerRadius 0.80 * theme.cornerRadius[0]
+    clipContent true
+
   rectangle "bar holder":
     gridArea 2 // 3, 2 // 3
 
-    let popBtnWidth = height()
-    let popTrackWidth = width() - popBtnWidth
-    if self.pipDrag:
-      let rel = current.mouseRatio(pad=popBtnWidth, clamped=true)
-      self.value = rel.x.float32
-      if props.value != self.value:
-        dispatchEvent Float(self.value)
-
-    let pipFrac = UICoord(props.value).clamp(0'ui, 1'ui)
-    let pipPos = popTrackWidth*pipFrac
-
+    let sliderPos = self.dragger.position(props.value)
+    if sliderPos.updated:
+      dispatchEvent Float(self.dragger.value)
+    
     rectangle "pop button":
-      box pipPos, 0, parent.box.h, parent.box.h
+      box sliderPos.value, 0, parent.box.h, parent.box.h
       fill palette.cursor
       cornerRadius theme
       stroke theme.outerStroke
       clipContent true
       imageOf theme.gloss
 
-    rectangle "bar holder":
-      box 0, 0, pipPos + parent.box.h/2, parent.box.h
+    rectangle "bar filling":
+      # Draw the bar itself.
+      let bw = (100.0 * props.value.clamp(0, 1.0)).csPerc()
+      size bw, 100'pp
       fill palette.accent
-      cornerRadius theme
+      cornerRadius 0.80 * theme.cornerRadius[0]
+      imageOf theme.gloss, 0.67
       clipContent true
-      imageOf theme.gloss, 0.77
+      stroke theme.innerStroke
 
   rectangle "bar bg":
     gridArea 1 // 4, 1 // 4
-    imageOf theme.gloss
-    rotation 180
-    fill palette.foreground
-    cornerRadius theme
-    clipContent true
     stroke theme.outerStroke
+    fill palette.foreground
+    cornerRadius 1.0 * theme.cornerRadius[0]
+
+  cornerRadius 1.0 * theme.cornerRadius[0]
