@@ -55,4 +55,4 @@ proc drawMain() =
       gridTemplateDebugLines true
       
 
-startFidget(drawMain, w = 600, h = 400, uiScale = 2.0)
+startFidget(drawMain, w = 600, h = 400)

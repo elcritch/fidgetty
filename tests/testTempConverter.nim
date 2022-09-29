@@ -88,5 +88,4 @@ startFidget(
     when defined(demoBulmaTheme): setup(bulmaTheme)
     else: setup(grayTheme),
   w = 400,
-  h = 200,
-  uiScale = 2.0)
+  h = 200)

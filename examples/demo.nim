@@ -166,5 +166,4 @@ startFidget(
     else: setup(grayTheme),
   w = 640,
   h = 700,
-  uiScale = 2.0
 )
