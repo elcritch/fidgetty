@@ -1,5 +1,4 @@
 
-import fidget_dev
 import std/[math, strformat]
 
 import fidgetty

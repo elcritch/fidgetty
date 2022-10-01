@@ -1,4 +1,4 @@
-import fidget_dev
+import ../fidget_dev
 
 type
   Dragger* = ref object

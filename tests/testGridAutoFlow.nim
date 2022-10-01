@@ -1,4 +1,4 @@
-import fidget_dev, random
+import fidgetty
 
 setTitle("Auto Layout Vertical")
 

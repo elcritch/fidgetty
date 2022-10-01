@@ -1,4 +1,3 @@
-import bumpy, fidget_dev
 import std/strformat
 
 import fidgetty
