@@ -1038,10 +1038,6 @@ template gridTemplateRows*(args: untyped) =
 template defaultGridTemplate() =
   if current.gridTemplate.isNil:
     current.gridTemplate = newGridTemplate()
-template setGridItem(field, pos: untyped, idx: GridIndex) =
-  if current.gridItem.isNil:
-    current.gridItem = newGridItem()
-  current.gridItem.`field`.`pos` = idx
 
 template getGridItem(): untyped =
   if current.gridItem.isNil:
@@ -1059,15 +1055,7 @@ template columnEnd*(idx: untyped) =
   getGridItem().index[dcol].b = idx.mkIndex()
 template gridColumn*(val: untyped) =
   ## set CSS grid ending column 
-  # setGridItem(column, a, mkIndex idxStart)
-  # setGridItem(column, b, mkIndex idxEnd)
   getGridItem().column = val
-# proc gridColumn*(rat: Rational[int]) =
-#   ## set CSS grid ending column 
-#   gridColumn(idxStart=rat.num, idxEnd=rat.den)
-# proc gridColumn*(idx: (string, string, ) ) =
-#   ## set CSS grid ending column 
-#   gridColumn(idxStart=idx[0], idxEnd=idx[1])
 
 template rowStart*(idx: untyped) =
   ## set CSS grid starting row 
@@ -1078,11 +1066,6 @@ template rowEnd*(idx: untyped) =
 template gridRow*(val: untyped) =
   ## set CSS grid ending column
   getGridItem().row = val
-# proc gridRow*(rat: Rational[int]) =
-#   gridRow(idxStart=rat.num, idxEnd=rat.den)
-# proc gridRow*(idx: (string, string,)) =
-#   ## set CSS grid ending column
-#   gridRow(idxStart=idx[0], idxEnd=idx[1])
 template gridArea*(c, r: untyped) =
   getGridItem().column = c
   getGridItem().row = r
