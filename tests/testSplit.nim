@@ -40,21 +40,21 @@ proc drawMain() =
     
     gridTemplateColumns ["left"] csFixed(Em(1)) \
                       ["menu-col"] csFixed(10'em.float32 + self.barVal + self.barOffset) \
-                      ["bar-start"] csFixed(0.5'em) \
-                      ["bar-end", "area-col"] 2'fr \
+                      ["bar"] csFixed(0.5'em) \
+                      ["area-col"] 2'fr \
                       ["right"] csFixed(Em(1))
 
 
     rectangle "border":
       cornerRadius 0.2'em
-      gridRow "main-row" // "bottom"
+      gridRow "main-row"
       gridColumn "menu-col" // "right"
       stroke 0.1'em.float32, blackColor
 
     rectangle "gutter":
       cornerRadius 0.2'em
-      gridRow "main-row" // "bottom"
-      gridColumn "menu-col" // "bar-start"
+      gridRow "main-row" // span "main-row"
+      gridColumn "menu-col"
 
       fill rgba(66, 177, 44, 167).to(Color).spin(75.0)
 
@@ -73,8 +73,8 @@ proc drawMain() =
           onClick: self.count.inc()
   
     rectangle "bar":
-      gridRow "main-row" // "bottom"
-      gridColumn "bar-start" // "bar-end"
+      gridRow "main-row"
+      gridColumn "bar" 
 
       fill rgba(66, 177, 44, 167).to(Color).spin(85.0)
 
@@ -96,6 +96,7 @@ proc drawMain() =
         self.value = (self.count.toFloat * 0.10) mod 1.0001
 
         ProgressBar:
+          size 10'em, 2'em
           value: self.value
 
     # gridTemplateDebugLines true
