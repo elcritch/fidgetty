@@ -42,6 +42,7 @@ proc testDemo() =
     self.value = (self.count1.toFloat * 0.10) mod 1.0
     var delta = 0.0
 
+
     Vertical:
       blank: size(0, 0)
       itemSpacing 1.5'em
