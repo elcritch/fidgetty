@@ -88,7 +88,7 @@ proc drawMain() =
         self.barOffset = self.pipPos.mouseRelativeDiff().x.float32
 
     rectangle "area":
-      fill rgba(66, 177, 44, 167).to(Color).spin(100.0)
+      fill rgba(66, 177, 44, 167).to(Color).spin(100.0) * 0.2
       gridRow "main-row" // span "main-row"
       gridColumn "area-col" // span "area-col"
 
