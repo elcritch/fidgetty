@@ -60,12 +60,13 @@ proc drawMain() =
 
           Button:
             size 100'pp, 2'em
-            label fmt"Button2: {parent.screenbox.w.float:6.0f}"
-            onClick: self.count.inc()
+            disabled true
+            label fmt"Width: {parent.screenbox.w.float:6.0f}"
+            # onClick: self.count.inc()
 
           Button:
             size 100'pp, 2'em
-            label fmt"Button2: {self.barVal.float:4.2f}"
+            label fmt"Increment"
             onClick: self.count.inc()
     
       split "main":
