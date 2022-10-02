@@ -7,14 +7,26 @@ fidgetty SplitView:
   state:
     dragger: Dragger
 
-template splitbar*(blk: untyped) =
+template splitMenu*(blk: untyped) =
+  rectangle "split-menu":
+    gridRow "area"
+    gridColumn "menu"
+    `blk`
+
+template splitMain*(blk: untyped) =
+  rectangle "split-area":
+    gridRow "area"
+    gridColumn "main"
+    `blk`
+
+template splitBar*(blk: untyped) =
   ## creates a bar in the middle of the view
   ## you can use `draggable true` to make the bar
   ## able to be dragged. 
   ## 
   
   rectangle "bar":
-    gridRow "main"
+    gridRow "area"
     gridColumn "bar"
 
     template draggable(enable: bool): untyped =
@@ -23,7 +35,7 @@ template splitbar*(blk: untyped) =
         behavior state.dragger
 
         let sliderPos = state.dragger.position(
-          self.pos,
+          state.dragger.value,
           0'ui,
           node = parent,
           normalized=true
@@ -58,9 +70,9 @@ proc render*(
   
   # Setup CSS Grid Template
   box 0, 0, 100'pp, 100'pp
-  gridTemplateRows ["main"] 1'fr
+  gridTemplateRows ["area"] 1'fr
   
   gridTemplateColumns ["menu"] csPerc(100.0 * props.sliderFraction) \
-                    ["bar"] csFixed(0.5'em) \
-                    ["area"] 2'fr
+                      ["bar"] csFixed(0.5'em) \
+                      ["main"] 2'fr
   

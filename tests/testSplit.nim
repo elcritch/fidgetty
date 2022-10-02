@@ -22,12 +22,11 @@ type
     pipPos: Position
     barOffset: float
     barVal: float
-    pos: float
-    dragger: Dragger
+    position: float
 
 proc new*(_: typedesc[GridApp]): GridApp =
   new result
-  result.pos = 0.33
+  result.position = 0.33
 
 proc drawMain() =
   # echo "\n\n=================================\n"
@@ -47,17 +46,14 @@ proc drawMain() =
       clipContent true
       cornerRadius 0.5'em
 
-      splitbar:
+      splitBar:
         draggable true
         stroke theme.outerStroke
         imageOf theme.gloss
         fill palette.foreground
       
-      rectangle "gutter":
+      splitMenu:
         cornerRadius 0.2'em
-        gridRow "main" // span "main"
-        gridColumn "menu"
-
         fill rgba(66, 177, 44, 167).to(Color).spin(75.0)
 
         Vertical:
@@ -74,9 +70,8 @@ proc drawMain() =
             label fmt"Button2: {self.barVal.float:4.2f}"
             onClick: self.count.inc()
     
-      rectangle "area":
+      splitMain:
         fill rgba(66, 177, 44, 167).to(Color).spin(100.0) * 0.2
-        gridArea "main", "area"
 
         Vertical:
           self.value = (self.count.toFloat * 0.10) mod 1.0001
