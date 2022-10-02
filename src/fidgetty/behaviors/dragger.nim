@@ -12,7 +12,7 @@ proc activate*(self: Dragger, isActive = true) =
 proc active*(self: Dragger): bool =
   self.isDrag
 
-template setup*(dragger: Dragger) =
+template behavior*(dragger: Dragger) =
   if dragger.isNil:
     dragger.new()
   

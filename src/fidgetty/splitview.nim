@@ -4,28 +4,8 @@ import behaviors/dragger
 fidgetty SplitView:
   properties:
     sliderFraction: float
-    label: string
   state:
-    pipDrag: bool
-    pipPos: Position
-    barOffset: float
-    barVal: float
     dragger: Dragger
-
-# template SplitBar*(blk: untyped) =
-#   block:
-#     useState[SplitViewState](state)
-#     rectangle "bar":
-#       gridRow "main"
-#       gridColumn "bar"
-#       `blk`
-#       onClick:
-#         state.pipDrag = true
-#         state.pipPos = current.mouseRelativeStart()
-#         state.barVal = self.barVal + self.barOffset
-#       if state.pipDrag:
-#         state.pipDrag = buttonDown[MOUSE_LEFT]
-#         state.barOffset = state.pipPos.mouseRelativeDiff().x.float32
 
 template SplitBar*(blk: untyped) =
   ## item
@@ -33,19 +13,24 @@ template SplitBar*(blk: untyped) =
     gridRow "main"
     gridColumn "bar"
 
-    setup state.dragger
+    template draggable(enable: bool): untyped =
+      ## enable slider dragging
+      if enable:
+        behavior state.dragger
 
-    # print self.pos, self.dragger.value
-    let sliderPos = state.dragger.position(
-      self.pos,
-      0'ui,
-      node = parent,
-      normalized=true
-    )
-    # print sliderPos
-    if sliderPos.updated:
-      sliderFraction state.dragger.value
-      refresh()
+        let sliderPos = state.dragger.position(
+          self.pos,
+          0'ui,
+          node = parent,
+          normalized=true
+        )
+        # print sliderPos
+        if sliderPos.updated:
+          sliderFraction state.dragger.value
+          refresh()
+    
+    `blk`
+
 
 proc new*(_: typedesc[SplitViewProps]): SplitViewProps =
   new result
@@ -71,8 +56,8 @@ proc render*(
                     ["bar"] csFixed(0.5'em) \
                     ["area"] 2'fr
 
-  rectangle "border":
-    cornerRadius 0.2'em
-    gridRow "main"
-    gridColumn "menu" // "area"
-    stroke 0.1'em.float32, blackColor
+  # rectangle "border":
+  #   cornerRadius 0.2'em
+  #   gridRow "main"
+  #   gridColumn "menu" // "area"
+  #   stroke 0.1'em.float32, blackColor

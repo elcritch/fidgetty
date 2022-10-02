@@ -24,7 +24,7 @@ proc render*(
   gridTemplateRows csFixed(0.4'em) 1'fr csFixed(0.4'em)
   gridTemplateColumns csFixed(0.4'em) 1'fr csFixed(0.4'em)
 
-  setup self.dragger
+  behavior self.dragger
 
   if props.label.len() > 0:
     text "text":

@@ -44,26 +44,14 @@ proc drawMain() =
     box 1'em, 1'em, 100'vw - 2'em, 100'vh - 2'em
 
     SplitView:
-
-      # rectangle "border":
-      #   cornerRadius 0.2'em
-      #   gridRow "top" // span "bottom"
-      #   gridColumn "left" // span "right"
-      #   stroke 0.1'em.float32, blackColor
-      
-      # if self.dragger.isNil:
-      #   self.dragger.new()
-
-      # let sliderPos = self.dragger.position(self.pos, 1'em, node = current, normalized=true)
-      # print sliderPos
-      # if sliderPos.updated:
-      #   self.pos = self.dragger.value
+      cornerRadius 0.5'em
 
       SplitBar:
+        draggable true
         stroke theme.outerStroke
         imageOf theme.gloss
         fill palette.foreground
-
+      
       rectangle "gutter":
         cornerRadius 0.2'em
         gridRow "main" // span "main"
@@ -95,6 +83,7 @@ proc drawMain() =
           ProgressBar:
             size 10'em, 2'em
             value: self.value
+
 
     # gridTemplateDebugLines true
 
