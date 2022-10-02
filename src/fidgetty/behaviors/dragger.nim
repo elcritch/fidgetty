@@ -22,9 +22,9 @@ template setup*(dragger: Dragger) =
   if dragger.active():
     dragger.activate(buttonDown[MOUSE_LEFT])
 
-proc position*(self: Dragger, value: float32): tuple[value: UICoord, updated: bool] =
-  let popBtnWidth = height()
-  let popTrackWidth = width() - popBtnWidth
+proc position*(self: Dragger, value: float32, size = height(), width = width()): tuple[value: UICoord, updated: bool] =
+  let popBtnWidth = size
+  let popTrackWidth = width - popBtnWidth
   if self.isDrag:
     let rel = current.mouseRatio(pad=popBtnWidth, clamped=true)
     self.value = rel.x.float32
