@@ -34,6 +34,10 @@ template SplitBar*(blk: untyped) =
 
 proc new*(_: typedesc[SplitViewProps]): SplitViewProps =
   new result
+  result.sliderFraction = 0.33
+
+proc new*(_: typedesc[SplitViewState]): SplitViewState =
+  new result
   box 0, 0, 100'pp, 2.Em
   textAutoResize tsHeight
   layoutAlign laStretch
