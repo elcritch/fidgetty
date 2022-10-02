@@ -1,5 +1,5 @@
-import fidget_dev
 import widgets
+import behaviors/dragger
 
 fidgetty SplitView:
   properties:
@@ -10,25 +10,42 @@ fidgetty SplitView:
     pipPos: Position
     barOffset: float
     barVal: float
+    dragger: Dragger
+
+# template SplitBar*(blk: untyped) =
+#   block:
+#     useState[SplitViewState](state)
+#     rectangle "bar":
+#       gridRow "main"
+#       gridColumn "bar"
+#       `blk`
+#       onClick:
+#         state.pipDrag = true
+#         state.pipPos = current.mouseRelativeStart()
+#         state.barVal = self.barVal + self.barOffset
+#       if state.pipDrag:
+#         state.pipDrag = buttonDown[MOUSE_LEFT]
+#         state.barOffset = state.pipPos.mouseRelativeDiff().x.float32
 
 template SplitBar*(blk: untyped) =
-  block:
-    useState[SplitViewState](state)
+  ## item
+  rectangle "bar":
+    gridRow "main"
+    gridColumn "bar"
 
-    rectangle "bar":
-      gridRow "main"
-      gridColumn "bar"
+    setup state.dragger
 
-      `blk`
-
-      onClick:
-        state.pipDrag = true
-        state.pipPos = current.mouseRelativeStart()
-        state.barVal = self.barVal + self.barOffset
-
-      if state.pipDrag:
-        state.pipDrag = buttonDown[MOUSE_LEFT]
-        state.barOffset = state.pipPos.mouseRelativeDiff().x.float32
+    # print self.pos, self.dragger.value
+    let sliderPos = state.dragger.position(
+      self.pos,
+      0'ui,
+      node = parent,
+      normalized=true
+    )
+    # print sliderPos
+    if sliderPos.updated:
+      sliderFraction state.dragger.value
+      refresh()
 
 proc new*(_: typedesc[SplitViewProps]): SplitViewProps =
   new result
@@ -53,16 +70,6 @@ proc render*(
   gridTemplateColumns ["menu"] csPerc(100.0 * props.sliderFraction) \
                     ["bar"] csFixed(0.5'em) \
                     ["area"] 2'fr
-
-  # gridTemplateRows ["top"] csFixed(Em(1)) \
-  #                   ["main"] 1'fr \
-  #                   ["bottom"] csFixed(Em(1))
-  
-  # gridTemplateColumns ["left"] csFixed(Em(1)) \
-  #                   ["menu"] csPerc(props.sliderFraction * 100.0) \
-  #                   ["bar"] csFixed(0.5'em) \
-  #                   ["area"] 2'fr \
-  #                   ["right"] csFixed(Em(1))
 
   rectangle "border":
     cornerRadius 0.2'em

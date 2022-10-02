@@ -59,28 +59,10 @@ proc drawMain() =
       # if sliderPos.updated:
       #   self.pos = self.dragger.value
 
-      rectangle "bar":
-        gridRow "main"
-        gridColumn "bar"
-
-        setup self.dragger
-
-        # print self.pos, self.dragger.value
-        let sliderPos = self.dragger.position(
-          self.pos,
-          0'ui,
-          node = parent,
-          normalized=true
-        )
-        # print sliderPos
-        if sliderPos.updated:
-          sliderFraction self.dragger.value
-          refresh()
-
-      # SplitBar:
-      #   stroke theme.outerStroke
-      #   imageOf theme.gloss
-      #   fill palette.foreground
+      SplitBar:
+        stroke theme.outerStroke
+        imageOf theme.gloss
+        fill palette.foreground
 
       rectangle "gutter":
         cornerRadius 0.2'em
