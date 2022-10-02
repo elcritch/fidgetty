@@ -35,26 +35,26 @@ proc drawMain() =
     # Setup CSS Grid Template
     box 0, 0, 100'vw, 100'vh
     gridTemplateRows ["top"] csFixed(Em(1)) \
-                      ["main-row"] 1'fr \
+                      ["main"] 1'fr \
                       ["bottom"] csFixed(Em(1))
     
     gridTemplateColumns ["left"] csFixed(Em(1)) \
-                      ["menu-col"] csFixed(10'em.float32 + self.barVal + self.barOffset) \
+                      ["menu"] csFixed(10'em.float32 + self.barVal + self.barOffset) \
                       ["bar"] csFixed(0.5'em) \
-                      ["area-col"] 2'fr \
+                      ["area"] 2'fr \
                       ["right"] csFixed(Em(1))
 
 
     rectangle "border":
       cornerRadius 0.2'em
-      gridRow "main-row"
-      gridColumn "menu-col" // "right"
+      gridRow "main"
+      gridColumn "menu" // "right"
       stroke 0.1'em.float32, blackColor
 
     rectangle "gutter":
       cornerRadius 0.2'em
-      gridRow "main-row" // span "main-row"
-      gridColumn "menu-col"
+      gridRow "main" // span "main"
+      gridColumn "menu"
 
       fill rgba(66, 177, 44, 167).to(Color).spin(75.0)
 
@@ -73,7 +73,7 @@ proc drawMain() =
           onClick: self.count.inc()
   
     rectangle "bar":
-      gridRow "main-row"
+      gridRow "main"
       gridColumn "bar" 
 
       fill rgba(66, 177, 44, 167).to(Color).spin(85.0)
@@ -89,8 +89,8 @@ proc drawMain() =
 
     rectangle "area":
       fill rgba(66, 177, 44, 167).to(Color).spin(100.0) * 0.2
-      gridRow "main-row" // span "main-row"
-      gridColumn "area-col" // span "area-col"
+      gridRow "main" // span "main"
+      gridColumn "area" // span "area"
 
       Vertical:
         self.value = (self.count.toFloat * 0.10) mod 1.0001
