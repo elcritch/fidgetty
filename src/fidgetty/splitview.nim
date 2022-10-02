@@ -1,51 +1,35 @@
 import widgets
 import behaviors/dragger
 
+export dragger
+
 fidgetty SplitView:
   properties:
     sliderFraction: float
   state:
     dragger: Dragger
 
-template splitMenu*(blk: untyped) =
-  rectangle "split-menu":
-    gridRow "area"
-    gridColumn "menu"
-    `blk`
-
-template splitMain*(blk: untyped) =
-  rectangle "split-area":
-    gridRow "area"
-    gridColumn "main"
-    `blk`
-
-template splitBar*(blk: untyped) =
-  ## creates a bar in the middle of the view
-  ## you can use `draggable true` to make the bar
-  ## able to be dragged. 
+template split*(name, blk: untyped) =
+  ## sets up split panes. options are "menu", "main", and "bar".
   ## 
-  
-  rectangle "bar":
-    gridRow "area"
-    gridColumn "bar"
-
-    template draggable(enable: bool): untyped =
-      ## enable slider dragging
-      if enable:
-        behavior state.dragger
-
-        let sliderPos = state.dragger.position(
-          state.dragger.value,
-          0'ui,
-          node = parent,
-          normalized=true
-        )
-        # print sliderPos
-        if sliderPos.updated:
-          sliderFraction state.dragger.value
-          refresh()
-    
-    `blk`
+  ## "bar" sets up the middle bar, use `draggable` property
+  ## to be able to be dragged.
+  ## 
+  when name == "menu":
+    rectangle "split-menu":
+      gridRow "area"
+      gridColumn "menu"
+      `blk`
+  elif name == "main":
+    rectangle "split-area":
+      gridRow "area"
+      gridColumn "main"
+      `blk`
+  elif name == "bar":
+    rectangle "bar":
+      gridRow "area"
+      gridColumn "bar"
+      `blk`
 
 
 proc new*(_: typedesc[SplitViewProps]): SplitViewProps =
