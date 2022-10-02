@@ -4,6 +4,8 @@ import std/[math, strformat]
 import fidgetty
 import fidgetty/themes
 import fidgetty/[button, progressbar]
+import fidgetty/[splitview]
+import fidgetty/behaviors/dragger
 
 import print
 
@@ -20,6 +22,12 @@ type
     pipPos: Position
     barOffset: float
     barVal: float
+    pos: float
+    dragger: Dragger
+
+proc new*(_: typedesc[GridApp]): GridApp =
+  new result
+  result.pos = 0.33
 
 proc drawMain() =
   # echo "\n\n=================================\n"
@@ -33,70 +41,50 @@ proc drawMain() =
     cornerRadius 0.2'em
 
     # Setup CSS Grid Template
-    box 0, 0, 100'vw, 100'vh
-    gridTemplateRows ["top"] csFixed(Em(1)) \
-                      ["main"] 1'fr \
-                      ["bottom"] csFixed(Em(1))
+    box 1'em, 1'em, 100'vw - 2'em, 100'vh - 2'em
+
+    SplitView:
+      clipContent true
+      cornerRadius 0.5'em
+
+      splitbar:
+        draggable true
+        stroke theme.outerStroke
+        imageOf theme.gloss
+        fill palette.foreground
+      
+      rectangle "gutter":
+        cornerRadius 0.2'em
+        gridRow "main" // span "main"
+        gridColumn "menu"
+
+        fill rgba(66, 177, 44, 167).to(Color).spin(75.0)
+
+        Vertical:
+          itemSpacing 1'em
+          size 100'pp, 100'pp
+
+          Button:
+            size 100'pp, 2'em
+            label fmt"Button2: {parent.screenbox.w.float:6.0f}"
+            onClick: self.count.inc()
+
+          Button:
+            size 100'pp, 2'em
+            label fmt"Button2: {self.barVal.float:4.2f}"
+            onClick: self.count.inc()
     
-    gridTemplateColumns ["left"] csFixed(Em(1)) \
-                      ["menu"] csFixed(10'em.float32 + self.barVal + self.barOffset) \
-                      ["bar"] csFixed(0.5'em) \
-                      ["area"] 2'fr \
-                      ["right"] csFixed(Em(1))
+      rectangle "area":
+        fill rgba(66, 177, 44, 167).to(Color).spin(100.0) * 0.2
+        gridArea "main", "area"
 
+        Vertical:
+          self.value = (self.count.toFloat * 0.10) mod 1.0001
 
-    rectangle "border":
-      cornerRadius 0.2'em
-      gridRow "main"
-      gridColumn "menu" // "right"
-      stroke 0.1'em.float32, blackColor
+          ProgressBar:
+            size 10'em, 2'em
+            value: self.value
 
-    rectangle "gutter":
-      cornerRadius 0.2'em
-      gridRow "main" // span "main"
-      gridColumn "menu"
-
-      fill rgba(66, 177, 44, 167).to(Color).spin(75.0)
-
-      Vertical:
-        itemSpacing 1'em
-        size 100'pp, 100'pp
-
-        Button:
-          size 100'pp, 2'em
-          label fmt"Button2: {parent.screenbox.w.float:6.0f}"
-          onClick: self.count.inc()
-
-        Button:
-          size 100'pp, 2'em
-          label fmt"Button2: {self.barVal.float:4.2f}"
-          onClick: self.count.inc()
-  
-    rectangle "bar":
-      gridArea "main", "bar"
-
-      fill rgba(66, 177, 44, 167).to(Color).spin(85.0)
-
-      onClick:
-        self.pipDrag = true
-        self.pipPos = current.mouseRelativeStart()
-        self.barVal = self.barVal + self.barOffset
-
-      if self.pipDrag:
-        self.pipDrag = buttonDown[MOUSE_LEFT]
-        self.barOffset = self.pipPos.mouseRelativeDiff().x.float32
-
-    rectangle "area":
-      fill rgba(66, 177, 44, 167).to(Color).spin(100.0) * 0.2
-      gridRow "main" // span "main"
-      gridColumn "area" // span "area"
-
-      Vertical:
-        self.value = (self.count.toFloat * 0.10) mod 1.0001
-
-        ProgressBar:
-          size 10'em, 2'em
-          value: self.value
 
     # gridTemplateDebugLines true
 
