@@ -230,7 +230,7 @@ proc mouseRatio*(node: Node, pad: Position|UICoord, clamped = false): Position =
     when pad is Position: pad
     else: initPosition(pad.float32, pad.float32)
   let track = node.box.wh - pad
-  result = (mouseRelative() - pad/2)/track 
+  result = (node.mouseRelative() - pad/2)/track 
   if clamped:
     result.x = result.x.clamp(0'ui, 1'ui)
     result.y = result.y.clamp(0'ui, 1'ui)
@@ -1066,9 +1066,10 @@ template rowEnd*(idx: untyped) =
 template gridRow*(val: untyped) =
   ## set CSS grid ending column
   getGridItem().row = val
-template gridArea*(c, r: untyped) =
-  getGridItem().column = c
+
+template gridArea*(r, c: untyped) =
   getGridItem().row = r
+  getGridItem().column = c
 
 proc columnGap*(value: UICoord) =
   ## set CSS grid column gap

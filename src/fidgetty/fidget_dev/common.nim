@@ -922,14 +922,21 @@ template dispatchEvent*(evt: typed) =
 import std/macrocache
 const mcStateCounter = CacheCounter"stateCounter"
 
-template useState*[T: ref](vname: untyped) =
+template useStateImpl[T: ref](node: Node, vname: untyped) =
   ## creates and caches a new state ref object
   const id = static:
-    mcStateCounter.inc(1)
-    value(mcStateCounter)
-  if not current.userStates.hasKey(id):
-    current.userStates[id] = newVariant(T.new())
-  var `vname` {.inject.} = current.userStates[id].get(typeof T)
+    hash(astToStr(vname))
+  if not node.userStates.hasKey(id):
+    node.userStates[id] = newVariant(T.new())
+  var `vname` {.inject.} = node.userStates[id].get(typeof T)
+
+template useState*[T: ref](vname: untyped) =
+  ## creates and caches a new state ref object
+  useStateImpl[T](common.current, vname)
+
+template useStateParent*[T: ref](vname: untyped) =
+  ## creates and caches a new state ref object
+  useStateImpl[T](common.parent, vname)
 
 template withState*[T: ref](tp: typedesc[T]): untyped =
   ## creates and caches a new state ref object

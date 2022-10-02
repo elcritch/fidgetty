@@ -24,7 +24,7 @@ proc render*(
   gridTemplateRows csFixed(0.4'em) 1'fr csFixed(0.4'em)
   gridTemplateColumns csFixed(0.4'em) 1'fr csFixed(0.4'em)
 
-  setup self.dragger
+  behavior self.dragger
 
   if props.label.len() > 0:
     text "text":
@@ -40,17 +40,18 @@ proc render*(
   rectangle "bar holder":
     gridArea 2 // 3, 2 // 3
 
-    let sliderPos = self.dragger.position(props.value)
-    if sliderPos.updated:
-      dispatchEvent Float(self.dragger.value)
-    
     rectangle "pop button":
+      let sliderPos = self.dragger.position(props.value)
+      if sliderPos.updated:
+        dispatchEvent Float(self.dragger.value)
+    
       box sliderPos.value, 0, parent.box.h, parent.box.h
       fill palette.cursor
       cornerRadius theme
       stroke theme.outerStroke
       clipContent true
       imageOf theme.gloss
+
 
     rectangle "bar filling":
       # Draw the bar itself.

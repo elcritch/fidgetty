@@ -12,7 +12,7 @@ proc activate*(self: Dragger, isActive = true) =
 proc active*(self: Dragger): bool =
   self.isDrag
 
-template setup*(dragger: Dragger) =
+template behavior*(dragger: Dragger) =
   if dragger.isNil:
     dragger.new()
   
@@ -22,17 +22,32 @@ template setup*(dragger: Dragger) =
   if dragger.active():
     dragger.activate(buttonDown[MOUSE_LEFT])
 
-proc position*(self: Dragger, value: float32): tuple[value: UICoord, updated: bool] =
-  let popBtnWidth = height()
-  let popTrackWidth = width() - popBtnWidth
+proc position*(self: Dragger, value: float32, size = height(), node = common.parent, normalized=false): tuple[value: UICoord, updated: bool] =
+  let popTrackWidth = node.box.w - size
   if self.isDrag:
-    let rel = current.mouseRatio(pad=popBtnWidth, clamped=true)
+    let rel = node.mouseRatio(pad=size, clamped=true)
     self.value = rel.x.float32
     if value != self.value:
       result[1] = true
-    # if value != self.value:
-    #   result[0] = dispatchEvent Float(self.value)
 
   let pipFrac = UICoord(value).clamp(0'ui, 1'ui)
-  let pipPos = popTrackWidth*pipFrac
-  result[0] = pipPos
+  if normalized:
+    result[0] = pipFrac
+  else:
+    let pipPos = popTrackWidth*pipFrac
+    result[0] = pipPos
+
+template draggable*(setter: untyped): untyped =
+  ## enable slider dragging
+  behavior state.dragger
+
+  let sliderPos = state.dragger.position(
+    state.dragger.value,
+    0'ui,
+    node = parent,
+    normalized=true
+  )
+  # print sliderPos
+  if sliderPos.updated:
+    setter(state.dragger.value)
+    refresh()
