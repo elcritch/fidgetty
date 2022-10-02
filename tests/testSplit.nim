@@ -73,8 +73,7 @@ proc drawMain() =
           onClick: self.count.inc()
   
     rectangle "bar":
-      gridRow "main"
-      gridColumn "bar" 
+      gridArea "main", "bar"
 
       fill rgba(66, 177, 44, 167).to(Color).spin(85.0)
 
