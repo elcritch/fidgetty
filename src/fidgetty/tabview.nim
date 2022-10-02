@@ -3,6 +3,11 @@ import behaviors/dragger
 
 export dragger
 
+variants TabEvent:
+  ## variant case types for scroll events
+  ScrollTo(perc: float32)
+  ScrollPage(amount: float32)
+
 fidgetty TabView:
   properties:
     triggers: TabEvents
@@ -37,7 +42,7 @@ import print
 proc render*(
     props: TabViewProps,
     self: TabViewState,
-): Events =
+): Events[All]=
   ## Renders a TabView which is a vertical bar splitting
   ## an area into two with a draggable bar in between.
   

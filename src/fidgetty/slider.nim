@@ -19,7 +19,7 @@ proc new*(_: typedesc[SliderProps]): SliderProps =
 proc render*(
     props: SliderProps,
     self: SliderState,
-): Events =
+): Events[All]=
   ## Draw a progress bars 
   gridTemplateRows csFixed(0.4'em) 1'fr csFixed(0.4'em)
   gridTemplateColumns csFixed(0.4'em) 1'fr csFixed(0.4'em)

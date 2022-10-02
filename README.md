@@ -31,7 +31,7 @@ proc new*(_: typedesc[CounterButtonProps]): CounterButtonProps =
 proc render*(
     props: CounterButtonProps,
     self: CounterButtonState
-): Events =
+): Events[All]=
   clipContent true
   cornerRadius theme.cornerRadius
   onHover:

@@ -73,7 +73,7 @@ proc new*(_: typedesc[TextInputProps]): TextInputProps =
 proc render*(
     props: TextInputProps,
     self: TextInputState,
-): Events =
+): Events[All]=
   # Draw a progress bars
 
   stroke theme.outerStroke

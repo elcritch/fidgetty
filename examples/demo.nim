@@ -21,7 +21,7 @@ type
     dropIndexes: int
     dropName: string
     textInput: string
-    evts: Events
+    evts: Events[All]
 
 var self = DemoApp.new()
 
@@ -103,8 +103,8 @@ proc testDemo() =
           items dropItems
           selected self.dropIndexes
           defaultLabel "Menu"
-        do -> ValueChange:
-          Index(idx):
+        do -> ChangeEvent[int]:
+          Changed(idx):
             self.dropIndexes = idx
             refresh()
 
@@ -125,13 +125,13 @@ proc testDemo() =
         items dropItems
         selected self.dropIndexes
         itemsVisible 4
-        triggers self.evts
+        triggers self.evts.to(ScrollEvent)
         size 60'vw, 2'em
       finally:
         # instead of `do -> ValueChange` we can
         # use a `finally` block and process events.
-        processEvents(ValueChange):
-          Index(val):
+        processEvents(ChangeEvent[int]):
+          Changed(val):
             self.dropIndexes = val
             refresh()
         # this lets us do other things after the widget 

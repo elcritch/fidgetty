@@ -18,7 +18,7 @@ proc new*(_: typedesc[ProgressBarProps]): ProgressBarProps =
 proc render*(
     props: ProgressBarProps,
     self: ProgressBarState,
-): Events =
+): Events[All]=
   ## Draw a progress bars 
   gridTemplateRows csFixed(0.4'em) 1'fr csFixed(0.4'em)
   gridTemplateColumns csFixed(0.4'em) 1'fr csFixed(0.4'em)

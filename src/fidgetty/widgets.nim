@@ -104,16 +104,34 @@ macro fidgetty*(name, blk: untyped) =
         component `procName`:
           useState[`propsTypeId`](item)
           useState[`stateTypeId`](state)
-          var events {.inject, used.}: Events
+          var events {.inject, used.}: Events[All]
           `setters`
           code
-          events = item.render(state)
+          events = item.render(state).to(All)
           doBlocks(handlers)
   # echo "result:\n", repr result
 
+type
+  ChangeKind* = enum
+    NoChange
+    Changed
+    ChangeError
+  
+  ChangeEvent*[T] = object
+    case kind*: ChangeKind
+    of Changed:
+      value*: T
+    of NoChange:
+      prev*: T
+    of ChangeError:
+      old*: T
+      curr*: T
+
+proc changed*[T](value: T): ChangeEvent[T] =
+  ChangeEvent[T](kind: Changed, value: value)
+
 variants ValueChange:
-  ## variant case types for scroll events
-  Index(index: int)
+  ## variant case types generic value changes
   Bool(bval: bool)
   Float(fval: float)
   Strings(sval: string)

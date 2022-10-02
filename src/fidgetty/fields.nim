@@ -14,7 +14,7 @@ fidgetty BasicLabel:
 proc render*(
     props: BasicLabelProps,
     self: BasicLabelState,
-): Events =
+): Events[All]=
   ## labels
   let lw = max(props.width, props.label.len().float32.Em) * 0.5
   size lw, props.height

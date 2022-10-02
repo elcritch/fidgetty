@@ -32,6 +32,13 @@ else:
   type NodeUID* = int64
 
 type
+  All* = distinct object
+  # Events* = GenericEvents[void]
+  Events*[T] = object
+    data*: TableRef[TypeId, Variant]
+
+
+type
   FidgetConstraint* = enum
     cMin
     cMax
@@ -193,13 +200,9 @@ type
     selectable*: bool
     scrollpane*: bool
     userStates*: Table[int, Variant]
-    userEvents*: Events
+    userEvents*: Events[All]
     points*: seq[Position]
 
-  GenericEvents*[T] = object
-    data*: TableRef[TypeId, Variant]
-
-  Events* = GenericEvents[void]
   
   KeyState* = enum
     Empty
@@ -890,14 +893,17 @@ proc `+`*(rect: Rect, xy: Vec2): Rect =
 proc `~=`*(rect: Vec2, val: float32): bool =
   result = rect.x ~= val and rect.y ~= val
 
-proc add*[T](events: var Events, evt: T) =
+template to*[V, T](events: Events[T], v: typedesc[V]): Events[V] =
+  Events[V](events)
+
+proc add*[T, V](events: var Events[V], evt: T) =
   if events.data.isNil:
     events.data = newTable[TypeId, Variant]()
   let key = T.getTypeId()
   let res = events.data.mgetOrPut(key, newVariant(new seq[T])).get(ref seq[T])
   res[].add(evt)
 
-proc `[]`*[T](events: Events, tp: typedesc[T]): seq[T] =
+proc `[]`*[T](events: Events[void], tp: typedesc[T]): seq[T] =
   if events.data.isNil:
     return @[]
   let key = T.getTypeId()
@@ -905,7 +911,7 @@ proc `[]`*[T](events: Events, tp: typedesc[T]): seq[T] =
 
 import std/monotimes, std/times
 
-proc popEvents*[T](events: Events, vals: var seq[T]): bool =
+proc popEvents*[T, V](events: Events[V], vals: var seq[T]): bool =
   # let a = getMonoTime()
   if events.data.isNil:
     return false
@@ -915,6 +921,7 @@ proc popEvents*[T](events: Events, vals: var seq[T]): bool =
     vals = res.get(ref seq[T])[]
   # let b = getMonoTime()
   # echo "popEvents: ", $inNanoseconds(b-a), "ns"
+
 
 template dispatchEvent*(evt: typed) =
   result.add(evt)

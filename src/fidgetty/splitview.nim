@@ -48,7 +48,7 @@ import print
 proc render*(
     props: SplitViewProps,
     self: SplitViewState,
-): Events =
+): Events[All]=
   ## Renders a SplitView which is a vertical bar splitting
   ## an area into two with a draggable bar in between.
   

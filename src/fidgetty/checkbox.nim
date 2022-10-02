@@ -18,7 +18,7 @@ proc new*(_: typedesc[CheckboxProps]): CheckboxProps =
 proc render*(
     props: CheckboxProps,
     self: CheckboxState
-): Events =
+): Events[All]=
   # Draw a progress bars
   # onClick:
   #   props.checked = not props.checked

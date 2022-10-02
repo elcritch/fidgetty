@@ -21,7 +21,7 @@ proc new*(_: typedesc[ButtonProps]): ButtonProps =
 proc render*(
     props: ButtonProps,
     self: ButtonState
-): Events =
+): Events[All]=
   # button widget!
   text "button text":
     # boxSizeOf parent
