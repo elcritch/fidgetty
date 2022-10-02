@@ -22,17 +22,17 @@ template setup*(dragger: Dragger) =
   if dragger.active():
     dragger.activate(buttonDown[MOUSE_LEFT])
 
-proc position*(self: Dragger, value: float32, size = height(), width = width()): tuple[value: UICoord, updated: bool] =
-  let popBtnWidth = size
-  let popTrackWidth = width - popBtnWidth
+proc position*(self: Dragger, value: float32, size = height(), node = common.parent, normalized=false): tuple[value: UICoord, updated: bool] =
+  let popTrackWidth = node.box.w - size
   if self.isDrag:
-    let rel = current.mouseRatio(pad=popBtnWidth, clamped=true)
+    let rel = node.mouseRatio(pad=size, clamped=true)
     self.value = rel.x.float32
     if value != self.value:
       result[1] = true
-    # if value != self.value:
-    #   result[0] = dispatchEvent Float(self.value)
 
   let pipFrac = UICoord(value).clamp(0'ui, 1'ui)
-  let pipPos = popTrackWidth*pipFrac
-  result[0] = pipPos
+  if normalized:
+    result[0] = pipFrac
+  else:
+    let pipPos = popTrackWidth*pipFrac
+    result[0] = pipPos

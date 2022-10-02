@@ -5,6 +5,7 @@ import fidgetty
 import fidgetty/themes
 import fidgetty/[button, progressbar]
 import fidgetty/[splitview]
+import fidgetty/behaviors/dragger
 
 import print
 
@@ -21,6 +22,8 @@ type
     pipPos: Position
     barOffset: float
     barVal: float
+    pos: float
+    dragger: Dragger
 
 proc drawMain() =
   # echo "\n\n=================================\n"
@@ -38,16 +41,35 @@ proc drawMain() =
 
     SplitView:
 
-      rectangle "border":
-        cornerRadius 0.2'em
-        gridRow "main"
-        gridColumn "menu" // "right"
-        stroke 0.1'em.float32, blackColor
+      # rectangle "border":
+      #   cornerRadius 0.2'em
+      #   gridRow "top" // span "bottom"
+      #   gridColumn "left" // span "right"
+      #   stroke 0.1'em.float32, blackColor
       
-      SplitBar:
-        stroke theme.outerStroke
-        imageOf theme.gloss
-        fill palette.foreground
+      if self.dragger.isNil:
+        self.dragger.new()
+
+      # let sliderPos = self.dragger.position(self.pos, 1'em, node = current, normalized=true)
+      # print sliderPos
+      # if sliderPos.updated:
+      #   self.pos = self.dragger.value
+
+      rectangle "bar":
+        gridRow "main"
+        gridColumn "bar"
+
+        setup self.dragger
+
+        let sliderPos = self.dragger.position(self.pos, width(), node = parent, normalized=true)
+        print sliderPos
+        if sliderPos.updated:
+          self.pos = self.dragger.value
+
+      # SplitBar:
+      #   stroke theme.outerStroke
+      #   imageOf theme.gloss
+      #   fill palette.foreground
 
       rectangle "gutter":
         cornerRadius 0.2'em

@@ -46,22 +46,14 @@ proc render*(
   
   # Setup CSS Grid Template
   box 0, 0, 100'vw, 100'vh
-  gridTemplateRows ["top"] csFixed(Em(1)) \
-                    ["main"] 1'fr \
-                    ["bottom"] csFixed(Em(1))
+  gridTemplateRows ["main"] 1'fr
   
-  gridTemplateColumns ["left"] csFixed(Em(1)) \
-                    ["menu"] csFixed(10'em.float32 + self.barVal + self.barOffset) \
+  gridTemplateColumns ["menu"] csFixed(10'em.float32 + self.barVal + self.barOffset) \
                     ["bar"] csFixed(0.5'em) \
-                    ["area"] 2'fr \
-                    ["right"] csFixed(Em(1))
+                    ["area"] 2'fr
 
   rectangle "border":
     cornerRadius 0.2'em
     gridRow "main"
-    gridColumn "menu" // "right"
+    gridColumn "menu" // "area"
     stroke 0.1'em.float32, blackColor
-  
-  # echo "splitter:self: ", repr self
-  echo "splitview:self: ", self.unsafeAddr.pointer.repr
-

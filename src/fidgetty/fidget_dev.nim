@@ -230,7 +230,7 @@ proc mouseRatio*(node: Node, pad: Position|UICoord, clamped = false): Position =
     when pad is Position: pad
     else: initPosition(pad.float32, pad.float32)
   let track = node.box.wh - pad
-  result = (mouseRelative() - pad/2)/track 
+  result = (node.mouseRelative() - pad/2)/track 
   if clamped:
     result.x = result.x.clamp(0'ui, 1'ui)
     result.y = result.y.clamp(0'ui, 1'ui)
