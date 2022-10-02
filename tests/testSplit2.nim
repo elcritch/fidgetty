@@ -25,6 +25,10 @@ type
     pos: float
     dragger: Dragger
 
+proc new*(_: typedesc[GridApp]): GridApp =
+  new result
+  result.pos = 0.33
+
 proc drawMain() =
   # echo "\n\n=================================\n"
   frame "main":
@@ -37,7 +41,7 @@ proc drawMain() =
     cornerRadius 0.2'em
 
     # Setup CSS Grid Template
-    box 0, 0, 100'vw, 100'vh
+    box 1'em, 1'em, 100'vw - 2'em, 100'vh - 2'em
 
     SplitView:
 
@@ -47,8 +51,8 @@ proc drawMain() =
       #   gridColumn "left" // span "right"
       #   stroke 0.1'em.float32, blackColor
       
-      if self.dragger.isNil:
-        self.dragger.new()
+      # if self.dragger.isNil:
+      #   self.dragger.new()
 
       # let sliderPos = self.dragger.position(self.pos, 1'em, node = current, normalized=true)
       # print sliderPos
@@ -61,10 +65,17 @@ proc drawMain() =
 
         setup self.dragger
 
-        let sliderPos = self.dragger.position(self.pos, width(), node = parent, normalized=true)
-        print sliderPos
+        # print self.pos, self.dragger.value
+        let sliderPos = self.dragger.position(
+          self.pos,
+          0'ui,
+          node = parent,
+          normalized=true
+        )
+        # print sliderPos
         if sliderPos.updated:
-          self.pos = self.dragger.value
+          sliderFraction self.dragger.value
+          refresh()
 
       # SplitBar:
       #   stroke theme.outerStroke
