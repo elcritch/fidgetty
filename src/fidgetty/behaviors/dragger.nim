@@ -37,18 +37,17 @@ proc position*(self: Dragger, value: float32, size = height(), node = common.par
     let pipPos = popTrackWidth*pipFrac
     result[0] = pipPos
 
-template draggable*(enable: bool): untyped =
+template draggable*(setter: untyped): untyped =
   ## enable slider dragging
-  if enable:
-    behavior state.dragger
+  behavior state.dragger
 
-    let sliderPos = state.dragger.position(
-      state.dragger.value,
-      0'ui,
-      node = parent,
-      normalized=true
-    )
-    # print sliderPos
-    if sliderPos.updated:
-      # sliderFraction state.dragger.value
-      refresh()
+  let sliderPos = state.dragger.position(
+    state.dragger.value,
+    0'ui,
+    node = parent,
+    normalized=true
+  )
+  # print sliderPos
+  if sliderPos.updated:
+    setter(state.dragger.value)
+    refresh()
