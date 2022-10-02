@@ -24,7 +24,7 @@ template Horizontal*(child: untyped) =
 template Vertical*(text, child: untyped) =
   group text:
     layout lmVertical
-    counterAxisSizingMode csAuto
+    counterAxisSizingMode CounterAxisSizingMode.csAuto
     `child`
 
 template Vertical*(child: untyped) =
