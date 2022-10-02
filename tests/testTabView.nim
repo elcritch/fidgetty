@@ -4,8 +4,7 @@ import std/[math, strformat]
 import fidgetty
 import fidgetty/themes
 import fidgetty/[button, progressbar]
-import fidgetty/[splitview]
-import fidgetty/behaviors/dragger
+import fidgetty/[tabview]
 
 import print
 
@@ -40,11 +39,12 @@ proc drawMain() =
     # Setup CSS Grid Template
     box 1'em, 1'em, 100'vw - 2'em, 100'vh - 2'em
 
-    SplitView:
+    TabView:
       clipContent true
       cornerRadius 0.5'em
 
       split "bar":
+        draggable sliderFraction
         stroke theme.outerStroke
         imageOf theme.gloss
         fill palette.foreground

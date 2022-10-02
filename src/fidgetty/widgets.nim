@@ -32,21 +32,22 @@ type
     w is ref
     ($typeof(w)).endswith("State")
 
-proc processEventsImpl(tp, body: NimNode): NimNode =
-  let code = body
+proc matchEventsImpl(code: NimNode): NimNode =
   let hasOther = code.mapIt(it[0].repr).anyIt(it == "_")
-  # echo "PROCESSEVENTS:hasOther: ", hasOther
-  # echo "PROCESSEVENTS: ", body.treeRepr
   if not hasOther:
     code.add nnkCommand.newTree(
       ident "_",
       nnkDiscardStmt.newTree(nnkEmpty.newNimNode()),
     )
-  let match = nnkCommand.newTree(
+  result = nnkCommand.newTree(
     ident "match",
     ident "evt",
     code
   )
+
+proc processEventsImpl(tp, body: NimNode): NimNode =
+  let code = body
+  let match = matchEventsImpl(code)
   result = quote do:
     var evts: seq[`tp`]
     {.push warning[UnreachableElse]: off.}
@@ -120,11 +121,12 @@ variants ValueChange:
 macro processEvents*(tp, body: untyped): untyped =
   result = processEventsImpl(tp, body)
 
-template forEvents*(tp, body: untyped): untyped =
+template forEvents*(evts, body: untyped): untyped =
   var evts: seq[`tp`]
-  if events.popEvents(evts):
-    for event {.inject.} in evts:
-      `body`
+  {.push warning[UnreachableElse]: off.}
+  for event {.inject.} in evts:
+    `match`
+  {.pop.}
 
 template dispatchMouseEvents*(): untyped =
   for evt in current.events.mouse:
