@@ -10,7 +10,7 @@ variants TabEvent:
 
 fidgetty TabView:
   properties:
-    triggers: TabEvents
+    triggers: Events[All]
   state:
     activeTab: int
 

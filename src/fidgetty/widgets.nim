@@ -8,8 +8,8 @@ export tables, strformat, options
 export math, random
 export variant, patty
 
-import fidget_dev, theming
-export fidget_dev, theming, tables
+import fidget_dev, events, theming
+export fidget_dev, events, theming, tables
 
 type
   WidgetProc* = proc()
@@ -56,6 +56,9 @@ proc processEventsImpl(tp, body: NimNode): NimNode =
         `match`
     {.pop.}
   # echo "res: ", result.treeRepr
+
+macro processEvents*(tp, body: untyped): untyped =
+  result = processEventsImpl(tp, body)
 
 macro doBlocks*(blks: varargs[untyped]) =
   # echo "DOEVENTS: ", blks.treeRepr
@@ -110,41 +113,6 @@ macro fidgetty*(name, blk: untyped) =
           events = item.render(state).to(All)
           doBlocks(handlers)
   # echo "result:\n", repr result
-
-type
-  ChangeKind* = enum
-    NoChange
-    Changed
-    ChangeError
-  
-  ChangeEvent*[T] = object
-    case kind*: ChangeKind
-    of Changed:
-      value*: T
-    of NoChange:
-      prev*: T
-    of ChangeError:
-      old*: T
-      curr*: T
-
-proc changed*[T](value: T): ChangeEvent[T] =
-  ChangeEvent[T](kind: Changed, value: value)
-
-variants ValueChange:
-  ## variant case types generic value changes
-  Bool(bval: bool)
-  Float(fval: float)
-  Strings(sval: string)
-
-macro processEvents*(tp, body: untyped): untyped =
-  result = processEventsImpl(tp, body)
-
-template forEvents*(evts, body: untyped): untyped =
-  var evts: seq[`tp`]
-  {.push warning[UnreachableElse]: off.}
-  for event {.inject.} in evts:
-    `match`
-  {.pop.}
 
 template dispatchMouseEvents*(): untyped =
   for evt in current.events.mouse:
