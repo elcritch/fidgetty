@@ -15,7 +15,7 @@ template Box*(child: untyped) =
 template Horizontal*(text, child: untyped) =
   group text:
     layout lmHorizontal
-    counterAxisSizingMode csAuto
+    counterAxisSizingMode CounterAxisSizingMode.csAuto
     `child`
 
 template Horizontal*(child: untyped) =

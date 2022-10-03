@@ -138,7 +138,7 @@ proc render*(
 
     if self.textBox.hasChange:
       if props.value != curr:
-        dispatchEvent Strings(curr)
+        dispatchEvent changed(curr)
     elif curr == "":
       self.textBox.text = props.value
     elif curr != props.value:
