@@ -35,8 +35,8 @@ proc exampleApp*() =
     TextInput:
       value self.textInput
       box 20'pp, 20'pp, 40'pp, 40'pp
-    do -> ValueChange:
-      Strings(val):
+    do -> ChangeEvent[string]:
+      Changed(val):
         self.textInput = val
         refresh()
 
