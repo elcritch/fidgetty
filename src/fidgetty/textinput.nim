@@ -37,11 +37,11 @@ proc handleClicked(self: TextInputState) =
     self.multiClick = 0
   self.lastClickTime = epochTime()
   if self.multiClick == 1:
-    echo "selectWord"
+    # echo "selectWord"
     self.textBox.selectWord(mousePos)
     buttonDown[MOUSE_LEFT] = false
   elif self.multiClick == 2:
-    echo "selectParagraph"
+    # echo "selectParagraph"
     self.textBox.selectParagraph(mousePos)
     buttonDown[MOUSE_LEFT] = false
   elif self.multiClick == 3:
@@ -110,7 +110,7 @@ proc render*(
           await sleepAsync(cursorBlink)
       
       if self.ticks.isNil or self.ticks.finished:
-        echo "ticker..."
+        # echo "ticker..."
         self.ticks = ticker(self)
 
     onClickOutside:
