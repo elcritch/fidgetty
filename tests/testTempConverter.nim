@@ -45,8 +45,8 @@ proc labeledTextInput[T](
     size 5'em, 2'em
     pattern re"[0-9\.]"
     ignorePostfix true
-  do -> ValueChange: # handle events from widget
-    Strings(val):
+  do -> ChangeEvent[string]:
+    Changed(val):
       var res: float
       if parseFloat(val.strip(), res, 0) > 0:
         self.temp = T(res).toC()

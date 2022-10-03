@@ -8,8 +8,8 @@ export tables, strformat, options
 export math, random
 export variant, patty
 
-import fidget_dev, theming
-export fidget_dev, theming, tables
+import fidget_dev, extras, events, theming
+export fidget_dev, extras, events, theming, tables
 
 type
   WidgetProc* = proc()
@@ -56,6 +56,9 @@ proc processEventsImpl(tp, body: NimNode): NimNode =
         `match`
     {.pop.}
   # echo "res: ", result.treeRepr
+
+macro processEvents*(tp, body: untyped): untyped =
+  result = processEventsImpl(tp, body)
 
 macro doBlocks*(blks: varargs[untyped]) =
   # echo "DOEVENTS: ", blks.treeRepr
@@ -111,41 +114,6 @@ macro fidgetty*(name, blk: untyped) =
           doBlocks(handlers)
   # echo "result:\n", repr result
 
-type
-  ChangeKind* = enum
-    NoChange
-    Changed
-    ChangeError
-  
-  ChangeEvent*[T] = object
-    case kind*: ChangeKind
-    of Changed:
-      value*: T
-    of NoChange:
-      prev*: T
-    of ChangeError:
-      old*: T
-      curr*: T
-
-proc changed*[T](value: T): ChangeEvent[T] =
-  ChangeEvent[T](kind: Changed, value: value)
-
-variants ValueChange:
-  ## variant case types generic value changes
-  Bool(bval: bool)
-  Float(fval: float)
-  Strings(sval: string)
-
-macro processEvents*(tp, body: untyped): untyped =
-  result = processEventsImpl(tp, body)
-
-template forEvents*(evts, body: untyped): untyped =
-  var evts: seq[`tp`]
-  {.push warning[UnreachableElse]: off.}
-  for event {.inject.} in evts:
-    `match`
-  {.pop.}
-
 template dispatchMouseEvents*(): untyped =
   for evt in current.events.mouse:
     dispatchEvent MouseEvent(kind: evt)
@@ -156,84 +124,3 @@ macro reverseStmts*(body: untyped) =
   for ln in body:
     stmts.insert(ln, 0)
   result.add stmts
-
-# =========================
-template Box*(text, child: untyped) =
-  group text:
-    layout parent.layoutMode
-    counterAxisSizingMode parent.counterAxisSizingMode
-    `child`
-
-template Box*(child: untyped) =
-  Box("", child)
-
-template Horizontal*(text, child: untyped) =
-  group text:
-    layout lmHorizontal
-    counterAxisSizingMode csAuto
-    `child`
-
-template Horizontal*(child: untyped) =
-  Horizontal("", child)
-
-template Vertical*(text, child: untyped) =
-  group text:
-    layout lmVertical
-    counterAxisSizingMode csAuto
-    `child`
-
-template Vertical*(child: untyped) =
-  Vertical("", child)
-
-template Group*(child: untyped) =
-  group text:
-    `child`
-
-template Centered*(child: untyped) =
-  Horizontal: # "centered":
-    centeredX current.screenBox.w
-    centeredY current.screenBox.h
-    `child`
-
-
-template VHBox*(sz, child: untyped) =
-  Vertical:
-    sz
-    Horizontal:
-      child
-
-template Theme*(pl: Palette, child: untyped) =
-  block:
-    push pl
-    `child`
-    pop(Palette)
-
-template ThemePalette*(child: untyped) =
-  block:
-    var pl = palette()
-    push pl
-    `child`
-    pop(Palette)
-
-template GeneralTheme*(child: untyped) =
-  block:
-    var th = theme()
-    push th
-    `child`
-    pop(GeneralTheme)
-
-template Spacer*(w: UICoord, h: UICoord) =
-  blank: size(w, h)
-
-template VSpacer*(h: UICoord) =
-  blank: size(0, h)
-
-template HSpacer*(w: UICoord) =
-  blank: size(w, 0)
-
-template wrapApp*(fidgetName: typed, fidgetType: typedesc): proc() =
-  proc `fidgetName Main`() =
-    useState[`fidgetType`](state)
-    fidgetName(state)
-  
-  `fidgetName Main`

@@ -116,8 +116,8 @@ proc testDemo() =
       Slider:
         size 60'vw, 2'em
         value self.mySlider
-      do -> ValueChange:
-        Float(val):
+      do -> ChangeEvent[float32]:
+        Changed(val):
           self.mySlider = val
           refresh()
       
@@ -141,8 +141,8 @@ proc testDemo() =
       Slider:
         value self.scrollValue
         box 0, 0, 55.0'pp, 1.5'em
-      do -> ValueChange:
-        Float(val):
+      do -> ChangeEvent[float32]:
+        Changed(val):
           self.evts.add ScrollTo(val)
           self.scrollValue = val
           refresh()
@@ -150,8 +150,8 @@ proc testDemo() =
       TextInput:
         value self.textInput
         size 60'vw, 2'em
-      do -> ValueChange:
-        Strings(val):
+      do -> ChangeEvent[string]:
+        Changed(val):
           self.textInput = val
           refresh()
 
