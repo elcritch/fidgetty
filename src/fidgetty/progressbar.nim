@@ -11,14 +11,14 @@ fidgetty ProgressBar:
 proc new*(_: typedesc[ProgressBarProps]): ProgressBarProps =
   new result
   box 0, 0, 100'pp, 2.Em
-  textAutoResize tsHeight
-  layoutAlign laStretch
+  # textAutoResize tsHeight
+  # layoutAlign laStretch
   stroke theme.outerStroke
 
 proc render*(
     props: ProgressBarProps,
     self: ProgressBarState,
-): Events[All]=
+): Events[All] =
   ## Draw a progress bars 
   gridTemplateRows csFixed(0.4'em) 1'fr csFixed(0.4'em)
   gridTemplateColumns csFixed(0.4'em) 1'fr csFixed(0.4'em)

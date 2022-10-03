@@ -42,17 +42,10 @@ proc drawMain() =
     TabView:
       clipContent true
       cornerRadius 0.5'em
+      fill rgba(66, 177, 44, 167).to(Color).spin(100.0) * 0.2
 
-      split "bar":
-        draggable sliderFraction
-        stroke theme.outerStroke
-        imageOf theme.gloss
-        fill palette.foreground
-      
-      split "menu":
+      tab "menu":
         cornerRadius 0.2'em
-        fill rgba(66, 177, 44, 167).to(Color).spin(75.0)
-
         Vertical:
           itemSpacing 1'em
           size 100'pp, 100'pp
@@ -61,24 +54,29 @@ proc drawMain() =
             size 100'pp, 2'em
             disabled true
             label fmt"Width: {parent.screenbox.w.float:6.0f}"
-            # onClick: self.count.inc()
 
           Button:
             size 100'pp, 2'em
+            disabled true
+            label fmt"Width: {parent.screenbox.w.float:6.0f}"
+
+      tab "main":
+        size 10'em, 10'em
+        Vertical:
+          itemSpacing 1'em
+          size 10'em, 10'em
+          self.value = (self.count.toFloat * 0.10) mod 1.0001
+
+          Button:
+            size 10'em, 2'em
             label fmt"Increment"
             onClick: self.count.inc()
     
-      split "main":
-        fill rgba(66, 177, 44, 167).to(Color).spin(100.0) * 0.2
-
-        Vertical:
-          self.value = (self.count.toFloat * 0.10) mod 1.0001
-
           ProgressBar:
             size 10'em, 2'em
             value: self.value
 
-    # gridTemplateDebugLines true
+    gridTemplateDebugLines true
 
 startFidget(
   drawMain,
