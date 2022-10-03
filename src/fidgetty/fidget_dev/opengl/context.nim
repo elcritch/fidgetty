@@ -239,8 +239,10 @@ proc findEmptyRect(ctx: Context, width, height: int): Rect =
 
   return rect
 
-proc putImage*(ctx: Context, path: string | Hash, image: Image) =
+proc putImage*(ctx: Context, path: string | Hash, image: Image, debug = false) =
   # Reminder: This does not set mipmaps (used for text, should it?)
+  if debug:
+    echo "putImage: ", (image.width, image.height), " @ ", path
   let rect = ctx.findEmptyRect(image.width, image.height)
   ctx.entries[path] = rect / float(ctx.atlasSize)
   updateSubImage(
@@ -266,6 +268,7 @@ proc updateImage*(ctx: Context, path: string | Hash, image: Image) =
   )
 
 proc putFlippy*(ctx: Context, path: string | Hash, flippy: Flippy) =
+  echo "putFlippy: ", (flippy.width, flippy.height), " @ ", path
   let rect = ctx.findEmptyRect(flippy.width, flippy.height)
   ctx.entries[path] = rect / float(ctx.atlasSize)
   var
@@ -507,6 +510,7 @@ proc fillRect*(ctx: Context, rect: Rect, color: Color) =
   if imgKey notin ctx.entries:
     var image = newImage(4, 4)
     image.fill(rgba(255, 255, 255, 255))
+    echo "fillRect: ", imgKey
     ctx.putImage(imgKey, image)
 
   let
@@ -522,11 +526,12 @@ proc fillRect*(ctx: Context, rect: Rect, color: Color) =
 proc generateCorner(
     radius: int,
     quadrant: range[1..4],
+    stroked: bool,
     lineWidth: float32 = 0'f32,
+    fillStyle = rgba(255, 255, 255, 255)
 ): Image =
   const s = 4.0/3.0 * (sqrt(2.0) - 1.0)
   let
-    fillStyle = rgba(255, 255, 255, 255)
     x = radius.toFloat
     y = radius.toFloat
     r = radius.toFloat
@@ -568,23 +573,29 @@ proc generateCorner(
 
   let image = newImage(radius, radius)
 
-  if lineWidth == 0'f32:
+  if not stroked:
     let ctx1 = newContext(image)
     ctx1.fillStyle = fillStyle
-    drawImpl(ctx1, false)
+    drawImpl(ctx1, doStroke=false)
+    echo "non stroked corner"
   else:
     let ctx2 = newContext(image)
+    # ctx2.fillStyle = rgba(255, 255, 255, 0)
     ctx2.strokeStyle = fillStyle
     ctx2.lineWidth = lineWidth
-    drawImpl(ctx2, true)
+    drawImpl(ctx2, doStroke=true)
+    echo "stroked corner"
 
   result = image
 
-proc fillRoundedRect*(
+proc fillRoundedRectImpl*(
     ctx: Context,
     rect: Rect,
     color: Color,
-    radius: float32
+    radius: float32,
+    stroked: bool,
+    lineWidth: float32 = 0'f32,
+    fillStyle = rgba(255, 255, 255, 255)
 ) =
   if rect.w <= 0 or rect.h <= -0:
     when defined(fidgetExtraDebugLogging):
@@ -601,87 +612,129 @@ proc fillRoundedRect*(
   let hash = hash((
     6118,
     (rw*100).int, (rh*100).int,
-    (radius*100).int
+    (radius*100).int,
+    (lineWidth*100).int,
+    stroked.int,
   ))
 
-  var hashes: array[4, Hash]
-  for quadrant in 1..4:
-    let qhash = hash !& quadrant
-    hashes[quadrant-1] = qhash
-    if qhash notin ctx.entries:
-      let
-        img = generateCorner(radius.int, quadrant, 0'f32)
-      ctx.putImage(hashes[quadrant-1], img)
+  echo "fillRoundedRect: radius: ", radius.int, " lw: ", lineWidth, " stroked: ", stroked
+  if radius > 0.0:
+    var hashes: array[4, Hash]
+    for quadrant in 1..4:
+      let qhash = hash !& quadrant
+      hashes[quadrant-1] = qhash
+      if qhash notin ctx.entries:
+        let img = generateCorner(radius.int, quadrant, stroked, lineWidth, fillStyle)
+        echo "fillRoundedRect: ", hashes[quadrant-1]
+        ctx.putImage(hashes[quadrant-1], img)
 
-  let
-    xy = rect.xy 
-    offsets = [vec2(w-rw, 0), vec2(0, 0), vec2(0, h-rh), vec2(w-rw, h-rh)]
-
-  for corner in 0..3:
     let
-      uvRect = ctx.entries[hashes[corner]]
-      wh = rect.wh * ctx.atlasSize.float32
-      pt = xy + offsets[corner]
+      xy = rect.xy 
+      offsets = [vec2(w-rw, 0), vec2(0, 0), vec2(0, h-rh), vec2(w-rw, h-rh)]
+
+    for corner in 0..3:
+      let
+        uvRect = ctx.entries[hashes[corner]]
+        wh = rect.wh * ctx.atlasSize.float32
+        pt = xy + offsets[corner]
+      
+      ctx.drawUvRect(pt, pt + rw,
+                    uvRect.xy, uvRect.xy + uvRect.wh,
+                    color)
+
+  if not stroked:
+    let
+      rrw = w-rw
+      rrh = h-rh
+      wrw = w-2*rw
+      hrh = h-2*rh
     
-    ctx.drawUvRect(pt, pt + rw,
-                   uvRect.xy, uvRect.xy + uvRect.wh,
-                   color)
+    fillRect(ctx, rect(rect.x+rw, rect.y+rh, wrw, hrh), color)
 
-  let
-    rrw = w-rw
-    rrh = h-rh
-    wrw = w-2*rw
-    hrh = h-2*rh
-  fillRect(ctx, rect(rect.x+rw, rect.y+rh, wrw, hrh), color)
+    fillRect(ctx, rect(rect.x+rw, rect.y,     wrw, rh), color)
+    fillRect(ctx, rect(rect.x+rw, rect.y+rrh, wrw, rh), color)
 
-  fillRect(ctx, rect(rect.x+rw, rect.y,     wrw, rh), color)
-  fillRect(ctx, rect(rect.x+rw, rect.y+rrh, wrw, rh), color)
+    fillRect(ctx, rect(rect.x, rect.y+rh,     rw, hrh), color)
+    fillRect(ctx, rect(rect.x+rrw, rect.y+rh, rw, hrh), color)
+  else:
+    let
+      rw = lineWidth
+      rh = lineWidth
+      rrw = w-rw
+      rrh = h-rh
+      wrw = w-2*rw
+      hrh = h-2*rh
+    
+    fillRect(ctx, rect(rect.x+rw, rect.y,     wrw, rh), color)
+    fillRect(ctx, rect(rect.x+rw, rect.y+rrh, wrw, rh), color)
 
-  fillRect(ctx, rect(rect.x, rect.y+rh,     rw, hrh), color)
-  fillRect(ctx, rect(rect.x+rrw, rect.y+rh, rw, hrh), color)
+    fillRect(ctx, rect(rect.x, rect.y+rh,     rw, hrh), color)
+    fillRect(ctx, rect(rect.x+rrw, rect.y+rh, rw, hrh), color)
+
+
+proc fillRoundedRect*(
+    ctx: Context,
+    rect: Rect,
+    color: Color,
+    radius: float32
+) =
+  fillRoundedRectImpl(ctx, rect, color, radius, false, 0.0, rgba(255, 255, 255, 255))
 
 proc strokeRoundedRect*(
   ctx: Context, rect: Rect, color: Color, weight: float32, radius: float32
 ) =
-  if rect.w <= 0 or rect.h <= -0:
-    when defined(fidgetExtraDebugLogging): echo "strokeRoundedRect: too small: ", rect
-    return
-
-  let radius = min(radius, min(rect.w/2, rect.h/2))
-  # TODO: Make this a 9 patch
-  let hash = hash((
-    8349,
-    rect.w.int,
-    rect.h.int,
-    (weight*100).int,
-    (radius*100).int
-  ))
-
-  let
-    w = ceil(rect.w).int
-    h = ceil(rect.h).int
-  if hash notin ctx.entries:
-    let
-      image = newImage(w, h)
-      c = newContext(image)
-    c.fillStyle = rgba(255, 255, 255, 255)
-    c.lineWidth = weight
-    c.strokeStyle = color
-    c.strokeRoundedRect(
-      rect(weight / 2, weight / 2, rect.w - weight, rect.h - weight),
-      radius
+  when true:
+    echo "strokeRoundedRect"
+    fillRoundedRectImpl(
+      ctx,
+      rect,
+      color,
+      radius,
+      true,
+      weight,
+      rgba(255, 255, 255, 255)
     )
-    ctx.putImage(hash, image)
-  let
-    uvRect = ctx.entries[hash]
-    wh = rect.wh * ctx.atlasSize.float32
-  ctx.drawUvRect(
-    rect.xy,
-    rect.xy + vec2(w.float32, h.float32),
-    uvRect.xy,
-    uvRect.xy + uvRect.wh,
-    color
-  )
+  else:
+    if rect.w <= 0 or rect.h <= -0:
+      when defined(fidgetExtraDebugLogging): echo "strokeRoundedRect: too small: ", rect
+      return
+
+    let radius = min(radius, min(rect.w/2, rect.h/2))
+    # TODO: Make this a 9 patch
+    let hash = hash((
+      8349,
+      rect.w.int,
+      rect.h.int,
+      (weight*100).int,
+      (radius*100).int
+    ))
+
+    let
+      w = ceil(rect.w).int
+      h = ceil(rect.h).int
+    if hash notin ctx.entries:
+      let
+        image = newImage(w, h)
+        c = newContext(image)
+      c.fillStyle = rgba(255, 255, 255, 255)
+      c.lineWidth = weight
+      c.strokeStyle = color
+      c.strokeRoundedRect(
+        rect(weight / 2, weight / 2, rect.w - weight, rect.h - weight),
+        radius
+      )
+      echo "strokeRoundedRect: ", hash
+      ctx.putImage(hash, image, true)
+    let
+      uvRect = ctx.entries[hash]
+      wh = rect.wh * ctx.atlasSize.float32
+    ctx.drawUvRect(
+      rect.xy,
+      rect.xy + vec2(w.float32, h.float32),
+      uvRect.xy,
+      uvRect.xy + uvRect.wh,
+      color
+    )
 
 proc line*(
   ctx: Context, a: Vec2, b: Vec2, weight: float32, color: Color
@@ -709,7 +762,8 @@ proc line*(
     c.fillStyle = rgba(255, 255, 255, 255)
     c.lineWidth = weight
     c.strokeSegment(segment(a - pos, b - pos))
-    ctx.putImage(hash, image)
+    echo "line: ", hash
+    ctx.putImage(hash, image, true)
   let
     uvRect = ctx.entries[hash]
     wh = vec2(w.float32, h.float32) * ctx.atlasSize.float32

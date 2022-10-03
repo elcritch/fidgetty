@@ -36,7 +36,7 @@ proc render*(
   clipContent true
 
   if props.disabled:
-    imageColor palette.disabled
+    # imageColor palette.disabled
     fill palette.disabled
   else:
     onHover:

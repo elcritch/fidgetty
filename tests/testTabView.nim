@@ -45,6 +45,7 @@ proc drawMain() =
       fill rgba(66, 177, 44, 167).to(Color).spin(100.0) * 0.2
 
       tab "menu":
+        strokeLine 1'em.float32, "#FF0000"
         cornerRadius 0.2'em
         Vertical:
           itemSpacing 1'em
@@ -53,18 +54,18 @@ proc drawMain() =
           Button:
             size 100'pp, 2'em
             disabled true
-            label fmt"Width: {parent.screenbox.w.float:6.0f}"
+            label fmt"Width: {root.box.w.float:6.0f}"
 
           Button:
             size 100'pp, 2'em
             disabled true
-            label fmt"Height: {parent.screenbox.h.float:6.0f}"
+            label fmt"Height: {root.box.h.float:6.0f}"
 
       tab "main":
         size 10'em, 10'em
         Vertical:
           itemSpacing 1'em
-          size 10'em, 10'em
+          size 100'pp, 100'pp
           self.value = (self.count.toFloat * 0.10) mod 1.0001
 
           Button:
