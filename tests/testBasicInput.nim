@@ -30,7 +30,7 @@ proc exampleApp*() =
 
   rectangle "box":
     box 5'pp, 5'pp, 90'pp, 90'pp
-    strokeLine 1'em.float32, "#FF0000"
+    strokeLine 1'em.float32, "#0000CC"
     cornerRadius 6'em
 
     TextInput:

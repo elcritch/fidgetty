@@ -580,15 +580,12 @@ proc generateCorner(
     let ctx1 = newContext(image)
     ctx1.fillStyle = fillStyle
     drawImpl(ctx1, doStroke=false)
-    echo "non stroked corner"
   else:
     let ctx2 = newContext(image)
-    # ctx2.fillStyle = rgba(255, 255, 255, 0)
     ctx2.strokeStyle = fillStyle
     ctx2.lineCap = SquareCap
     ctx2.lineWidth = lineWidth
     drawImpl(ctx2, doStroke=true)
-    echo "stroked corner"
 
   result = image
 
@@ -624,7 +621,6 @@ proc fillRoundedRect*(
       hashes[quadrant-1] = qhash
       if qhash notin ctx.entries:
         let img = generateCorner(radius.int, quadrant, false, 0.0, rgba(255, 255, 255, 255))
-        echo "fillRoundedRect: ", hashes[quadrant-1]
         ctx.putImage(hashes[quadrant-1], img)
 
     let
@@ -694,7 +690,6 @@ proc strokeRoundedRect*(
       hashes[quadrant-1] = qhash
       if qhash notin ctx.entries:
         let img = generateCorner(radius.int, quadrant, true, weight, fillStyle)
-        echo "fillRoundedRect: ", hashes[quadrant-1]
         ctx.putImage(hashes[quadrant-1], img)
 
     let
