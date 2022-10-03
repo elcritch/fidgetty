@@ -50,16 +50,6 @@ proc handleClicked(self: TextInputState) =
   else:
     self.textBox.mouseAction(mousePos, click = true, keyboard.shiftKey)
 
-# proc handleDrag(textBox: TextBox) =
-#   let mousePos = mouse.pos(raw=true) + current.totalOffset
-#   if textBox != nil and
-#       mouse.down and
-#       not mouse.click and
-#       keyboard.focusNode == current:
-#     # Dragging the mouse:
-#     echo "dragging mouse"
-#     textBox.mouseAction(mousePos, click = false, keyboard.shiftKey)
-
 proc new*(_: typedesc[TextInputProps]): TextInputProps =
   new result
   # boxSizeOf parent
