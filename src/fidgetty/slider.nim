@@ -19,7 +19,7 @@ proc new*(_: typedesc[SliderProps]): SliderProps =
 proc render*(
     props: SliderProps,
     self: SliderState,
-): Events =
+): Events[All]=
   ## Draw a progress bars 
   gridTemplateRows csFixed(0.4'em) 1'fr csFixed(0.4'em)
   gridTemplateColumns csFixed(0.4'em) 1'fr csFixed(0.4'em)
@@ -43,7 +43,7 @@ proc render*(
     rectangle "pop button":
       let sliderPos = self.dragger.position(props.value)
       if sliderPos.updated:
-        dispatchEvent Float(self.dragger.value)
+        dispatchEvent changed(self.dragger.value)
     
       box sliderPos.value, 0, parent.box.h, parent.box.h
       fill palette.cursor
@@ -51,7 +51,6 @@ proc render*(
       stroke theme.outerStroke
       clipContent true
       imageOf theme.gloss
-
 
     rectangle "bar filling":
       # Draw the bar itself.

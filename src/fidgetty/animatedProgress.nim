@@ -14,7 +14,7 @@ variants AnimatedEvents:
 fidgetty AnimatedProgress:
   properties:
     delta: float32
-    triggers: Events
+    triggers: Events[All]
   state:
     pbProps: ProgressBarProps
     pbState: ProgressBarState
@@ -52,7 +52,7 @@ proc ticker(props: AnimatedProgressProps, self: AnimatedProgressState) {.async.}
 proc render*(
     props: AnimatedProgressProps,
     self: AnimatedProgressState
-): Events =
+): Events[All]=
   let events = props.triggers
 
   var nextTarget = 0.0

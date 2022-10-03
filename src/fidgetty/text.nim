@@ -17,7 +17,7 @@ proc new*(_: typedesc[TextBoxProps]): TextBoxProps =
 proc render*(
     props: TextBoxProps,
     self: TextBoxState
-): Events =
+): Events[All]=
   # button widget!
   characters props.label
   size props.label.len().float.Em/2.0+0.5'em, 2'em

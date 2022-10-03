@@ -17,7 +17,7 @@ proc new*(_: typedesc[ButtonEvtProps]): ButtonEvtProps =
 proc render*(
     props: ButtonEvtProps,
     self: ButtonEvtState
-): Events =
+): Events[All]=
   clipContent true
   onHover:
     highlight palette

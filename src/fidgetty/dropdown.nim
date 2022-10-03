@@ -35,7 +35,7 @@ proc new*(_: typedesc[DropdownProps]): DropdownProps =
 proc render*(
     props: DropdownProps,
     self: DropdownState
-): Events =
+): Events[ChangeEvent[int]]=
   ## dropdown widget 
   let
     cb = current.box
@@ -142,7 +142,7 @@ proc render*(
             do -> MouseEvent: # handle events from widget
               evClick:
                 resetState()
-                dispatchEvent Index(idx)
+                dispatchEvent changed(idx)
 
         # group "menuBtnBlankSpacer":
           # box 0, 0, bw, this.cornerRadius[0]
