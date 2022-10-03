@@ -534,7 +534,7 @@ proc generateCorner(
   let
     x = radius.toFloat
     y = radius.toFloat
-    r = radius.toFloat - lineWidth/2
+    r = radius.toFloat - lineWidth
 
     tl = vec2(0, 0)
     tr = vec2(x, 0)
@@ -585,6 +585,7 @@ proc generateCorner(
     let ctx2 = newContext(image)
     # ctx2.fillStyle = rgba(255, 255, 255, 0)
     ctx2.strokeStyle = fillStyle
+    ctx2.lineCap = SquareCap
     ctx2.lineWidth = lineWidth
     drawImpl(ctx2, doStroke=true)
     echo "stroked corner"
@@ -710,17 +711,19 @@ proc strokeRoundedRect*(
                     uvRect.xy, uvRect.xy + uvRect.wh,
                     color)
 
-  let
-    rrw = w-rw
-    rrh = h-rh
-    wrw = w-2*rw
-    hrh = h-2*rh
-  
-  fillRect(ctx, rect(rect.x+rw, rect.y,     wrw, rh), color)
-  fillRect(ctx, rect(rect.x+rw, rect.y+rrh, wrw, rh), color)
+  block:
+    let
+      ww = weight
+      rrw = w-ww
+      rrh = h-ww
+      wrw = w-2*rw
+      hrh = h-2*rh
+    
+    fillRect(ctx, rect(rect.x+rw, rect.y,     wrw, ww), color)
+    fillRect(ctx, rect(rect.x+rw, rect.y+rrh, wrw, ww), color)
 
-  fillRect(ctx, rect(rect.x, rect.y+rh,     rw, hrh), color)
-  fillRect(ctx, rect(rect.x+rrw, rect.y+rh, rw, hrh), color)
+    fillRect(ctx, rect(rect.x, rect.y+rh,     ww, hrh), color)
+    fillRect(ctx, rect(rect.x+rrw, rect.y+rh, ww, hrh), color)
 
 when false:
   proc strokeRoundedRect*(
