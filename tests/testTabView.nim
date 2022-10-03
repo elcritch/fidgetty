@@ -58,7 +58,7 @@ proc drawMain() =
           Button:
             size 100'pp, 2'em
             disabled true
-            label fmt"Width: {parent.screenbox.w.float:6.0f}"
+            label fmt"Height: {parent.screenbox.h.float:6.0f}"
 
       tab "main":
         size 10'em, 10'em
