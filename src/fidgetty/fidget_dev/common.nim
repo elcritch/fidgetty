@@ -349,6 +349,7 @@ var
   numNodes*: int
   popupActive*: bool
   inPopup*: bool
+  resetNodes*: int
   popupBox*: Box
   fullscreen* = false
   windowLogicalSize*: Vec2 ## Screen size in logical coordinates.
@@ -524,6 +525,7 @@ proc emptyFuture*(): Future[void] =
 
 proc clearInputs*() =
 
+  resetNodes = 0
   mouse.wheelDelta = 0
   mouse.consumed = false
   mouse.clickedOutside = false

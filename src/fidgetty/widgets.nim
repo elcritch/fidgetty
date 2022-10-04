@@ -107,6 +107,7 @@ macro fidgetty*(name, blk: untyped) =
         component `procName`:
           useState[`propsTypeId`](item)
           useState[`stateTypeId`](state)
+          item.preRender(state)
           var events {.inject, used.}: Events[All]
           `setters`
           code
@@ -124,3 +125,6 @@ macro reverseStmts*(body: untyped) =
   for ln in body:
     stmts.insert(ln, 0)
   result.add stmts
+
+proc preRender*[T, V](t: T, v: V) =
+  discard

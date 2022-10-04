@@ -37,7 +37,8 @@ proc preNode(kind: NodeKind, id: string) =
   else:
     # Reuse Node.
     current = parent.nodes[parent.diffIndex]
-    if current.id == id and
+    if resetNodes == 0 and
+        current.id == id and
         current.nIndex == parent.diffIndex:
       # Same node.
       discard

@@ -9,7 +9,8 @@ fidgetty TabView:
   properties:
     selected: string
   state:
-    selected: Hash
+    currentTab: Hash
+    changed: bool
     tabs: OrderedSet[string]
 
 template tab*(name, blk: untyped) =
@@ -19,11 +20,12 @@ template tab*(name, blk: untyped) =
   ## to be able to be dragged.
   ## 
   state.tabs.incl name
-  rectangle name:
-    current.disableRender = state.selected != name.hash()
-    gridRow "main" // "end"
-    gridColumn "area"
-    `blk`
+  if state.currentTab == name.hash():
+    rectangle name:
+      # current.disableRender = state.currentTab != name.hash()
+      gridRow "main" // "end"
+      gridColumn "area"
+      `blk`
 
 proc new*(_: typedesc[TabViewProps]): TabViewProps =
   new result
@@ -37,12 +39,23 @@ proc new*(_: typedesc[TabViewState]): TabViewState =
 
 import print
 
+proc preRender*(
+    props: TabViewProps,
+    self: TabViewState,
+) =
+  if self.changed:
+    common.resetNodes.inc
+
 proc render*(
     props: TabViewProps,
     self: TabViewState,
 ): Events[All]=
   ## Renders a TabView which is a vertical bar splitting
   ## an area into two with a draggable bar in between.
+  
+  if self.changed:
+    common.resetNodes.dec
+    self.changed = false
   
   # Setup CSS Grid Template
   box 0, 0, 100'pp, 100'pp
@@ -75,8 +88,10 @@ proc render*(
 
           size 6'em, 2'em
           label tab
-          isActive self.selected == th
+          isActive self.currentTab == th
           onClick:
-            self.selected = th
-            dispatchEvent changed(th)
+            self.currentTab = th
+            self.changed = true
+            dispatchEvent changed(tab)
+            refresh()
   

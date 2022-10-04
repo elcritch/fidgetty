@@ -86,7 +86,7 @@ proc drawMain() =
         Vertical:
           itemSpacing 1'em
           size 100'pp, 100'pp
-          Spacer 1'em, 1'em
+          # Spacer 1'em, 1'em
 
           Dropdown:
             size 12'em, 2'em
@@ -97,6 +97,7 @@ proc drawMain() =
             Changed(idx):
               self.dropIndexes = idx
               refresh()
+
 
     gridTemplateDebugLines true
 
