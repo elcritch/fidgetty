@@ -37,11 +37,11 @@ proc handleClicked(self: TextInputState) =
     self.multiClick = 0
   self.lastClickTime = epochTime()
   if self.multiClick == 1:
-    echo "selectWord"
+    # echo "selectWord"
     self.textBox.selectWord(mousePos)
     buttonDown[MOUSE_LEFT] = false
   elif self.multiClick == 2:
-    echo "selectParagraph"
+    # echo "selectParagraph"
     self.textBox.selectParagraph(mousePos)
     buttonDown[MOUSE_LEFT] = false
   elif self.multiClick == 3:
@@ -49,16 +49,6 @@ proc handleClicked(self: TextInputState) =
     buttonDown[MOUSE_LEFT] = false
   else:
     self.textBox.mouseAction(mousePos, click = true, keyboard.shiftKey)
-
-# proc handleDrag(textBox: TextBox) =
-#   let mousePos = mouse.pos(raw=true) + current.totalOffset
-#   if textBox != nil and
-#       mouse.down and
-#       not mouse.click and
-#       keyboard.focusNode == current:
-#     # Dragging the mouse:
-#     echo "dragging mouse"
-#     textBox.mouseAction(mousePos, click = false, keyboard.shiftKey)
 
 proc new*(_: typedesc[TextInputProps]): TextInputProps =
   new result
@@ -84,9 +74,8 @@ proc render*(
     imageColor palette.disabled
   else:
     if self.editing:
-      rotation 180
-      stroke palette.highlight * 0.40
-      strokeWeight 0.2'em
+      stroke palette.highlight * 0.30
+      strokeWeight 0.5'em
     if props.isActive:
       highlight palette
 
@@ -110,7 +99,7 @@ proc render*(
           await sleepAsync(cursorBlink)
       
       if self.ticks.isNil or self.ticks.finished:
-        echo "ticker..."
+        # echo "ticker..."
         self.ticks = ticker(self)
 
     onClickOutside:
@@ -160,3 +149,4 @@ proc render*(
         rectangle "selection":
           box selection.descaled
           fill palette.cursor * 0.22
+  

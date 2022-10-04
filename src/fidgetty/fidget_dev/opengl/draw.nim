@@ -236,7 +236,9 @@ proc draw*(node, parent: Node) =
   ##
   ## Note that visiable draw calls need to check they're on the current
   ## active ZLevel (z-index).
-
+  if node.disableRender:
+    return
+  
   # setup the opengl context to match the current node size and position
   node.hasRendered = true
 

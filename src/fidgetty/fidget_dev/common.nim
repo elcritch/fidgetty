@@ -155,6 +155,12 @@ type
     offset*: Position
     totalOffset*: Position
     hasRendered*: bool
+    editableText*: bool
+    multiline*: bool
+    bindingSet*: bool
+    drawable*: bool
+    clipContent*: bool
+    disableRender*: bool
     rotation*: float32
     fill*: Color
     transparency*: float32
@@ -164,10 +170,6 @@ type
     textStyle*: TextStyle
     image*: ImageStyle
     cornerRadius*: (UICoord, UICoord, UICoord, UICoord)
-    editableText*: bool
-    multiline*: bool
-    bindingSet*: bool
-    drawable*: bool
     cursorColor*: Color
     highlightColor*: Color
     disabledColor*: Color
@@ -182,7 +184,6 @@ type
     horizontalPadding*: UICoord
     verticalPadding*: UICoord
     itemSpacing*: UICoord
-    clipContent*: bool
     nIndex*: int
     diffIndex*: int
     events*: InputEvents
