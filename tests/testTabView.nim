@@ -3,7 +3,7 @@ import std/[math, strformat]
 
 import fidgetty
 import fidgetty/themes
-import fidgetty/[button, progressbar]
+import fidgetty/[button, progressbar, dropdown]
 import fidgetty/[tabview]
 
 import print
@@ -21,6 +21,10 @@ type
     pipPos: Position
     barOffset: float
     barVal: float
+    dropIndexes: int
+
+let dropItems = @["Nim", "UI", "in", "100%", "Nim", "to",
+                  "OpenGL", "Immediate", "mode"]
 
 proc new*(_: typedesc[GridApp]): GridApp =
   new result
@@ -44,7 +48,7 @@ proc drawMain() =
       cornerRadius 0.5'em
       fill rgba(66, 177, 44, 167).to(Color).spin(100.0) * 0.2
 
-      tab "menu":
+      tab "tab a":
         # strokeLine 1'em.float32, "#FF0000"
         cornerRadius 0.2'em
         Vertical:
@@ -61,7 +65,7 @@ proc drawMain() =
             disabled true
             label fmt"Height: {root.box.h.float:6.0f}"
 
-      tab "main":
+      tab "tab b":
         size 10'em, 10'em
         Vertical:
           itemSpacing 1'em
@@ -76,6 +80,23 @@ proc drawMain() =
           ProgressBar:
             size 10'em, 2'em
             value: self.value
+      
+      tab "tab c":
+        size 10'em, 10'em
+        Vertical:
+          itemSpacing 1'em
+          size 100'pp, 100'pp
+          Spacer 1'em, 1'em
+
+          Dropdown:
+            size 12'em, 2'em
+            items dropItems
+            selected self.dropIndexes
+            defaultLabel "Menu"
+          do -> ChangeEvent[int]:
+            Changed(idx):
+              self.dropIndexes = idx
+              refresh()
 
     gridTemplateDebugLines true
 

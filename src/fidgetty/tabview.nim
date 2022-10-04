@@ -67,10 +67,16 @@ proc render*(
       for tab in self.tabs:
         let th = tab.hash()
         Button:
+          # clearShadows()
+          imageTransparency 0.1
+          boxOf parent
+          cornerRadius 0
+          stroke theme.innerStroke
+
           size 6'em, 2'em
           label tab
           isActive self.selected == th
           onClick:
             self.selected = th
-
+            dispatchEvent changed(th)
   
