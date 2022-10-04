@@ -660,7 +660,6 @@ proc strokeRoundedRect*(
     radius: float32,
 ) =
   let
-    lineWidth: float32 = 0'f32
     fillStyle = rgba(255, 255, 255, 255)
   
   if rect.w <= 0 or rect.h <= -0:
@@ -679,7 +678,7 @@ proc strokeRoundedRect*(
     6217,
     (rw*100).int, (rh*100).int,
     (radius*100).int,
-    (lineWidth*100).int,
+    (weight*100).int,
   ))
 
   if radius > 0.0:

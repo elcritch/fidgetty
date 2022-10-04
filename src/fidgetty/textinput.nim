@@ -74,9 +74,8 @@ proc render*(
     imageColor palette.disabled
   else:
     if self.editing:
-      rotation 180
-      stroke palette.highlight * 0.40
-      strokeWeight 0.2'em
+      stroke palette.highlight * 0.30
+      strokeWeight 0.5'em
     if props.isActive:
       highlight palette
 
@@ -150,3 +149,4 @@ proc render*(
         rectangle "selection":
           box selection.descaled
           fill palette.cursor * 0.22
+  
