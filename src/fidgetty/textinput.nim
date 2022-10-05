@@ -52,8 +52,6 @@ proc handleClicked(self: TextInputState) =
 
 proc new*(_: typedesc[TextInputProps]): TextInputProps =
   new result
-  # boxSizeOf parent
-  echo "result: ", repr result
   cornerRadius theme.textCorner.UICoord
   shadows theme
   imageOf theme.gloss
@@ -66,7 +64,6 @@ proc render*(
     self: TextInputState,
 ): Events[All]=
   # Draw a progress bars
-
   text "text":
     fill palette.text
 
