@@ -58,7 +58,7 @@ proc drawMain() =
             textAlign hCenter, vCenter
             cornerRadius 2
             value self.textInput[i]
-            pattern re"[0-9\.]"
+            # pattern re"[0-9\.]"
             # fill rgba(66, 177, 44, 167).to(Color).spin(i.toFloat*20+50)
 
             rectangle "overlay":

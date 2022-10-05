@@ -156,17 +156,19 @@ type
     totalOffset*: Position
     hasRendered*: bool
     editableText*: bool
+    selectable*: bool
     multiline*: bool
     bindingSet*: bool
     drawable*: bool
     clipContent*: bool
     disableRender*: bool
+    resizeDone*: bool
+    htmlDone*: bool
+    scrollpane*: bool
     rotation*: float32
     fill*: Color
     transparency*: float32
     stroke*: Stroke
-    resizeDone*: bool
-    htmlDone*: bool
     textStyle*: TextStyle
     image*: ImageStyle
     cornerRadius*: (UICoord, UICoord, UICoord, UICoord)
@@ -198,8 +200,6 @@ type
     textLayoutHeight*: UICoord
     textLayoutWidth*: UICoord
     ## Can the text be selected.
-    selectable*: bool
-    scrollpane*: bool
     userStates*: Table[int, Variant]
     userEvents*: Events[All]
     points*: seq[Position]

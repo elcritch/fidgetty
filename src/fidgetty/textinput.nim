@@ -40,13 +40,13 @@ proc handleClicked(self: TextInputState) =
     # echo "selectWord"
     self.textBox.selectWord(mousePos)
     buttonDown[MOUSE_LEFT] = false
-  elif self.multiClick == 2:
-    # echo "selectParagraph"
-    self.textBox.selectParagraph(mousePos)
-    buttonDown[MOUSE_LEFT] = false
-  elif self.multiClick == 3:
-    self.textBox.selectAll()
-    buttonDown[MOUSE_LEFT] = false
+  # elif self.multiClick == 2:
+  #   # echo "selectParagraph"
+  #   self.textBox.selectParagraph(mousePos)
+  #   buttonDown[MOUSE_LEFT] = false
+  # elif self.multiClick == 3:
+  #   self.textBox.selectAll()
+  #   buttonDown[MOUSE_LEFT] = false
   else:
     self.textBox.mouseAction(mousePos, click = true, keyboard.shiftKey)
 
