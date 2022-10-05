@@ -18,14 +18,12 @@ fidgetty TextInput:
   state:
     multiClick: int
     lastClickTime: float
-    textBox: TextBox
     editing: bool
     showCursor: bool
-    textBox: TextBox[Node]
     ticks: Future[void] = emptyFuture()
 
 
-proc handleClicked(self: TextInputState) =
+proc handleClicked(self: TextInputState, textbox: TextBox[Node]) =
   # let mousePos = mouse.pos(raw=true) - current.screenBox.xy + current.totalOffset
   # let mousePos = mouse.pos(raw=true) + current.totalOffset
   let mousePos = mouse.pos
@@ -38,17 +36,17 @@ proc handleClicked(self: TextInputState) =
   self.lastClickTime = epochTime()
   if self.multiClick == 1:
     # echo "selectWord"
-    self.textBox.selectWord(mousePos)
+    textbox.selectWord(mousePos)
     buttonDown[MOUSE_LEFT] = false
   # elif self.multiClick == 2:
   #   # echo "selectParagraph"
-  #   self.textBox.selectParagraph(mousePos)
+  #   self.textbox.selectParagraph(mousePos)
   #   buttonDown[MOUSE_LEFT] = false
   # elif self.multiClick == 3:
-  #   self.textBox.selectAll()
+  #   self.textbox.selectAll()
   #   buttonDown[MOUSE_LEFT] = false
   else:
-    self.textBox.mouseAction(mousePos, click = true, keyboard.shiftKey)
+    textbox.mouseAction(mousePos, click = true, keyboard.shiftKey)
 
 proc new*(_: typedesc[TextInputProps]): TextInputProps =
   new result
@@ -65,16 +63,38 @@ proc render*(
 ): Events[All]=
   # Draw a progress bars
   text "text":
-    fill palette.text
+    useState[TextBox[Node]](textbox)
 
+    # echo "mouseDown"
+    let font = common.fonts[current.textStyle.fontFamily]
+    # let evts = current.currentEvents()
+    # self.textbox = evts.mgetOrPut("$textbox",
+
+    if textbox.item.isNil:
+      echo "textbox item isNil"
+      textbox.item = current
+      textbox.init(
+          font,
+          current.screenBox.w.scaled,
+          current.screenBox.h.scaled,
+          current,
+          hAlignMode(current.textStyle.textAlignHorizontal),
+          vAlignMode(current.textStyle.textAlignVertical),
+          current.multiline,
+          worldWrap = true,
+          pattern = props.pattern
+          )
+      echo textbox.repr
+    
     # setup focus
+    fill palette.text
     current.bindingSet = true
     selectable true
     editableText true
 
     onClick:
-      keyboard.focus(current, self.textBox)
-      self.handleClicked()
+      keyboard.focus(current, textbox)
+      self.handleClicked(textbox)
       self.editing = true
       proc ticker(self: TextInputState) {.async.} =
         let cursorBlink = 1_000
@@ -91,46 +111,29 @@ proc render*(
       keyboard.unFocus(current)
       self.editing = false
     
-    # echo "mouseDown"
-    let font = common.fonts[current.textStyle.fontFamily]
-    # let evts = current.currentEvents()
-    # self.textBox = evts.mgetOrPut("$textbox",
-    if self.textBox.isNil:
-      self.textBox = newTextBox[Node](
-          font,
-          current.screenBox.w.scaled,
-          current.screenBox.h.scaled,
-          current,
-          hAlignMode(current.textStyle.textAlignHorizontal),
-          vAlignMode(current.textStyle.textAlignVertical),
-          current.multiline,
-          worldWrap = true,
-          pattern = props.pattern
-          )
-    
     let curr = $current.text
 
-    if self.textBox.hasChange:
+    if textbox.hasChange:
       if props.value != curr:
         dispatchEvent changed(curr)
     elif curr == "":
-      self.textBox.text = props.value
+      textbox.text = props.value
     elif curr != props.value:
       if not (props.ignorePostfix and props.value.contains(curr)):
-        self.textBox.text = props.value
+        textbox.text = props.value
     # clear change
-    self.textBox.hasChange = false
+    textbox.hasChange = false
 
     if font.size > 0:
-      self.textBox.resize(current.box.scaled.wh)
+      textbox.resize(current.box.scaled.wh)
       rectangle "cursor":
-        let cursor = self.textBox.cursorRect()
+        let cursor = textbox.cursorRect()
         box cursor.descaled
         if self.showCursor and self.editing:
           fill blackColor
         else:
           fill clearColor
-      for selection in self.textBox.selectionRegions():
+      for selection in textbox.selectionRegions():
         rectangle "selection":
           box selection.descaled
           fill palette.cursor * 0.22

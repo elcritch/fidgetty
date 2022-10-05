@@ -229,6 +229,26 @@ proc onFocus(window: staticglfw.Window, state: cint) {.cdecl.} =
   focused = state == 1
   uiEvent.trigger()
 
+proc nextFocus*(parent, node: Node) =
+  ## Setups screenBoxes for the whole tree.
+  var foundFocus = false
+  for child in node.nodes:
+    if child.selectable:
+      if foundFocus:
+        let id = "self".hash()
+        return
+      echo "focusNode:child: ", child.id, " ", child.uid
+      if child == keyboard.focusNode:
+        echo "focusNode:found!"
+        foundFocus = true
+    else:
+      nextFocus(node, child)
+
+proc nextFocus() =
+  echo "focusNode:tab: ", keyboard.focusNode.id
+  echo "focusNode:tab: ", common.root.id
+  nextFocus(nil, root)
+
 proc onSetKey(
   window: staticglfw.Window, key, scancode, action, modifiers: cint
 ) {.cdecl.} =
@@ -247,6 +267,8 @@ proc onSetKey(
       ctrl = keyboard.ctrlKey
       shift = keyboard.shiftKey
     case cast[Button](key):
+      of TAB:
+        nextFocus()
       of ARROW_LEFT:
         if ctrl:
           currTextBox.leftWord(shift)
