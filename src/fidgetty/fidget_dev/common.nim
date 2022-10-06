@@ -157,6 +157,7 @@ type
     hasRendered*: bool
     editableText*: bool
     selectable*: bool
+    setFocus*: bool
     multiline*: bool
     bindingSet*: bool
     drawable*: bool

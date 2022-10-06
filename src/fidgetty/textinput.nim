@@ -71,7 +71,7 @@ proc render*(
     # self.textbox = evts.mgetOrPut("$textbox",
 
     if textbox.item.isNil:
-      echo "textbox item isNil"
+      # echo "textbox item isNil"
       textbox.item = current
       textbox.init(
           font,
@@ -84,7 +84,7 @@ proc render*(
           worldWrap = true,
           pattern = props.pattern
           )
-      echo textbox.repr
+      # echo textbox.repr
     
     # setup focus
     fill palette.text
@@ -92,7 +92,7 @@ proc render*(
     selectable true
     editableText true
 
-    onClick:
+    proc setupFocus() =
       keyboard.focus(current, textbox)
       self.handleClicked(textbox)
       self.editing = true
@@ -106,6 +106,12 @@ proc render*(
       if self.ticks.isNil or self.ticks.finished:
         # echo "ticker..."
         self.ticks = ticker(self)
+    
+    onClick:
+      setupFocus()
+    if current.setFocus:
+      current.setFocus = false
+      setupFocus()
 
     onClickOutside:
       keyboard.unFocus(current)
