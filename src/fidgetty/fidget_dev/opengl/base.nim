@@ -230,7 +230,7 @@ proc onFocus(window: staticglfw.Window, state: cint) {.cdecl.} =
   uiEvent.trigger()
 
 proc nextFocus*(parent, node: Node, foundFocus: var bool): bool =
-  ## Setups screenBoxes for the whole tree.
+  ## find the next node to focus on
   for child in node.nodes:
     if child.selectable:
       if foundFocus:
