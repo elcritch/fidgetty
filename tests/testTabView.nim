@@ -47,8 +47,12 @@ proc drawMain() =
       clipContent true
       cornerRadius 0.5'em
       fill rgba(66, 177, 44, 167).to(Color).spin(100.0) * 0.2
-      findGridRow(ln"bar").track = csFixed(0)
+      findGridRow(ln"bar").track = csFixed(2)
 
+      rectangle "bar":
+        gridArea "bar", "area"
+        fill palette.highlight * 0.90
+      
       tab "tab a":
         # strokeLine 1'em.float32, "#FF0000"
         cornerRadius 0.2'em

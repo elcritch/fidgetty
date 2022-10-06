@@ -64,12 +64,12 @@ proc render*(
     common.resetNodes.dec
     self.changed = false
   
-  rectangle "bar":
-    gridRow "bar"
-    gridColumn "area"
-    stroke theme.outerStroke
-    imageOf theme.gloss
-    fill palette.foreground
+  # rectangle "bar":
+  #   gridRow "bar"
+  #   gridColumn "area"
+  #   stroke theme.outerStroke
+  #   imageOf theme.gloss
+  #   fill palette.foreground
       
   rectangle "menu":
     gridRow "menu"
