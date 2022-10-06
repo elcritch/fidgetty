@@ -1040,6 +1040,14 @@ template defaultGridTemplate() =
   if current.gridTemplate.isNil:
     current.gridTemplate = newGridTemplate()
 
+template findGridColumn*(index: GridIndex): GridLine =
+  defaultGridTemplate()
+  current.gridTemplate.getLine(dcol, index)
+
+template findGridRow*(index: GridIndex): GridLine =
+  defaultGridTemplate()
+  current.gridTemplate.getLine(drow, index)
+
 template getGridItem(): untyped =
   if current.gridItem.isNil:
     current.gridItem = newGridItem()
