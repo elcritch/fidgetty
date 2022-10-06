@@ -234,15 +234,10 @@ proc nextFocus*(parent, node: Node, foundFocus: var bool): bool =
   for child in node.nodes:
     if child.selectable:
       if foundFocus:
-        # let id = "textbox".hash()
-        echo "focusNode:setnext:child: ", child.id, " ", child.uid
         child.setFocus = true
         return true
-      # echo "focusNode:child: ", child.id, " ", child.uid
       if child == keyboard.focusNode:
-        # echo "focusNode:found!"
         foundFocus = true
-        # child.editing = false
     else:
       if nextFocus(node, child, foundFocus):
         return
