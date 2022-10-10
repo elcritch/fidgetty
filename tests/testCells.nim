@@ -46,8 +46,8 @@ proc drawMain() =
       # Setup CSS Grid Template
       let cw = 6'em
       let ch = 2'em
-      gridTemplateColumns csFixed(cw) csFixed(cw) csFixed(cw) csFixed(cw) csFixed(cw) 
-      gridTemplateRows csFixed(ch) csFixed(ch) csFixed(ch) 
+      gridTemplateColumns repeat(5, csFixed(cw))
+      gridTemplateRows repeat(3, csFixed(ch))
       justifyContent CxCenter
 
       theme().outerStroke = Stroke.init(2, "#707070", 1.0)
