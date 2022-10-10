@@ -328,7 +328,7 @@ proc onSetKey(
 proc onScroll(window: staticglfw.Window, xoffset, yoffset: float64) {.cdecl.} =
   requestedFrame.inc
   let yoffset = yoffset
-  mouse.wheelDelta += yoffset
+  mouse.wheelDelta += 6 * yoffset * common.uiScale
   uiEvent.trigger()
 
 proc onMouseButton(
