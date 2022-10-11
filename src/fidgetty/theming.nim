@@ -5,6 +5,8 @@ import fidget_dev
 type
   Themer = proc()
 
+  Themes* = TableRef[Atom, Deque[Themer]]
+
   ThemePalette* = object
     primary*: Color
     link*: Color
@@ -32,12 +34,16 @@ type
 var
   themePalette*: ThemePalette
   currentPalette*: Palette
-  themes*: TableRef[Atom, Deque[Themer]]
+  themes*: Themes = newTable[Atom, Deque[Themer]]()
 
-template push*(name: Atom, theme: Themer) =
+proc push*(themes: Themes, name: Atom, theme: Themer) =
   themes.mgetOrPut(name, initDeque[Themer]()).addLast(theme)
-proc pop*(name: Atom) =
+proc pop*(themes: Themes, name: Atom) =
   discard themes[name].popLast()
+template setTheme*(name: Atom, blk: untyped) =
+  let themer = proc() =
+    `blk`
+  themes.push(name, themer)
 
 template setupWidgetTheme*(blk) =
   block:

@@ -803,12 +803,12 @@ proc imageTransparency*(alpha: float32) =
   ## Sets image fill.
   current.image.color.a *= alpha
 
-proc imageOf*(item: ImageStyle, transparency: float32) =
+proc image*(item: ImageStyle, transparency: float32) =
   ## Sets image fill.
   current.image = item
   current.image.color.a *= transparency
 
-proc imageOf*(item: ImageStyle) =
+proc image*(item: ImageStyle) =
   ## Sets image fill.
   current.image = item
 
