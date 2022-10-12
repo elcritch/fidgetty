@@ -20,7 +20,7 @@ requires "opengl >= 1.2.6"
 requires "zippy >= 0.10.4"
 requires "patty >= 0.3.4"
 requires "macroutils >= 1.2.0"
-requires "cdecl >= 0.5.10"
+requires "cdecl >= 0.7.1"
 requires "asynctools >= 0.1.1"
 
 import strutils, strformat

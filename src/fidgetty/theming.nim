@@ -1,5 +1,5 @@
 import std/strutils, std/tables, std/deques
-import cssgrid/atoms
+import cdecl/atoms
 import fidget_dev
 
 type
@@ -35,6 +35,9 @@ var
   themePalette*: ThemePalette
   currentPalette*: Palette
   themes*: Themes = newTable[Atom, Deque[Themer]]()
+
+proc has*(themes: Themes, name: Atom) =
+  themes.mgetOrPut(name, initDeque[Themer]()).addLast(theme)
 
 proc push*(themes: Themes, name: Atom, theme: Themer) =
   themes.mgetOrPut(name, initDeque[Themer]()).addLast(theme)

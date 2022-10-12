@@ -16,12 +16,12 @@ template split*(name, blk: untyped) =
   ## to be able to be dragged.
   ## 
   when name == "menu":
-    rectangle "split-menu":
+    rectangle "menu":
       gridRow "area"
       gridColumn "menu"
       `blk`
   elif name == "main":
-    rectangle "split-area":
+    rectangle "area":
       gridRow "area"
       gridColumn "main"
       `blk`
