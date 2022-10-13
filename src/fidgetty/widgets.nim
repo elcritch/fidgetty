@@ -77,6 +77,7 @@ macro doBlocks*(blks: varargs[untyped]) =
 macro fidgetty*(name, blk: untyped) =
   # echo "BLK: ", treeRepr blk
   let
+    simpleName = name.strVal.toLowerAscii()
     procName = name.strVal.capitalizeAscii()
     propsTypeName = procName & "Props"
     stateTypeName = procName & "State"
@@ -104,7 +105,7 @@ macro fidgetty*(name, blk: untyped) =
     template `procId`*(code: untyped, handlers: varargs[untyped]) =
       # printRepr(handlers)
       block:
-        component `procName`:
+        component `simpleName`:
           useState[`propsTypeId`](item)
           useState[`stateTypeId`](state)
           item.preRender(state)

@@ -85,6 +85,14 @@ proc darkNimTheme*() =
   palette.textModeLight = blackColor
   palette.textModeDark = whiteColor
 
+  theme.foreground = palette.info
+  theme.highlight = palette.info.lighten(0.14)
+  theme.disabled = palette.info.darken(0.3)
+  theme.background = rgba(27,29,38,255).color
+  theme.cursor = whiteColor
+  theme.text = whiteColor
+  theme.accent = blackColor
+
   let fs = 16'f32
   setTheme(atom"font"):
     font("IBM Plex Sans", fs, 200, 0, hCenter, vCenter)
@@ -92,15 +100,13 @@ proc darkNimTheme*() =
 
   setTheme(atom"font"):
     cornerRadius(5)
-    theme.foreground = palette.info
-    theme.highlight = palette.info.lighten(0.14)
-    theme.disabled = palette.info.darken(0.3)
-    theme.background = rgba(27,29,38,255).color
-    theme.cursor = whiteColor
 
-  setTheme(atom"font"):
-    theme.text = whiteColor
-    theme.accent = blackColor
+  setTheme(atom"button"):
+    cornerRadius theme.cornerRadius
+    shadow theme.shadow
+    stroke theme.outerStroke
+    image theme.gloss
+    fill theme.foreground
 
 type
   ThemeAccents* = enum

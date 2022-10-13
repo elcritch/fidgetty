@@ -21,7 +21,7 @@ else:
   import fidget_dev/openglbackend
   export openglbackend
 
-proc preNode(kind: NodeKind, id: string) =
+proc preNode(kind: NodeKind, id: Atom) =
   ## Process the start of the node.
 
   parent = nodeStack[^1]
@@ -80,14 +80,14 @@ proc postNode() =
   else:
     parent = nil
 
-template node(kind: NodeKind, id: string, inner, setup: untyped): untyped =
+template node(kind: NodeKind, id: static string, inner, setup: untyped): untyped =
   ## Base template for node, frame, rectangle...
   preNode(kind, id)
   setup
   inner
   postNode()
 
-template node(kind: NodeKind, id: string, inner: untyped): untyped =
+template node(kind: NodeKind, id: static string, inner: untyped): untyped =
   ## Base template for node, frame, rectangle...
   preNode(kind, id)
   inner
@@ -105,45 +105,45 @@ template withDefaultName(name: untyped): untyped =
 ## Fidget nodes. 
 ## 
 
-template frame*(id: string, inner: untyped): untyped =
+template frame*(id: static string, inner: untyped): untyped =
   ## Starts a new frame.
   node(nkFrame, id, inner):
     # boxSizeOf parent
     current.cxSize = [csAuto(), csAuto()]
 
-template group*(id: string, inner: untyped): untyped =
+template group*(id: static string, inner: untyped): untyped =
   ## Starts a new node.
   node(nkGroup, id, inner):
     # boxSizeOf parent
     current.cxSize = [csAuto(), csAuto()]
 
-template component*(id: string, inner: untyped): untyped =
+template component*(id: static string, inner: untyped): untyped =
   ## Starts a new component.
   node(nkComponent, id, inner):
     # boxSizeOf parent
     current.cxSize = [csAuto(), csAuto()]
 
-template rectangle*(id: string, inner: untyped): untyped =
+template rectangle*(id: static string, inner: untyped): untyped =
   ## Starts a new text element.
   node(nkRectangle, id, inner)
 
-template element*(id: string, inner: untyped): untyped =
+template element*(id: static string, inner: untyped): untyped =
   ## Starts a new rectangle.
   node(nkRectangle, id, inner):
     # boxSizeOf parent
     current.cxSize = [csAuto(), csAuto()]
 
-template text*(id: string, inner: untyped): untyped =
+template text*(id: static string, inner: untyped): untyped =
   ## Starts a new text element.
   node(nkText, id, inner):
     # boxSizeOf parent
     current.cxSize = [csAuto(), csAuto()]
 
-template instance*(id: string, inner: untyped): untyped =
+template instance*(id: static string, inner: untyped): untyped =
   ## Starts a new instance of a component.
   node(nkInstance, id, inner)
 
-template drawable*(id: string, inner: untyped): untyped =
+template drawable*(id: static string, inner: untyped): untyped =
   ## Starts a drawable node. These don't draw a normal rectangle.
   ## Instead they draw a list of points set in `current.points`
   ## using the nodes fill/stroke. The size of the drawable node
@@ -393,17 +393,17 @@ proc csFixed*(coord: UICoord): Constraint =
 ## These are the primary API for drawing UI objects. 
 ## 
 
-proc id*(id: string) =
+proc id*(id: static string) =
   ## Sets ID.
   current.id = id
 
 proc id*(): string =
   ## Get current node ID.
-  return current.id
+  return $current.id
 
 proc getId*(): string =
   ## Get current node ID.
-  return current.id
+  return $current.id
 
 proc orgBox*(x, y, w, h: int|float32|float64|UICoord) =
   ## Sets the box dimensions of the original element for constraints.
@@ -957,10 +957,10 @@ proc disabledColor*(node: Node) =
 
 proc clearShadows*() =
   ## Clear shadow
-  current.shadows = Shadow.none()
+  current.shadow = Shadow.none()
 
-proc shadows*(shadow: Option[Shadow]) =
-  current.shadows = shadow
+proc shadow*(shadow: Option[Shadow]) =
+  current.shadow = shadow
 
 proc dropShadow*(item: Node; blur, x, y: float32, color: string, alpha: float32) =
   ## Sets drop shadow on an element
@@ -971,7 +971,7 @@ proc dropShadow*(item: Node; blur, x, y: float32, color: string, alpha: float32)
                            x: x.UICoord,
                            y: y.UICoord,
                            color: c)
-  item.shadows = some(sh)
+  item.shadow = some(sh)
 
 proc dropShadow*(blur, x, y: float32, color: string, alpha: float32) =
   ## Sets drop shadow on an element
@@ -981,7 +981,7 @@ proc innerShadow*(blur, x, y: float32, color: string, alpha: float32) =
   ## Sets an inner shadow
   var c = parseHtmlColor(color)
   c.a = alpha
-  current.shadows = some Shadow(
+  current.shadow = some Shadow(
     kind: InnerShadow,
     blur: blur.UICoord,
     x: x.UICoord,

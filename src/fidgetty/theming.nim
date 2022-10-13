@@ -24,12 +24,13 @@ type
     disabled*: Color
     background*: Color
     text*: Color
-    textBg*: Color
     cursor*: Color
     cornerRadius*: (UICoord, UICoord, UICoord, UICoord)
     shadow*: Option[Shadow]
+    gloss*: ImageStyle
     textStyle*: TextStyle
-
+    innerStroke*: Stroke
+    outerStroke*: Stroke
 
 var
   palette*: Palette

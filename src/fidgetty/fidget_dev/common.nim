@@ -7,12 +7,14 @@ import options
 import cssgrid
 
 import commonutils
+import cdecl/atoms
 
 export sequtils, strformat, tables, hashes
 export variant
 # export unicode
 export commonutils
 export cssgrid
+export atoms
 
 import print
 
@@ -141,9 +143,9 @@ type
     color*: Color
 
   Node* = ref object
-    id*: string
+    id*: Atom
     uid*: NodeUID
-    idPath*: string
+    idPath*: seq[Atom]
     kind*: NodeKind
     text*: seq[Rune]
     code*: string
@@ -177,7 +179,7 @@ type
     cursorColor*: Color
     highlightColor*: Color
     disabledColor*: Color
-    shadows*: Option[Shadow]
+    shadow*: Option[Shadow]
     constraintsHorizontal*: FidgetConstraint
     constraintsVertical*: FidgetConstraint
     layoutAlign*: LayoutAlign
@@ -429,14 +431,13 @@ proc x*(mouse: Mouse): UICoord = mouse.pos.descaled.x
 proc y*(mouse: Mouse): UICoord = mouse.pos.descaled.x
 
 proc setNodePath*(node: Node) =
-  node.idPath = ""
+  node.idPath.setLen(nodeStack.len() + 1)
+  node.idPath[^1] = node.id
   for i, g in nodeStack:
-    if i != 0:
-      node.idPath.add "."
-    if g.id != "":
-      node.idPath.add g.id
+    if g.id == Atom(0):
+      node.idPath[i] = Atom(g.diffIndex)
     else:
-      node.idPath.add $g.diffIndex
+      node.idPath[i] = g.id
 
 proc dumpTree*(node: Node, indent = "") =
 
@@ -490,7 +491,7 @@ proc resetToDefault*(node: Node)=
   node.drawable = false
   node.cursorColor = clearColor
   node.highlightColor = clearColor
-  node.shadows = Shadow.none()
+  node.shadow = Shadow.none()
   node.gridTemplate = nil
   node.gridItem = nil
   node.constraintsHorizontal = cMin
@@ -513,7 +514,7 @@ proc setupRoot*() =
   if root == nil:
     root = Node()
     root.kind = nkRoot
-    root.id = "root"
+    root.id = atom"root"
     root.uid = newUId()
     root.zlevel = ZLevelDefault
     root.cursorColor = rgba(0, 0, 0, 255).color
