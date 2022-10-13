@@ -19,8 +19,8 @@ proc grayTheme*() =
   theme.accent = parseHtml("#87E3FF", 0.67)
   theme.highlight = parseHtml("#87E3FF", 0.77)
   theme.cursor = parseHtml("#77D3FF", 0.33)
-
   theme.textStyle.setFontStyle("IBM Plex Sans", 16, 200, 0, hCenter, vCenter)
+  theme.cornerRadius = (5'ui, 5'ui, 5'ui, 5'ui)
 
   setTheme(atom"font"):
     cornerRadius common.uiScale * 3.2'f32
