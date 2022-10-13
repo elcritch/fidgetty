@@ -3,7 +3,6 @@ import fidget_dev
 import theming
 
 proc grayTheme*() =
-  let fs = 16'f32
 
   palette.primary = parseHtml("#DDDDDD", 1.0)
   palette.link = palette.primary
@@ -21,8 +20,9 @@ proc grayTheme*() =
   theme.highlight = parseHtml("#87E3FF", 0.77)
   theme.cursor = parseHtml("#77D3FF", 0.33)
 
+  theme.textStyle.setFontStyle("IBM Plex Sans", 16, 200, 0, hCenter, vCenter)
+
   setTheme(atom"font"):
-    font("IBM Plex Sans", fs, 200, 0, hCenter, vCenter)
     cornerRadius common.uiScale * 3.2'f32
   
   setTheme(atom"basic"):
@@ -30,7 +30,7 @@ proc grayTheme*() =
     dropShadow(4, 0, 0, "#000000", 0.05)
     stroke Stroke.init(2, "#707070", 1.0)
     image imageStyle("shadow-button-middle.png", color(1, 1, 1, 0.27))
-    itemSpacing 0.001 * fs.UICoord
+    itemSpacing 0.001 * theme.textStyle.fontSize
 
   setTheme(atom"inner"):
     stroke Stroke.init(1, "#707070", 0.4)
@@ -54,6 +54,8 @@ proc bulmaTheme*() =
   theme.cursor = parseHtml("#77D3FF", 0.33)
   theme.text = palette.textModeDark
   theme.accent = parseHtml("#87E3FF", 0.77)
+
+  theme.textStyle.setFontStyle("IBM Plex Sans", 16, 200, 0, hCenter, vCenter)
 
   let fs = 16'f32
   setTheme(atom"font"):
@@ -92,6 +94,8 @@ proc darkNimTheme*() =
   theme.cursor = whiteColor
   theme.text = whiteColor
   theme.accent = blackColor
+
+  theme.textStyle.setFontStyle("IBM Plex Sans", 16, 200, 0, hCenter, vCenter)
 
   let fs = 16'f32
   setTheme(atom"font"):

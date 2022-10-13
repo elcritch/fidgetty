@@ -161,6 +161,8 @@ proc testDemo() =
 
 startFidget(
   testDemo,
+  setup = proc() =
+    grayTheme(),
   w = 640,
   h = 700,
 )
