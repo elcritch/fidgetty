@@ -9,7 +9,7 @@ fidgetty Button:
     empty: void
 
 proc themeButton*() =
-  cornerRadius theme
+  cornerRadius theme.cornerRadius
   shadows theme
   stroke theme.outerStroke
   imageOf theme.gloss

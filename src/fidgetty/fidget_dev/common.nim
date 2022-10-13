@@ -3,6 +3,7 @@ import strformat
 import unicode
 import typetraits
 import variant, chroma, input
+import options
 import cssgrid
 
 import commonutils
@@ -176,7 +177,7 @@ type
     cursorColor*: Color
     highlightColor*: Color
     disabledColor*: Color
-    shadows*: seq[Shadow]
+    shadows*: Option[Shadow]
     constraintsHorizontal*: FidgetConstraint
     constraintsVertical*: FidgetConstraint
     layoutAlign*: LayoutAlign
@@ -489,7 +490,7 @@ proc resetToDefault*(node: Node)=
   node.drawable = false
   node.cursorColor = clearColor
   node.highlightColor = clearColor
-  node.shadows = @[]
+  node.shadows = Shadow.none()
   node.gridTemplate = nil
   node.gridItem = nil
   node.constraintsHorizontal = cMin

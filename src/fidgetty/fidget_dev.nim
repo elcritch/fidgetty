@@ -957,7 +957,7 @@ proc disabledColor*(node: Node) =
 
 proc clearShadows*() =
   ## Clear shadow
-  current.shadows.setLen(0)
+  current.shadows = Shadow.none()
 
 proc shadows*(node: Node) =
   current.shadows = node.shadows
@@ -971,7 +971,7 @@ proc dropShadow*(item: Node; blur, x, y: float32, color: string, alpha: float32)
                            x: x.UICoord,
                            y: y.UICoord,
                            color: c)
-  item.shadows.add(sh)
+  item.shadows = some(sh)
 
 proc dropShadow*(blur, x, y: float32, color: string, alpha: float32) =
   ## Sets drop shadow on an element
@@ -981,7 +981,7 @@ proc innerShadow*(blur, x, y: float32, color: string, alpha: float32) =
   ## Sets an inner shadow
   var c = parseHtmlColor(color)
   c.a = alpha
-  current.shadows.add Shadow(
+  current.shadows = some Shadow(
     kind: InnerShadow,
     blur: blur.UICoord,
     x: x.UICoord,

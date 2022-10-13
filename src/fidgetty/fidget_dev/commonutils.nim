@@ -11,6 +11,9 @@ import typetraits
 
 import typography/font
 import cssgrid
+import options
+
+export options
 
 proc repr*(font: Font): string =
   if font.isNil:

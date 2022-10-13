@@ -183,7 +183,7 @@ proc drawMasks*(node: Node) =
 
 proc drawShadows*(node: Node) =
   ## drawing shadows
-  let shadow = node.shadows[0]
+  let shadow = node.shadows.get()
   let blurAmt = shadow.blur / 7.0'ui
   for i in 0..6:
     let blurs = i.toFloat().UICoord * blurAmt
@@ -267,7 +267,7 @@ proc draw*(node, parent: Node) =
     ctx.popMask()
 
   # hacky method to draw drop shadows... should probably be done in opengl sharders
-  ifdraw node.shadows.len() > 0:
+  ifdraw node.shadows.isSome():
     node.drawShadows()
 
   ifdraw true:
