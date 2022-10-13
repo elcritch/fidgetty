@@ -11,9 +11,11 @@ import typetraits
 
 import typography/font
 import cssgrid
+import cdecl/atoms
 import options
 
 export options
+export atoms
 
 proc repr*(font: Font): string =
   if font.isNil:

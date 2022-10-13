@@ -34,6 +34,17 @@ proc grayTheme*() =
 
   setTheme(atom"inner"):
     stroke Stroke.init(1, "#707070", 0.4)
+  
+  setTheme(atom"highlight"):
+    fill theme.highlight
+  setTheme(atom"active"):
+    fill theme.highlight
+  setTheme(atom"hover"):
+    fill theme.highlight
+  
+  setTheme(atom"button"):
+    fill theme.foreground
+
 
 
 proc bulmaTheme*() =

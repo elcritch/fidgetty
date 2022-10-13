@@ -20,8 +20,9 @@ proc render*(
   # button widget!
   # onTheme 
   clipContent true
+  useTheme
 
-  text "button text":
+  text "text":
     # boxSizeOf parent
     size csAuto(), csAuto()
     fill theme.text
@@ -31,11 +32,12 @@ proc render*(
   if props.disabled:
     # imageColor palette.disabled
     fill theme.disabled
+    useTheme atom"disabled"
   else:
     if props.isActive:
-      highlight theme.highlight
+      useTheme atom"active"
     onHover:
-      highlight theme.highlight
+      useTheme atom"hover"
     onClick:
-      highlight theme.highlight
+      useTheme atom"active"
     dispatchMouseEvents()

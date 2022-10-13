@@ -1,6 +1,7 @@
 import std/strutils, std/tables, std/deques
 import cdecl/atoms
 import fidget_dev
+import cdecl/[atoms, crc32]
 
 type
   Themer = proc()
@@ -38,14 +39,44 @@ var
   theme*: BasicTheme
   themes*: Themes = newTable[Atom, Deque[Themer]]()
 
-proc `[]`*(themes: Themes, name: Atom): Themer =
-  themes.mgetOrPut(name, initDeque[Themer]()).peekLast()
+proc `[]`*(themes: Themes, name: Atom): var Themer =
+  themes.mgetOrPut(name, [nil.Themer].toDeque()).peekLast()
+
+proc contains*(themes: Themes, name: Atom): bool =
+  not isNil(themes[name])
 
 proc push*(themes: Themes, name: Atom, theme: Themer) =
   themes.mgetOrPut(name, initDeque[Themer]()).addLast(theme)
 
 proc pop*(themes: Themes, name: Atom) =
   discard themes.mgetOrPut(name, initDeque[Themer]()).popLast()
+
+template onTheme*(themes: Themes, name: Atom, blk: untyped) =
+  if name in themes:
+    `blk`
+
+template useThemeImpl(name: Atom): bool =
+  block:
+    let themer = theming.themes[name]
+    if not themer.isNil:
+      themer()
+      true
+    else:
+      false
+
+template useTheme*(name: Atom) =
+  var ran = false
+  if not ran:
+    ran = useThemeImpl(Atom(Crc32(current.id) !& Crc32(name)))
+  if not ran:
+    ran = useThemeImpl(name)
+
+template useTheme*() =
+  var ran = false
+  if not ran:
+    ran = useThemeImpl(Atom(Crc32(parent.id) !& Crc32(current.id)))
+  if not ran:
+    ran = useThemeImpl(current.id)
 
 template setTheme*(name: Atom, blk: untyped) =
   let themer = proc() =
