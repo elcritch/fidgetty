@@ -10,7 +10,7 @@ fidgetty Button:
 
 proc themeButton*() =
   cornerRadius theme.cornerRadius
-  shadows theme
+  shadows theme.shadows
   stroke theme.outerStroke
   imageOf theme.gloss
   fill palette.foreground

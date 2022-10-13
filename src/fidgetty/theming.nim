@@ -17,7 +17,7 @@ type
     textModeLight*: Color
     textModeDark*: Color
 
-  Theme* = object
+  BasicTheme* = object
     foreground*: Color
     accent*: Color
     highlight*: Color
@@ -27,11 +27,13 @@ type
     textBg*: Color
     cursor*: Color
     cornerRadius*: (UICoord, UICoord, UICoord, UICoord)
+    shadow*: Option[Shadow]
+    textStyle*: TextStyle
 
 
 var
   palette*: Palette
-  theme*: Theme
+  theme*: BasicTheme
   themes*: Themes = newTable[Atom, Deque[Themer]]()
 
 proc `[]`*(themes: Themes, name: Atom): Themer =
@@ -66,26 +68,22 @@ proc setFontStyle*(
   textStyle.textAlignHorizontal = textAlignHorizontal
   textStyle.textAlignVertical = textAlignVertical
 
-# proc font*(
-#   item: var GeneralTheme,
-#   fontFamily: string,
-#   fontSize, fontWeight, lineHeight: float32,
-#   textAlignHorizontal: HAlign,
-#   textAlignVertical: VAlign
-# ) =
-#   item.setFontStyle(
-#     fontFamily,
-#     fontSize,
-#     fontWeight,
-#     lineHeight,
-#     textAlignHorizontal,
-#     textAlignVertical)
+proc font*(
+  item: var BasicTheme,
+  fontFamily: string,
+  fontSize, fontWeight, lineHeight: float32,
+  textAlignHorizontal: HAlign,
+  textAlignVertical: VAlign
+) =
+  item.textStyle.setFontStyle(
+    fontFamily,
+    fontSize,
+    fontWeight,
+    lineHeight,
+    textAlignHorizontal,
+    textAlignVertical)
 
-# proc textStyle*(node: var GeneralTheme) =
-#   ## Sets the font size.
-#   common.current.textStyle = node.textStyle
-
-proc fill*(item: var Palette) =
+proc fill*(item: var BasicTheme) =
   ## Sets background color.
   current.fill = item.foreground
 

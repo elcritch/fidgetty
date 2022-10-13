@@ -959,8 +959,8 @@ proc clearShadows*() =
   ## Clear shadow
   current.shadows = Shadow.none()
 
-proc shadows*(node: Node) =
-  current.shadows = node.shadows
+proc shadows*(shadow: Option[Shadow]) =
+  current.shadows = shadow
 
 proc dropShadow*(item: Node; blur, x, y: float32, color: string, alpha: float32) =
   ## Sets drop shadow on an element

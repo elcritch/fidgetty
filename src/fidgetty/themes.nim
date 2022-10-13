@@ -5,21 +5,21 @@ import theming
 proc grayTheme*() =
   let fs = 16'f32
 
-  themePalette.primary = parseHtml("#DDDDDD", 1.0)
-  themePalette.link = themePalette.primary
-  themePalette.info = themePalette.primary
-  themePalette.success = themePalette.primary
-  themePalette.warning = parseHtml("#ffdd57") # hsl(48, 100/360, 67/360).to(Color)
-  themePalette.danger = themePalette.primary
-  themePalette.textModeLight = parseHtml("#ffffff")
-  themePalette.textModeDark = parseHtml("#000000")
+  palette.primary = parseHtml("#DDDDDD", 1.0)
+  palette.link = palette.primary
+  palette.info = palette.primary
+  palette.success = palette.primary
+  palette.warning = parseHtml("#ffdd57") # hsl(48, 100/360, 67/360).to(Color)
+  palette.danger = palette.primary
+  palette.textModeLight = parseHtml("#ffffff")
+  palette.textModeDark = parseHtml("#000000")
 
-  currentPalette.foreground = parseHtml("#DDDDDD", 1.0)
-  currentPalette.text = parseHtml("#565555")
-  currentPalette.textBg = parseHtml("#F6F5F5")
-  currentPalette.accent = parseHtml("#87E3FF", 0.67)
-  currentPalette.highlight = parseHtml("#87E3FF", 0.77)
-  currentPalette.cursor = parseHtml("#77D3FF", 0.33)
+  theme.foreground = parseHtml("#DDDDDD", 1.0)
+  theme.text = parseHtml("#565555")
+  theme.textBg = parseHtml("#F6F5F5")
+  theme.accent = parseHtml("#87E3FF", 0.67)
+  theme.highlight = parseHtml("#87E3FF", 0.77)
+  theme.cursor = parseHtml("#77D3FF", 0.33)
 
   setTheme(atom"font"):
     font("IBM Plex Sans", fs, 200, 0, hCenter, vCenter)
@@ -38,22 +38,22 @@ proc grayTheme*() =
 
 proc bulmaTheme*() =
   # pallete.primary = hsl(171, 100'CPP, 41'CPP).to(Color)
-  # themePalette.primary = parseHtml("#87E3FF", 1.0).saturate(0.3)
-  themePalette.link = hsl(27, 100/255, 41/255).to(Color) # parseHtml("#00d1b2")
-  themePalette.primary = parseHtml("#3273dc").desaturate(0.25) * 0.87 # hsl(217, 71'PHSL, 53'PHSL).to(Color)
-  themePalette.info = hsl(204, 86/255, 53/255).to(Color)
-  themePalette.success = hsl(141, 53/255, 53/255).to(Color)
-  themePalette.warning = parseHtml("#ffdd57") # hsl(48, 100/360, 67/360).to(Color)
-  themePalette.danger = hsl(348, 100/255, 61/255).to(Color)
-  themePalette.textModeLight = parseHtml("#ffffff")
-  themePalette.textModeDark = parseHtml("#000000")
+  # palette.primary = parseHtml("#87E3FF", 1.0).saturate(0.3)
+  palette.link = hsl(27, 100/255, 41/255).to(Color) # parseHtml("#00d1b2")
+  palette.primary = parseHtml("#3273dc").desaturate(0.25) * 0.87 # hsl(217, 71'PHSL, 53'PHSL).to(Color)
+  palette.info = hsl(204, 86/255, 53/255).to(Color)
+  palette.success = hsl(141, 53/255, 53/255).to(Color)
+  palette.warning = parseHtml("#ffdd57") # hsl(48, 100/360, 67/360).to(Color)
+  palette.danger = hsl(348, 100/255, 61/255).to(Color)
+  palette.textModeLight = parseHtml("#ffffff")
+  palette.textModeDark = parseHtml("#000000")
 
-  currentPalette.foreground = themePalette.primary * 1.0
-  currentPalette.highlight = themePalette.primary.saturate(10.0) * 1.0
-  currentPalette.background = whiteColor
-  currentPalette.cursor = parseHtml("#77D3FF", 0.33)
-  currentPalette.text = themePalette.textModeDark
-  currentPalette.accent = parseHtml("#87E3FF", 0.77)
+  theme.foreground = palette.primary * 1.0
+  theme.highlight = palette.primary.saturate(10.0) * 1.0
+  theme.background = whiteColor
+  theme.cursor = parseHtml("#77D3FF", 0.33)
+  theme.text = palette.textModeDark
+  theme.accent = parseHtml("#87E3FF", 0.77)
 
   let fs = 16'f32
   setTheme(atom"font"):
@@ -75,15 +75,15 @@ proc bulmaTheme*() =
 
 proc darkNimTheme*() =
   # pallete.primary = hsl(171, 100'CPP, 41'CPP).to(Color)
-  # themePalette.primary = parseHtml("#87E3FF", 1.0).saturate(0.3)
-  themePalette.link = hsl(27, 100/255, 41/255).to(Color) # parseHtml("#00d1b2")
-  themePalette.primary = rgba(27,29,38,255).color
-  themePalette.info = rgba(194,166,9,255).color
-  themePalette.success = hsl(141, 53/255, 53/255).to(Color)
-  themePalette.warning = parseHtml("#ffdd57") # hsl(48, 100/360, 67/360).to(Color)
-  themePalette.danger = hsl(348, 100/255, 61/255).to(Color)
-  themePalette.textModeLight = blackColor
-  themePalette.textModeDark = whiteColor
+  # palette.primary = parseHtml("#87E3FF", 1.0).saturate(0.3)
+  palette.link = hsl(27, 100/255, 41/255).to(Color) # parseHtml("#00d1b2")
+  palette.primary = rgba(27,29,38,255).color
+  palette.info = rgba(194,166,9,255).color
+  palette.success = hsl(141, 53/255, 53/255).to(Color)
+  palette.warning = parseHtml("#ffdd57") # hsl(48, 100/360, 67/360).to(Color)
+  palette.danger = hsl(348, 100/255, 61/255).to(Color)
+  palette.textModeLight = blackColor
+  palette.textModeDark = whiteColor
 
   let fs = 16'f32
   setTheme(atom"font"):
@@ -92,15 +92,15 @@ proc darkNimTheme*() =
 
   setTheme(atom"font"):
     cornerRadius(5)
-    currentPalette.foreground = themePalette.info
-    currentPalette.highlight = themePalette.info.lighten(0.14)
-    currentPalette.disabled = themePalette.info.darken(0.3)
-    currentPalette.background = rgba(27,29,38,255).color
-    currentPalette.cursor = whiteColor
+    theme.foreground = palette.info
+    theme.highlight = palette.info.lighten(0.14)
+    theme.disabled = palette.info.darken(0.3)
+    theme.background = rgba(27,29,38,255).color
+    theme.cursor = whiteColor
 
   setTheme(atom"font"):
-    currentPalette.text = whiteColor
-    currentPalette.accent = blackColor
+    theme.text = whiteColor
+    theme.accent = blackColor
 
 type
   ThemeAccents* = enum
@@ -113,19 +113,19 @@ type
 #   proc `name Palette`*(accents: set[ThemeAccents] = {}): Palette =
 #     ## Set sub-palette using `name` colors for widgets
 #     result = palette()
-#     result.highlight = themePalette.`name`.lighten(0.1)
+#     result.highlight = palette.`name`.lighten(0.1)
 #     if fgDarken in accents:
-#       result.foreground = themePalette.`name`.darken(0.2)
+#       result.foreground = palette.`name`.darken(0.2)
 #     else:
-#       result.foreground = themePalette.`name`.lighten(0.2)
+#       result.foreground = palette.`name`.lighten(0.2)
 #     if bgDarken in accents:
 #       result.background = result.background.darken(0.2)
 #     if txtDark in accents:
-#       result.text = themePalette.textModeLight
+#       result.text = palette.textModeLight
 #     else:
-#       result.text = themePalette.textModeDark
+#       result.text = palette.textModeDark
 #     if txtHighlight in accents:
-#       result.text = themePalette.`name`
+#       result.text = palette.`name`
 
 # MakeDefaultPalette(info)
 # MakeDefaultPalette(link)
