@@ -16,7 +16,7 @@ proc grayTheme*() =
 
   theme.foreground = parseHtml("#DDDDDD", 1.0)
   theme.text = parseHtml("#565555")
-  theme.textBg = parseHtml("#F6F5F5")
+  # theme.textBg = parseHtml("#F6F5F5")
   theme.accent = parseHtml("#87E3FF", 0.67)
   theme.highlight = parseHtml("#87E3FF", 0.77)
   theme.cursor = parseHtml("#77D3FF", 0.33)

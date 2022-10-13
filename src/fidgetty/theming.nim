@@ -31,6 +31,7 @@ type
     textStyle*: TextStyle
     innerStroke*: Stroke
     outerStroke*: Stroke
+    itemSpacing*: UICoord
 
 var
   palette*: Palette

@@ -50,12 +50,12 @@ proc handleClicked(self: TextInputState, textbox: TextBox[Node]) =
 
 proc new*(_: typedesc[TextInputProps]): TextInputProps =
   new result
-  cornerRadius theme.textCorner.UICoord
-  shadows theme
-  imageOf theme.gloss
+  cornerRadius theme.cornerRadius
+  shadow theme.shadow
+  image theme.gloss
   imageTransparency 0.33
   rotation 0
-  fill palette.foreground
+  fill theme.foreground
 
 proc render*(
     props: TextInputProps,
@@ -87,7 +87,7 @@ proc render*(
       # echo textbox.repr
     
     # setup focus
-    fill palette.text
+    fill theme.text
     current.bindingSet = true
     selectable true
     editableText true
@@ -142,5 +142,5 @@ proc render*(
       for selection in textbox.selectionRegions():
         rectangle "selection":
           box selection.descaled
-          fill palette.cursor * 0.22
+          fill theme.text * 0.22
   

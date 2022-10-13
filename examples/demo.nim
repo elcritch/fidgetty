@@ -31,12 +31,12 @@ proc testDemo() =
                     "OpenGL", "Immediate", "mode"]
 
   setTitle(fmt"Fidget Animated Progress Example")
-  textStyle theme
-  fill palette.background.lighten(0.11)
+  textStyle theme.textStyle
+  fill theme.background.lighten(0.11)
 
   group "center":
     box 50, 0, 100'vw - 100, 100'vh
-    fill palette.background.darken(1'CPP)
+    fill theme.background.darken(1/255)
     strokeWeight 1
 
     self.value = (self.count1.toFloat * 0.10) mod 1.0
@@ -66,7 +66,7 @@ proc testDemo() =
               self.count2.inc()
               self.evts.add IncrementBar(increment = 0.02)
               refresh()
-          Theme(warningPalette()):
+          block:
             Checkbox:
               size 10'em, 2'em
               label fmt"Click {self.myCheck}"
@@ -161,9 +161,6 @@ proc testDemo() =
 
 startFidget(
   testDemo,
-  setup = 
-    when defined(demoBulmaTheme): setup(bulmaTheme)
-    else: setup(grayTheme),
   w = 640,
   h = 700,
 )

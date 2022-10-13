@@ -76,7 +76,7 @@ proc render*(
     clipContent true
     text "icon":
       box tw, 0, 1'em, bh
-      fill palette.text
+      fill theme.text
       if self.dropDownOpen: rotation -90
       else: rotation 0
       characters ">"
@@ -92,7 +92,7 @@ proc render*(
       outClick = true
   finally:
     if self.dropDownOpen:
-      highlight palette.highlight
+      highlight theme.highlight
 
   if self.dropDownOpen:
     group "dropDownScroller":
@@ -103,12 +103,12 @@ proc render*(
 
       clipContent true
       zlevel ZLevelRaised
-      cornerRadius theme
+      cornerRadius theme.cornerRadius
       strokeLine this
 
       group "menuoutline":
         box 0, 0, bw, bdh
-        cornerRadius theme
+        cornerRadius theme.cornerRadius
         stroke theme.outerStroke
 
       group "menu":
