@@ -81,7 +81,6 @@ proc render*(
         # echo fmt"{idx=} => {isCovered(popupBox)=}"
 
         Button:
-          useTheme()
           clearShadows()
           imageTransparency 0.1
           boxOf parent

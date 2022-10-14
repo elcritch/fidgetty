@@ -20,7 +20,7 @@ proc render*(
   # button widget!
   # onTheme 
   clipContent true
-  useTheme
+  useTheme()
 
   text "text":
     # boxSizeOf parent

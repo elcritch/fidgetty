@@ -51,6 +51,16 @@ proc grayTheme*() =
     cornerRadius theme.cornerRadius
     stroke theme.outerStroke
 
+  setTheme(atom"container"):
+    # fill theme.foreground
+    cornerRadius theme.cornerRadius
+    stroke theme.outerStroke
+
+  setTheme(atom"container" !& atom"outline"):
+    # fill theme.foreground
+    cornerRadius theme.cornerRadius
+    stroke theme.outerStroke
+
   # setTheme([atom"menu", atom"button"]):
   setTheme(atom"menu" !& atom"button"):
     fill theme.foreground

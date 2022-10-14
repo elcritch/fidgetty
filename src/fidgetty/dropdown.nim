@@ -95,7 +95,8 @@ proc render*(
       highlight theme.highlight
 
   if self.dropDownOpen:
-    group "dropDownScroller":
+    group "container":
+      useTheme
       if self.dropUp:
         box 0, bh-bdh-bh, bw, bdh
       else:
@@ -103,15 +104,13 @@ proc render*(
 
       clipContent true
       zlevel ZLevelRaised
-      cornerRadius theme.cornerRadius
-      strokeLine this
 
-      group "menuoutline":
+      group "outline":
+        useTheme
         box 0, 0, bw, bdh
-        cornerRadius theme.cornerRadius
-        stroke theme.outerStroke
 
-      group "container":
+      group "scrollpane":
+        useTheme
         box 0, 0, bw, bdh
         layout lmVertical
         counterAxisSizingMode CounterAxisSizingMode.csAuto
@@ -132,7 +131,6 @@ proc render*(
             layoutAlign laCenter
 
             Button:
-              useTheme()
               clearShadows()
               let ic = this.image.color
               imageColor ic * 0.9
