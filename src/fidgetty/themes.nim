@@ -19,8 +19,10 @@ proc grayTheme*() =
   theme.accent = parseHtml("#87E3FF", 0.67)
   theme.highlight = parseHtml("#87E3FF", 0.77)
   theme.cursor = parseHtml("#77D3FF", 0.33)
-  theme.textStyle.setFontStyle("IBM Plex Sans", 16, 200, 0, hCenter, vCenter)
   theme.cornerRadius = (5'ui, 5'ui, 5'ui, 5'ui)
+  theme.outerStroke = Stroke.init(3.0'f32, "#707070", 0.12)
+  theme.innerStroke = Stroke.init(1.0'f32, "#707070", 0.12)
+  theme.textStyle.setFontStyle("IBM Plex Sans", 16, 200, 0, hCenter, vCenter)
 
   setTheme(atom"font"):
     cornerRadius common.uiScale * 3.2'f32
@@ -33,17 +35,21 @@ proc grayTheme*() =
     itemSpacing 0.001 * theme.textStyle.fontSize
 
   setTheme(atom"inner"):
-    stroke Stroke.init(1, "#707070", 0.4)
+    stroke theme.innerStroke
   
   setTheme(atom"highlight"):
     fill theme.highlight
+  
   setTheme(atom"active"):
     fill theme.highlight
+  
   setTheme(atom"hover"):
     fill theme.highlight
   
   setTheme(atom"button"):
     fill theme.foreground
+    cornerRadius theme.cornerRadius
+    stroke theme.outerStroke
 
 
 
@@ -65,7 +71,8 @@ proc bulmaTheme*() =
   theme.cursor = parseHtml("#77D3FF", 0.33)
   theme.text = palette.textModeDark
   theme.accent = parseHtml("#87E3FF", 0.77)
-
+  theme.outerStroke = Stroke.init(0, "#707070", 3.0)
+  theme.innerStroke = Stroke.init(0, "#707070", 1.0)
   theme.textStyle.setFontStyle("IBM Plex Sans", 16, 200, 0, hCenter, vCenter)
 
   let fs = 16'f32
