@@ -3,6 +3,8 @@ import cdecl/atoms
 import fidget_dev
 import cdecl/[atoms, crc32]
 
+export atoms
+
 type
   Themer = proc()
 
@@ -64,19 +66,19 @@ template useThemeImpl(name: Atom): bool =
     else:
       false
 
-template useTheme*(name: Atom) =
-  var ran = false
-  if not ran:
-    ran = useThemeImpl(Atom(Crc32(current.id) !& Crc32(name)))
-  if not ran:
-    ran = useThemeImpl(name)
-
 template useTheme*() =
   var ran = false
   if not ran:
     ran = useThemeImpl(Atom(Crc32(parent.id) !& Crc32(current.id)))
   if not ran:
     ran = useThemeImpl(current.id)
+
+template useTheme*(name: Atom) =
+  var ran = false
+  if not ran:
+    ran = useThemeImpl(Atom(Crc32(current.id) !& Crc32(name)))
+  if not ran:
+    ran = useThemeImpl(name)
 
 template setTheme*(name: Atom, blk: untyped) =
   let themer = proc() =

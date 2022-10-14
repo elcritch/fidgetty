@@ -75,12 +75,13 @@ proc render*(
         (current.screenBox.h - parent.screenBox.h) * scrollAmount.UICoord
 
     for idx, buttonName in pairs(props.items):
-      group "menuBtn":
+      group "menu":
         box 0, 0, bw, bih
         layoutAlign laCenter
         # echo fmt"{idx=} => {isCovered(popupBox)=}"
 
         Button:
+          useTheme()
           clearShadows()
           imageTransparency 0.1
           boxOf parent

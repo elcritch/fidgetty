@@ -61,8 +61,8 @@ proc preNode(kind: NodeKind, id: Atom) =
   inc parent.diffIndex
 
   current.diffIndex = 0
-  when defined(fidgetNodePath):
-    current.setNodePath()
+  # when defined(fidgetNodePath):
+  current.setNodePath()
 
 proc postNode() =
   current.removeExtraChildren()

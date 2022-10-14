@@ -431,8 +431,9 @@ proc x*(mouse: Mouse): UICoord = mouse.pos.descaled.x
 proc y*(mouse: Mouse): UICoord = mouse.pos.descaled.x
 
 proc setNodePath*(node: Node) =
-  node.idPath.setLen(nodeStack.len() + 1)
-  node.idPath[^1] = node.id
+  node.idPath.setLen(nodeStack.len())
+  # node.idPath.setLen(nodeStack.len() + 1)
+  # node.idPath[^1] = node.id
   for i, g in nodeStack:
     if g.id == Atom(0):
       node.idPath[i] = Atom(g.diffIndex)

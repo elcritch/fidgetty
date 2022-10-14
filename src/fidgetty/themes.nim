@@ -51,6 +51,12 @@ proc grayTheme*() =
     cornerRadius theme.cornerRadius
     stroke theme.outerStroke
 
+  # setTheme([atom"menu", atom"button"]):
+  setTheme(atom"menu" !& atom"button"):
+    fill theme.foreground
+    cornerRadius (0'ui,0'ui,0'ui,0'ui)
+    stroke Stroke.init(0.0'f32, "#000000", 0.0)
+
 
 
 proc bulmaTheme*() =

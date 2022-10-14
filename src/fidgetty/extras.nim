@@ -19,7 +19,7 @@ template Horizontal*(text, child: untyped) =
     `child`
 
 template Horizontal*(child: untyped) =
-  Horizontal("", child)
+  Horizontal("horizontal", child)
 
 template Vertical*(text, child: untyped) =
   group text:
@@ -28,7 +28,7 @@ template Vertical*(text, child: untyped) =
     `child`
 
 template Vertical*(child: untyped) =
-  Vertical("", child)
+  Vertical("vertical", child)
 
 template Group*(child: untyped) =
   group text:
@@ -45,26 +45,6 @@ template VHBox*(sz, child: untyped) =
     sz
     Horizontal:
       child
-
-template Theme*(pl: Palette, child: untyped) =
-  block:
-    push pl
-    `child`
-    pop(Palette)
-
-template ThemePalette*(child: untyped) =
-  block:
-    var pl = palette()
-    push pl
-    `child`
-    pop(Palette)
-
-template GeneralTheme*(child: untyped) =
-  block:
-    var th = theme()
-    push th
-    `child`
-    pop(GeneralTheme)
 
 template Spacer*(w: UICoord, h: UICoord) =
   blank: size(w, h)
