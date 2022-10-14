@@ -8,7 +8,7 @@ export atoms
 type
   Themer = proc()
 
-  Themes* = TableRef[Atom, Deque[Themer]]
+  Themes* = TableRef[Atom, ref Deque[Themer]]
 
   Palette* = object
     primary*: Color
@@ -39,46 +39,55 @@ type
 var
   palette*: Palette
   theme*: BasicTheme
-  themes*: Themes = newTable[Atom, Deque[Themer]]()
+  themes: Themes = newTable[Atom, ref Deque[Themer]]()
 
-proc `[]`*(themes: Themes, name: Atom): var Themer =
-  themes.mgetOrPut(name, [nil.Themer].toDeque()).peekLast()
+proc `..`*(a, b: Atom): Atom =
+  b !& Atom(0xAAAAAAAA) !& a
 
-proc contains*(themes: Themes, name: Atom): bool =
-  not isNil(themes[name])
+proc `/`*(a, b: Atom): Atom =
+  b !& a
+
+proc peekLast(themes: ref Deque[Themer]): Themer =
+  if themes.isNil: nil else: themes[].peekLast()
+
+proc `[]`*(themes: Themes, name: Atom): Themer =
+  themes.getOrDefault(name, nil).peekLast()
 
 proc push*(themes: Themes, name: Atom, theme: Themer) =
-  themes.mgetOrPut(name, initDeque[Themer]()).addLast(theme)
+  themes.mgetOrPut(name, new(ref Deque[Themer]))[].addLast(theme)
 
 proc pop*(themes: Themes, name: Atom) =
-  discard themes.mgetOrPut(name, initDeque[Themer]()).popLast()
+  themes.mgetOrPut(name, new(ref Deque[Themer]))[].popLast()
 
 template onTheme*(themes: Themes, name: Atom, blk: untyped) =
   if name in themes:
     `blk`
 
-template useThemeImpl(name: Atom): bool =
-  block:
-    let themer = theming.themes[name]
+proc useThemeImpl(idPath: seq[Atom], extra: Atom) =
+  template runThemerIfFound(value: untyped) =
+    let themer = themes.getOrDefault(value, nil).peekLast()
     if not themer.isNil:
       themer()
-      true
-    else:
-      false
+      return
+
+  let id = idPath[^1]
+  runThemerIfFound(extra !& id !& idPath[^2]) # check parent
+  for idx in countdown(idPath.len()-2, 0):
+    # check skip matches
+    runThemerIfFound(extra !& id !& Atom(0xAAAAAAAA) !& idPath[idx])
+  
+  # check self
+  runThemerIfFound(extra !& id)
+  # check attribute if given
+  if extra != Atom(0):
+    runThemerIfFound(extra)
+  
 
 template useTheme*() =
-  var ran = false
-  if not ran:
-    ran = useThemeImpl(Atom(Crc32(parent.id) !& Crc32(current.id)))
-  if not ran:
-    ran = useThemeImpl(current.id)
+  useThemeImpl(current.idPath, Atom(0))
 
 template useTheme*(name: Atom) =
-  var ran = false
-  if not ran:
-    ran = useThemeImpl(Atom(Crc32(current.id) !& Crc32(name)))
-  if not ran:
-    ran = useThemeImpl(name)
+  useThemeImpl(current.idPath, name)
 
 template setTheme*(name: Atom, blk: untyped) =
   let themer = proc() =

@@ -124,7 +124,7 @@ proc render*(
 
         var itemsVisible = -1 + (if self.dropUp: -1 else: 0)
         for idx, buttonName in pairs(props.items):
-          group "menu":
+          group "outline":
             if current.screenBox.overlaps(scrollBox):
               itemsVisible.inc()
             box 0, 0, bw, bih
