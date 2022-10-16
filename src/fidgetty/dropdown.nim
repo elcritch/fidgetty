@@ -111,7 +111,6 @@ proc render*(
         scrollpane true
 
         onClickOutside:
-          echo "outClick: ", outClick
           resetState()
 
         var itemsVisible = -1 + (if self.dropUp: -1 else: 0)
@@ -123,7 +122,6 @@ proc render*(
             layoutAlign laCenter
 
             Button:
-              clearShadows()
               let ic = this.image.color
               imageColor ic * 0.9
               boxOf parent
@@ -133,13 +131,6 @@ proc render*(
               onClick:
                 resetState()
                 dispatchEvent changed(idx)
-            # do -> MouseEvent: # handle events from widget
-            #   evClick:
-            #     resetState()
-            #     dispatchEvent changed(idx)
-
-        # group "menuBtnBlankSpacer":
-          # box 0, 0, bw, this.cornerRadius[0]
         
         if self.itemsVisible >= 0:
           self.itemsVisible = min(itemsVisible, self.itemsVisible)
