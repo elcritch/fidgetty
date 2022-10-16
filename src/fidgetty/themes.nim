@@ -16,7 +16,7 @@ proc grayTheme*() =
   theme.foreground = parseHtml("#DDDDDD", 1.0)
   theme.text = parseHtml("#565555")
   # theme.textBg = parseHtml("#F6F5F5")
-  theme.accent = parseHtml("#87E3FF", 0.67)
+  theme.accent = parseHtml("#87E3FF", 0.77).desaturate(0.15)
   theme.highlight = parseHtml("#87E3FF", 0.77)
   theme.cursor = parseHtml("#77D3FF", 0.33)
   theme.cornerRadius = (5'ui, 5'ui, 5'ui, 5'ui)
@@ -41,7 +41,7 @@ proc grayTheme*() =
     fill theme.highlight
   
   setTheme(atom"active"):
-    fill theme.highlight
+    fill theme.accent
   
   setTheme(atom"disabled"):
     fill theme.disabled
@@ -75,6 +75,10 @@ proc grayTheme*() =
     fill theme.foreground
     cornerRadius 0'ui
     stroke Stroke.init(1.0'f32, "#707070", 0.12)
+
+  setTheme(atom"button" / atom"pop"):
+    fill theme.highlight
+    stroke Stroke.init(1.0'f32, "#707070", 0.90)
 
   # setTheme([atom"menu", atom"button"]):
   setTheme(atom"menu" / atom"button"):
