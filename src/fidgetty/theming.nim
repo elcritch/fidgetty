@@ -41,6 +41,8 @@ var
   theme*: BasicTheme
   themes: Themes = newTable[Atom, ref Deque[Themer]]()
 
+  noStroke* = Stroke.init(0.0'f32, "#000000", 0.0)
+
 proc `..`*(a, b: Atom): Atom =
   b !& Atom(0xAAAAAAAA) !& a
 

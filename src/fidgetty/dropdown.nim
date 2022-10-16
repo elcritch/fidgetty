@@ -125,12 +125,14 @@ proc render*(
         var itemsVisible = -1 + (if self.dropUp: -1 else: 0)
         for idx, buttonName in pairs(props.items):
           group "outline":
+            useTheme
             if current.screenBox.overlaps(scrollBox):
               itemsVisible.inc()
             box 0, 0, bw, bih
             layoutAlign laCenter
 
             Button:
+              useTheme
               clearShadows()
               let ic = this.image.color
               imageColor ic * 0.9
