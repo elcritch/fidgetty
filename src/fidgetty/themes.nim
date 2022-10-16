@@ -1,6 +1,6 @@
 import chroma
 import fidget_dev
-import theming
+import fidget_dev/theming
 
 proc grayTheme*() =
 
@@ -50,11 +50,18 @@ proc grayTheme*() =
     fill theme.foreground
     cornerRadius theme.cornerRadius
     stroke theme.outerStroke
+    image theme.gloss
 
   setTheme(atom"container"):
     # fill theme.foreground
     cornerRadius theme.cornerRadius
     stroke theme.outerStroke
+
+  setTheme(atom"filling"):
+    fill theme.accent.lighten(0.1).desaturate(0.2) * 0.9
+    cornerRadius theme.cornerRadius
+    stroke theme.innerStroke
+    image theme.gloss
 
   setTheme(atom"container" .. atom"outline"):
     # fill theme.foreground

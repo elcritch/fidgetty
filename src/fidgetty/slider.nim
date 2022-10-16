@@ -1,6 +1,7 @@
 import fidget_dev
 import widgets
 import behaviors/dragger
+import button
 
 fidgetty Slider:
   properties:
@@ -16,13 +17,19 @@ proc new*(_: typedesc[SliderProps]): SliderProps =
   # layoutAlign laStretch
   stroke theme.outerStroke
 
+proc preRender*(
+    props: SliderProps,
+    self: SliderState,
+) =
+  # Setup CSS Grid Template
+  gridTemplateRows csFixed(0.4'em) 1'fr csFixed(0.4'em)
+  gridTemplateColumns csFixed(0.4'em) 1'fr csFixed(0.4'em)
+
 proc render*(
     props: SliderProps,
     self: SliderState,
 ): Events[All]=
   ## Draw a progress bars 
-  gridTemplateRows csFixed(0.4'em) 1'fr csFixed(0.4'em)
-  gridTemplateColumns csFixed(0.4'em) 1'fr csFixed(0.4'em)
 
   behavior self.dragger
 
@@ -37,32 +44,24 @@ proc render*(
     cornerRadius 0.80 * theme.cornerRadius[0]
     clipContent true
 
-  rectangle "bar holder":
+  rectangle "bar":
     gridArea 2 // 3, 2 // 3
 
-    rectangle "pop button":
+    rectangle "button":
+      useTheme atom"active"
+      useTheme atom"pop"
       let sliderPos = self.dragger.position(props.value)
       if sliderPos.updated:
         dispatchEvent changed(self.dragger.value)
     
       box sliderPos.value, 0, parent.box.h, parent.box.h
-      fill theme.cursor
-      cornerRadius theme.cornerRadius
-      stroke theme.outerStroke
-      clipContent true
-      image theme.gloss
 
-    rectangle "bar filling":
+    rectangle "filling":
       # Draw the bar itself.
       let bw = (100.0 * props.value.clamp(0, 1.0)).csPerc()
       size bw, 100'pp
-      fill theme.accent
-      cornerRadius 0.80 * theme.cornerRadius[0]
-      image theme.gloss, 0.67
-      clipContent true
-      stroke theme.innerStroke
 
-  rectangle "bar bg":
+  rectangle "bar-gloss":
     gridArea 1 // 4, 1 // 4
     stroke theme.outerStroke
     fill theme.foreground

@@ -2,12 +2,14 @@ import algorithm, chroma, fidget_dev/common, fidget_dev/input, json, macros, str
     sequtils, tables, bumpy
 import math, strformat
 import unicode
-import fidget_dev/commonutils
 import cssgrid
+
+import fidget_dev/[commonutils, theming]
 
 export chroma, common, input
 export commonutils
 export cssgrid
+export theming
 
 import print
 
@@ -63,6 +65,8 @@ proc preNode(kind: NodeKind, id: Atom) =
   current.diffIndex = 0
   # when defined(fidgetNodePath):
   current.setNodePath()
+
+  useTheme()
 
 proc postNode() =
   current.removeExtraChildren()
@@ -861,18 +865,6 @@ proc stroke*(stroke: Stroke) =
 proc strokeWeight*(weight: float32|UICoord) =
   ## Sets stroke/border weight.
   current.stroke.weight = weight.float32
-
-proc init*(tp: typedesc[Stroke], weight: float32|UICoord, color: string, alpha = 1.0): Stroke =
-  ## Sets stroke/border color.
-  result.color = parseHtmlColor(color)
-  result.color.a = alpha
-  result.weight = weight.float32
-
-proc init*(tp: typedesc[Stroke], weight: float32|UICoord, color: Color, alpha = 1.0): Stroke =
-  ## Sets stroke/border color.
-  result.color = color
-  result.color.a = alpha
-  result.weight = weight.float32
 
 proc strokeLine*(item: Node, weight: float32|UICoord, color: string, alpha = 1.0) =
   ## Sets stroke/border color.

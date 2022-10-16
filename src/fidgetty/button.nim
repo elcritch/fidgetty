@@ -20,17 +20,15 @@ proc render*(
   # button widget!
   # onTheme 
   clipContent true
-  useTheme()
 
-  text "text":
-    # boxSizeOf parent
-    size csAuto(), csAuto()
-    fill theme.text
-    characters props.label
-    # textAutoResize tsHeight
+  if props.label.len() > 0:
+    text "text":
+      # boxSizeOf parent
+      size csAuto(), csAuto()
+      fill theme.text
+      characters props.label
 
   if props.disabled:
-    # imageColor palette.disabled
     fill theme.disabled
     useTheme atom"disabled"
   else:
@@ -38,6 +36,6 @@ proc render*(
       useTheme atom"active"
     onHover:
       useTheme atom"hover"
-    onClick:
-      useTheme atom"active"
-    dispatchMouseEvents()
+    # onClick:
+    #   useTheme atom"active"
+    # dispatchMouseEvents()

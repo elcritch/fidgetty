@@ -79,8 +79,8 @@ proc render*(
 
   self.pbProps.value = self.value
   result.add self.pbProps.render(self.pbState)
-  # ProgressBar:
-  #   value self.value
-  #   label fmt"{self.value:4.2}"
-  #   boxOf parent
+  ProgressBar:
+    value self.value
+    label fmt"{self.value:4.2}"
+    boxOf parent
 

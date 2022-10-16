@@ -1,5 +1,4 @@
-import theming
-import fidget_dev/commonutils
+import fidget_dev/[commonutils, theming]
 export commonutils, theming
 
 # =========================

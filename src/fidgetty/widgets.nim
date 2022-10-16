@@ -8,8 +8,8 @@ export tables, strformat, options
 export math, random
 export variant, patty
 
-import fidget_dev, extras, events, theming
-export fidget_dev, extras, events, theming, tables
+import fidget_dev, extras, events
+export fidget_dev, extras, events, tables
 
 type
   WidgetProc* = proc()

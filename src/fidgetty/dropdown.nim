@@ -22,10 +22,6 @@ fidgetty Dropdown:
     itemsVisible: int
     itemsCount: int
 
-# static:
-#   assert DropdownArgs is WidgetArgs
-#   assert DropdownState is WidgetState
-
 proc new*(_: typedesc[DropdownProps]): DropdownProps =
   new result
   size 8'em, 1.5'em
@@ -84,19 +80,18 @@ proc render*(
             props.defaultLabel
           else:
             props.items[props.selected]
-  do -> MouseEvent: # handle events from widget
-    evClick:
+    onClick:
       self.dropDownOpen = true
       self.itemsVisible = -1
-    evClickOut:
+    onClickOutside:
       outClick = true
+  
   finally:
     if self.dropDownOpen:
       highlight theme.highlight
 
   if self.dropDownOpen:
     group "container":
-      useTheme
       if self.dropUp:
         box 0, bh-bdh-bh, bw, bdh
       else:
@@ -106,11 +101,9 @@ proc render*(
       zlevel ZLevelRaised
 
       group "outline":
-        useTheme
         box 0, 0, bw, bdh
 
       group "scrollpane":
-        useTheme
         box 0, 0, bw, bdh
         layout lmVertical
         counterAxisSizingMode CounterAxisSizingMode.csAuto
@@ -119,20 +112,17 @@ proc render*(
 
         onClickOutside:
           echo "outClick: ", outClick
-          # if outClick == true:
           resetState()
 
         var itemsVisible = -1 + (if self.dropUp: -1 else: 0)
         for idx, buttonName in pairs(props.items):
           group "outline":
-            useTheme
             if current.screenBox.overlaps(scrollBox):
               itemsVisible.inc()
             box 0, 0, bw, bih
             layoutAlign laCenter
 
             Button:
-              useTheme
               clearShadows()
               let ic = this.image.color
               imageColor ic * 0.9
@@ -140,10 +130,13 @@ proc render*(
               cornerRadius 0
               stroke theme.innerStroke
               label buttonName
-            do -> MouseEvent: # handle events from widget
-              evClick:
+              onClick:
                 resetState()
                 dispatchEvent changed(idx)
+            # do -> MouseEvent: # handle events from widget
+            #   evClick:
+            #     resetState()
+            #     dispatchEvent changed(idx)
 
         # group "menuBtnBlankSpacer":
           # box 0, 0, bw, this.cornerRadius[0]

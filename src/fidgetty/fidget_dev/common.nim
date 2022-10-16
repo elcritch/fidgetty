@@ -392,6 +392,18 @@ proc defaultLineHeight*(fontSize: UICoord): UICoord =
 proc defaultLineHeight*(ts: TextStyle): UICoord =
   result = defaultLineHeight(ts.fontSize)
 
+proc init*(tp: typedesc[Stroke], weight: float32|UICoord, color: string, alpha = 1.0): Stroke =
+  ## Sets stroke/border color.
+  result.color = parseHtmlColor(color)
+  result.color.a = alpha
+  result.weight = weight.float32
+
+proc init*(tp: typedesc[Stroke], weight: float32|UICoord, color: Color, alpha = 1.0): Stroke =
+  ## Sets stroke/border color.
+  result.color = color
+  result.color.a = alpha
+  result.weight = weight.float32
+
 proc newUId*(): NodeUID =
   # Returns next numerical unique id.
   inc lastUId
