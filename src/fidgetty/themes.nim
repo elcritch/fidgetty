@@ -43,13 +43,16 @@ proc grayTheme*() =
   setTheme(atom"active"):
     fill theme.highlight
   
+  setTheme(atom"disabled"):
+    fill theme.disabled
+
   setTheme(atom"hover"):
     fill theme.highlight
   
   setTheme(atom"button"):
     fill theme.foreground
     cornerRadius theme.cornerRadius
-    stroke theme.outerStroke
+    stroke theme.innerStroke
     image theme.gloss
 
   setTheme(atom"container"):
@@ -58,7 +61,7 @@ proc grayTheme*() =
     stroke theme.outerStroke
 
   setTheme(atom"filling"):
-    fill theme.accent.lighten(0.1).desaturate(0.2) * 0.9
+    fill theme.accent.lighten(0.07).desaturate(0.3) * 0.9
     cornerRadius theme.cornerRadius
     stroke theme.innerStroke
     image theme.gloss

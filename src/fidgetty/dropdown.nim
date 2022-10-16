@@ -122,11 +122,6 @@ proc render*(
             layoutAlign laCenter
 
             Button:
-              let ic = this.image.color
-              imageColor ic * 0.9
-              boxOf parent
-              cornerRadius 0
-              stroke theme.innerStroke
               label buttonName
               onClick:
                 resetState()
