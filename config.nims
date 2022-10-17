@@ -2,7 +2,7 @@ switch("styleCheck", "hint")
 
 # --gc:arc
 # --define:release
-when not defined(useDefaultGc):
+when not defined(fidgettyNonArcGc):
   --gc:arc
 
 if not defined(emscripten):
