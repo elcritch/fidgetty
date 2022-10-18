@@ -1,5 +1,5 @@
 import std/strutils, std/tables, std/deques
-import cssgrid/atoms
+import cdecl/atoms
 import fidget_dev
 
 type
