@@ -46,7 +46,7 @@ proc drawMain() =
     TabView:
       clipContent true
       cornerRadius 0.5'em
-      fill rgba(66, 177, 44, 167).to(Color).spin(100.0) * 0.2
+      # fill rgba(66, 177, 44, 167).to(Color).spin(100.0) * 0.2
       findGridRow(ln"bar").track = csFixed(2)
 
       rectangle "bar":

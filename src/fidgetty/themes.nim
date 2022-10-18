@@ -19,6 +19,7 @@ proc grayTheme*() =
   # theme.textBg = parseHtml("#F6F5F5")
   theme.accent = parseHtml("#87E3FF", 0.77).desaturate(0.15)
   theme.highlight = parseHtml("#87E3FF", 0.77)
+  theme.disabled = theme.background * 0.68
   theme.cursor = parseHtml("#77D3FF", 0.33)
   theme.cornerRadius = (5'ui, 5'ui, 5'ui, 5'ui)
   theme.outerStroke = Stroke.init(3.0'f32, "#707070", 0.12)
