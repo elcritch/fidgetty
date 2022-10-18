@@ -13,7 +13,8 @@ proc grayTheme*() =
   palette.textModeLight = parseHtml("#ffffff")
   palette.textModeDark = parseHtml("#000000")
 
-  theme.foreground = parseHtml("#DDDDDD", 1.0)
+  theme.foreground = parseHtml("#CDCDCF", 1.0)
+  theme.background = parseHtml("#E4E4E6", 1.0)
   theme.text = parseHtml("#565555")
   # theme.textBg = parseHtml("#F6F5F5")
   theme.accent = parseHtml("#87E3FF", 0.77).desaturate(0.15)
@@ -60,6 +61,11 @@ proc grayTheme*() =
     stroke theme.innerStroke
     image theme.gloss
 
+  setTheme(atom"area"):
+    fill theme.background
+    cornerRadius theme.cornerRadius
+    stroke theme.outerStroke
+
   setTheme(atom"container"):
     # fill theme.foreground
     cornerRadius theme.cornerRadius
@@ -83,7 +89,7 @@ proc grayTheme*() =
 
   setTheme(atom"button" / atom"pop"):
     fill theme.highlight
-    stroke Stroke.init(1.0'f32, "#707070", 0.90)
+    stroke Stroke.init(1.0'f32, "#303030", 0.90)
 
   # setTheme([atom"menu", atom"button"]):
   setTheme(atom"menu" / atom"button"):

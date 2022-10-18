@@ -51,7 +51,6 @@ proc drawMain() =
 
       rectangle "bar":
         gridArea "bar", "area"
-        fill palette.highlight * 0.90
       
       tab "tab a":
         # strokeLine 1'em.float32, "#FF0000"
@@ -109,7 +108,7 @@ proc drawMain() =
 startFidget(
   drawMain,
   setup = 
-    when defined(demoBulmaTheme): setup(bulmaTheme)
-    else: setup(grayTheme),
+    when defined(demoBulmaTheme): bulmaTheme
+    else: grayTheme,
   w=480, h=300
 )

@@ -25,6 +25,7 @@ template tab*(name, blk: untyped) =
       # current.disableRender = state.currentTab != name.hash()
       gridRow "main" // "end"
       gridColumn "area"
+      useTheme atom"area"
       `blk`
 
 proc new*(_: typedesc[TabViewProps]): TabViewProps =
