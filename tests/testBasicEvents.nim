@@ -20,10 +20,11 @@ proc render*(
 ): Events[All]=
   clipContent true
   onHover:
-    highlight palette
+    useTheme atom"hover"
+  onHover:
+    useTheme atom"clicked"
   onClick:
-    highlight palette
-  dispatchMouseEvents()
+    dispatchMouseEvents()
 
 type
   AppState* = ref object
@@ -36,14 +37,13 @@ proc exampleApp*() =
     let self = withState(AppState)
 
     ButtonEvt:
-      fill palette.foreground
+      id "button"
+      useTheme atom"button"
       offset 4'em, 4'em
       size 10'em, 2'em
-      text "button text":
+      text "text":
         boxSizeOf parent
-        fill palette.text
         characters "Click me!"
-        textAutoResize tsHeight
     do -> MouseEvent:
       evClick:
         echo "hi!"
@@ -53,7 +53,7 @@ proc exampleApp*() =
 startFidget(
   exampleApp,
   setup = 
-    when defined(demoBulmaTheme): setup(bulmaTheme)
-    else: setup(grayTheme),
+    when defined(demoBulmaTheme): bulmaTheme
+    else: grayTheme,
   w=640, h=400
 )

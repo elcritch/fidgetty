@@ -49,6 +49,11 @@ proc grayTheme*() =
   setTheme(atom"hover"):
     fill theme.highlight
   
+  setTheme(atom"text"):
+    fill theme.highlight
+    size csAuto(), csAuto()
+    fill theme.text
+  
   setTheme(atom"button"):
     fill theme.foreground
     cornerRadius theme.cornerRadius

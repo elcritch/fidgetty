@@ -399,7 +399,7 @@ proc csFixed*(coord: UICoord): Constraint =
 
 proc id*(id: static string) =
   ## Sets ID.
-  current.id = id
+  current.id = atom(id)
 
 proc id*(): string =
   ## Get current node ID.
