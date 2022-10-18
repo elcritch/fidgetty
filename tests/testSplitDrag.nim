@@ -46,9 +46,9 @@ proc drawMain() =
 
       split "bar":
         draggable sliderFraction
-        stroke theme.outerStroke
-        imageOf theme.gloss
-        fill palette.foreground
+        # stroke theme.outerStroke
+        # imageOf theme.gloss
+        # fill palette.foreground
       
       split "menu":
         cornerRadius 0.2'em

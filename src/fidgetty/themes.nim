@@ -14,7 +14,7 @@ proc grayTheme*() =
   palette.textModeDark = parseHtml("#000000")
 
   theme.foreground = parseHtml("#CDCDCF", 1.0)
-  theme.background = parseHtml("#E4E4E6", 1.0)
+  theme.background = parseHtml("#FFFFFF", 1.0).darken(0.05)
   theme.text = parseHtml("#565555")
   # theme.textBg = parseHtml("#F6F5F5")
   theme.accent = parseHtml("#87E3FF", 0.77).desaturate(0.15)
@@ -72,7 +72,7 @@ proc grayTheme*() =
     stroke theme.outerStroke
 
   setTheme(atom"filling"):
-    fill theme.accent.lighten(0.07).desaturate(0.3) * 0.9
+    fill theme.accent.lighten(0.07) * 0.98
     cornerRadius theme.cornerRadius
     stroke theme.innerStroke
     image theme.gloss
