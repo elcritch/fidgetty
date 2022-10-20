@@ -15,9 +15,9 @@ fidgetty Listbox:
 proc new*(_: typedesc[ListboxProps]): ListboxProps =
   new result
   size 8'em, 1.5'em
-  cornerRadius theme
+  cornerRadius theme.cornerRadius
   stroke theme.outerStroke
-  imageOf theme.gloss
+  image theme.gloss
 
 proc render*(
     props: ListboxProps,
@@ -56,7 +56,7 @@ proc render*(
 
   group "menuoutline":
     box 0, 0, bw, bdh
-    cornerRadius theme
+    cornerRadius theme.cornerRadius
     stroke theme.outerStroke
 
   inPopup = true
@@ -75,7 +75,7 @@ proc render*(
         (current.screenBox.h - parent.screenBox.h) * scrollAmount.UICoord
 
     for idx, buttonName in pairs(props.items):
-      group "menuBtn":
+      group "menu":
         box 0, 0, bw, bih
         layoutAlign laCenter
         # echo fmt"{idx=} => {isCovered(popupBox)=}"

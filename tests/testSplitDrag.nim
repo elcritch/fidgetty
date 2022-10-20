@@ -46,9 +46,9 @@ proc drawMain() =
 
       split "bar":
         draggable sliderFraction
-        stroke theme.outerStroke
-        imageOf theme.gloss
-        fill palette.foreground
+        # stroke theme.outerStroke
+        # imageOf theme.gloss
+        # fill palette.foreground
       
       split "menu":
         cornerRadius 0.2'em
@@ -84,7 +84,7 @@ proc drawMain() =
 startFidget(
   drawMain,
   setup = 
-    when defined(demoBulmaTheme): setup(bulmaTheme)
-    else: setup(grayTheme),
+    when defined(demoBulmaTheme): bulmaTheme
+    else: grayTheme,
   w=480, h=300
 )

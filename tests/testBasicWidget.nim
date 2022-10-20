@@ -12,7 +12,6 @@ fidgetty CounterButton:
 
 proc new*(_: typedesc[CounterButtonProps]): CounterButtonProps =
   new result
-  fill palette.foreground
 
 proc render*(
     props: CounterButtonProps,
@@ -20,13 +19,15 @@ proc render*(
 ): Events[All]=
   clipContent true
   cornerRadius theme.cornerRadius
+  useTheme atom"button"
   onHover:
-    highlight palette
+    useTheme atom"hover"
   onClick:
+    useTheme atom"clicked"
     self.count.inc()
   text "counter button":
     boxSizeOf parent
-    fill palette.text
+    fill theme.text
     characters  fmt"label ({self.count})"
     textAutoResize tsHeight
 
@@ -49,7 +50,7 @@ proc exampleApp*() =
 startFidget(
   exampleApp,
   setup = 
-    when defined(demoBulmaTheme): setup(bulmaTheme)
-    else: setup(grayTheme),
+    when defined(demoBulmaTheme): bulmaTheme
+    else: grayTheme,
   w=640, h=400
 )

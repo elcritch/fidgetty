@@ -17,7 +17,7 @@ proc exampleApp*() =
 startFidget(
   exampleApp,
   setup = 
-    when defined(demoBulmaTheme): setup(bulmaTheme)
-    else: setup(grayTheme),
+    when defined(demoBulmaTheme): bulmaTheme
+    else: grayTheme,
   w=680, h=400
 )

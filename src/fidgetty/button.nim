@@ -8,41 +8,34 @@ fidgetty Button:
   state:
     empty: void
 
-proc themeButton*() =
-  cornerRadius theme
-  shadows theme
-  stroke theme.outerStroke
-  imageOf theme.gloss
-  fill palette.foreground
-
 proc new*(_: typedesc[ButtonProps]): ButtonProps =
   new result
   # setup code
   # box 0, 0, 8.Em, 2.Em
-  themeButton()
 
 proc render*(
     props: ButtonProps,
     self: ButtonState
 ): Events[All]=
   # button widget!
-  text "button text":
-    # boxSizeOf parent
-    size csAuto(), csAuto()
-    fill palette.text
-    characters props.label
-    # textAutoResize tsHeight
-
+  # onTheme 
   clipContent true
 
+  if props.label.len() > 0:
+    text "text":
+      # boxSizeOf parent
+      size csAuto(), csAuto()
+      fill theme.text
+      characters props.label
+
   if props.disabled:
-    # imageColor palette.disabled
-    fill palette.disabled
+    fill theme.disabled
+    useTheme atom"disabled"
   else:
-    onHover:
-      highlight palette
     if props.isActive:
-      highlight palette
-    onClick:
-      highlight palette
-    dispatchMouseEvents()
+      useTheme atom"active"
+    onHover:
+      useTheme atom"hover"
+    # onClick:
+    #   useTheme atom"active"
+    # dispatchMouseEvents()

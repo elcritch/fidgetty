@@ -1,5 +1,4 @@
 import fidgetty/fidget_dev
-import fidgetty/theming
 import fidgetty/themes
 import fidgetty/widgets
 

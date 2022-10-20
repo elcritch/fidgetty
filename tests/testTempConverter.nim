@@ -55,10 +55,10 @@ proc labeledTextInput[T](
 proc exampleApp*() =
   ## defines a stateful app widget
   useState[ExampleApp](self)
+  font "IBM Plex Sans", 16, 400, 16, hLeft, vCenter
 
   setTitle(fmt"Fidget Animated Progress Example")
-  textStyle theme
-  fill palette.background
+  fill theme.background
   box 0, 0, 100'vw, 100'vh
   setWindowBounds(vec2(400, 200), vec2(600, 400))
 
@@ -85,7 +85,7 @@ proc exampleApp*() =
 startFidget(
   exampleApp,
   setup = 
-    when defined(demoBulmaTheme): setup(bulmaTheme)
-    else: setup(grayTheme),
+    when defined(demoBulmaTheme): bulmaTheme
+    else: grayTheme,
   w = 400,
   h = 200)

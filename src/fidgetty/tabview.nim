@@ -25,6 +25,7 @@ template tab*(name, blk: untyped) =
       # current.disableRender = state.currentTab != name.hash()
       gridRow "main" // "end"
       gridColumn "area"
+      useTheme atom"area"
       `blk`
 
 proc new*(_: typedesc[TabViewProps]): TabViewProps =
@@ -45,6 +46,13 @@ proc preRender*(
 ) =
   if self.changed:
     common.resetNodes.inc
+  # Setup CSS Grid Template
+  box 0, 0, 100'pp, 100'pp
+  gridTemplateRows ["menu"] csFixed(2'em) \
+                   ["bar"] csFixed(0.5'em) \
+                   ["main"] 2'fr \
+                   ["end"]
+  gridTemplateColumns ["area"] 1'fr ["end"]
 
 proc render*(
     props: TabViewProps,
@@ -57,20 +65,12 @@ proc render*(
     common.resetNodes.dec
     self.changed = false
   
-  # Setup CSS Grid Template
-  box 0, 0, 100'pp, 100'pp
-  gridTemplateRows ["menu"] csFixed(2'em) \
-                   ["bar"] csFixed(0.5'em) \
-                   ["main"] 2'fr \
-                   ["end"]
-  gridTemplateColumns ["area"] 1'fr ["end"]
-  
-  rectangle "bar":
-    gridRow "bar"
-    gridColumn "area"
-    stroke theme.outerStroke
-    imageOf theme.gloss
-    fill palette.foreground
+  # rectangle "bar":
+  #   gridRow "bar"
+  #   gridColumn "area"
+  #   stroke theme.outerStroke
+  #   imageOf theme.gloss
+  #   fill palette.foreground
       
   rectangle "menu":
     gridRow "menu"

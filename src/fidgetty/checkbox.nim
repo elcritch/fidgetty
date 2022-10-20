@@ -28,20 +28,20 @@ proc render*(
   text "label":
     # box bwidth, 0, parent.box.w - bwidth, bwidth
     box bsize, 0, csSum(100.0'pp, -bsize.UiScalar), bsize
-    fill palette.text
+    fill theme.text
     characters props.label
 
   rectangle "square":
     size parent.box.h, parent.box.h
-    fill palette.foreground
+    fill theme.foreground
     clipContent true
-    imageOf theme.gloss
+    image theme.gloss
     if props.checked:
-      highlight palette
+      highlight theme.highlight
       text "checkfil":
         fontSize 1.6 * fontSize()
         box 0.0, 0.0, 1.2 * fontSize(), 100'pp
-        fill palette.text
+        fill theme.text
         characters "✓"
     stroke theme.outerStroke
-    cornerRadius theme
+    cornerRadius theme.cornerRadius

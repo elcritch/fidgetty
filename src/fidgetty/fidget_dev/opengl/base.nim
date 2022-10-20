@@ -229,6 +229,25 @@ proc onFocus(window: staticglfw.Window, state: cint) {.cdecl.} =
   focused = state == 1
   uiEvent.trigger()
 
+proc nextFocus*(parent, node: Node, foundFocus: var bool): bool =
+  ## find the next node to focus on
+  for child in node.nodes:
+    if child.selectable:
+      if foundFocus:
+        child.setFocus = true
+        return true
+      if child == keyboard.focusNode:
+        foundFocus = true
+    else:
+      if nextFocus(node, child, foundFocus):
+        return
+
+proc nextFocus() =
+  echo "focusNode:tab: ", keyboard.focusNode.id
+  echo "focusNode:tab: ", common.root.id
+  var foundFocus = false
+  discard nextFocus(nil, root, foundFocus)
+
 proc onSetKey(
   window: staticglfw.Window, key, scancode, action, modifiers: cint
 ) {.cdecl.} =
@@ -247,6 +266,8 @@ proc onSetKey(
       ctrl = keyboard.ctrlKey
       shift = keyboard.shiftKey
     case cast[Button](key):
+      of TAB:
+        nextFocus()
       of ARROW_LEFT:
         if ctrl:
           currTextBox.leftWord(shift)
@@ -307,7 +328,7 @@ proc onSetKey(
 proc onScroll(window: staticglfw.Window, xoffset, yoffset: float64) {.cdecl.} =
   requestedFrame.inc
   let yoffset = yoffset
-  mouse.wheelDelta += yoffset
+  mouse.wheelDelta += 6 * yoffset * common.uiScale
   uiEvent.trigger()
 
 proc onMouseButton(

@@ -46,8 +46,8 @@ proc drawMain() =
 
       split "bar":
         stroke theme.outerStroke
-        imageOf theme.gloss
-        fill palette.foreground
+        image theme.gloss
+        fill theme.foreground
       
       split "menu":
         cornerRadius 0.2'em
@@ -83,7 +83,7 @@ proc drawMain() =
 startFidget(
   drawMain,
   setup = 
-    when defined(demoBulmaTheme): setup(bulmaTheme)
-    else: setup(grayTheme),
+    when defined(demoBulmaTheme): bulmaTheme
+    else: grayTheme,
   w=480, h=300
 )

@@ -10,9 +10,6 @@ fidgetty TextBox:
 
 proc new*(_: typedesc[TextBoxProps]): TextBoxProps =
   new result
-  # setup code
-  # box 0, 0, 8.Em, 2.Em
-  cornerRadius theme
 
 proc render*(
     props: TextBoxProps,
@@ -24,7 +21,7 @@ proc render*(
 
   text "text":
     boxSizeOf parent
-    fill palette.text
+    # fill theme.text
     characters props.label
 
   clipContent true

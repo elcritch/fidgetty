@@ -22,10 +22,6 @@ fidgetty Dropdown:
     itemsVisible: int
     itemsCount: int
 
-# static:
-#   assert DropdownArgs is WidgetArgs
-#   assert DropdownState is WidgetState
-
 proc new*(_: typedesc[DropdownProps]): DropdownProps =
   new result
   size 8'em, 1.5'em
@@ -76,7 +72,7 @@ proc render*(
     clipContent true
     text "icon":
       box tw, 0, 1'em, bh
-      fill palette.text
+      fill theme.text
       if self.dropDownOpen: rotation -90
       else: rotation 0
       characters ">"
@@ -84,18 +80,18 @@ proc render*(
             props.defaultLabel
           else:
             props.items[props.selected]
-  do -> MouseEvent: # handle events from widget
-    evClick:
+    onClick:
       self.dropDownOpen = true
       self.itemsVisible = -1
-    evClickOut:
+    onClickOutside:
       outClick = true
+  
   finally:
     if self.dropDownOpen:
-      highlight palette.highlight
+      highlight theme.highlight
 
   if self.dropDownOpen:
-    group "dropDownScroller":
+    group "container":
       if self.dropUp:
         box 0, bh-bdh-bh, bw, bdh
       else:
@@ -103,15 +99,11 @@ proc render*(
 
       clipContent true
       zlevel ZLevelRaised
-      cornerRadius theme
-      strokeLine this
 
-      group "menuoutline":
+      group "outline":
         box 0, 0, bw, bdh
-        cornerRadius theme
-        stroke theme.outerStroke
 
-      group "menu":
+      group "scrollpane":
         box 0, 0, bw, bdh
         layout lmVertical
         counterAxisSizingMode CounterAxisSizingMode.csAuto
@@ -119,33 +111,21 @@ proc render*(
         scrollpane true
 
         onClickOutside:
-          echo "outClick: ", outClick
-          # if outClick == true:
           resetState()
 
         var itemsVisible = -1 + (if self.dropUp: -1 else: 0)
         for idx, buttonName in pairs(props.items):
-          group "menuBtn":
+          group "outline":
             if current.screenBox.overlaps(scrollBox):
               itemsVisible.inc()
             box 0, 0, bw, bih
             layoutAlign laCenter
 
             Button:
-              clearShadows()
-              let ic = this.image.color
-              imageColor ic * 0.9
-              boxOf parent
-              cornerRadius 0
-              stroke theme.innerStroke
               label buttonName
-            do -> MouseEvent: # handle events from widget
-              evClick:
+              onClick:
                 resetState()
                 dispatchEvent changed(idx)
-
-        # group "menuBtnBlankSpacer":
-          # box 0, 0, bw, this.cornerRadius[0]
         
         if self.itemsVisible >= 0:
           self.itemsVisible = min(itemsVisible, self.itemsVisible)

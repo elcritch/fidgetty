@@ -60,6 +60,35 @@ type TextBox*[T] = ref object
 proc clamp[T](v, a, b: int): int =
   max(a, min(b, v))
 
+proc init*[T](
+  tx: var TextBox[T],
+  font: Font,
+  width: float32,
+  height: float32,
+  item: T,
+  hAlign = Left,
+  vAlign = Top,
+  multiline = true,
+  worldWrap = true,
+  scrollable = true,
+  editable = true,
+  pattern: Regex = nil,
+  cursorFactors = (0.10'f32, 0.68'f32)
+) =
+  ## Creates new empty text box.
+  tx.item = item
+  tx.font = font
+  tx.width = width
+  tx.height = height
+  tx.hAling = hAlign
+  tx.vAlign = vAlign
+  tx.multiline = multiline
+  tx.wordWrap = worldWrap
+  tx.scrollable = scrollable
+  tx.editable = editable
+  tx.cursorFactors = cursorFactors 
+  tx.pattern = pattern 
+
 proc newTextBox*[T](
   font: Font,
   width: float32,
@@ -76,18 +105,11 @@ proc newTextBox*[T](
 ): TextBox[T] =
   ## Creates new empty text box.
   result = TextBox[T]()
-  result.item = item
-  result.font = font
-  result.width = width
-  result.height = height
-  result.hAling = hAlign
-  result.vAlign = vAlign
-  result.multiline = multiline
-  result.wordWrap = worldWrap
-  result.scrollable = scrollable
-  result.editable = editable
-  result.cursorFactors = cursorFactors 
-  result.pattern = pattern 
+  result.init(
+    font, width, height, item,
+    hAlign, vAlign, multiline, worldWrap,
+    scrollable, editable, pattern, cursorFactors,
+  )
 
 proc cursorWidth *[T](textBox: TextBox[T]): float32 =
   result = max(textBox.font.size * textBox.cursorFactors[0], 2)

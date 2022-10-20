@@ -34,7 +34,7 @@ proc drawMain() =
         fill rgba(245, 129, 49, 123).to(Color)
 
       for i in 1..4:
-        rectangle "item b" & $i:
+        rectangle "items b":
           # Setup CSS Grid Template
           size 30'ux, 30'ux
           cornerRadius 1'em

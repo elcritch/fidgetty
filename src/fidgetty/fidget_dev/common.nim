@@ -3,15 +3,18 @@ import strformat
 import unicode
 import typetraits
 import variant, chroma, input
+import options
 import cssgrid
 
 import commonutils
+import cdecl/atoms
 
 export sequtils, strformat, tables, hashes
 export variant
 # export unicode
 export commonutils
 export cssgrid
+export atoms
 
 import print
 
@@ -140,9 +143,9 @@ type
     color*: Color
 
   Node* = ref object
-    id*: string
+    id*: Atom
     uid*: NodeUID
-    idPath*: string
+    idPath*: seq[Atom]
     kind*: NodeKind
     text*: seq[Rune]
     code*: string
@@ -157,6 +160,7 @@ type
     hasRendered*: bool
     editableText*: bool
     selectable*: bool
+    setFocus*: bool
     multiline*: bool
     bindingSet*: bool
     drawable*: bool
@@ -175,7 +179,7 @@ type
     cursorColor*: Color
     highlightColor*: Color
     disabledColor*: Color
-    shadows*: seq[Shadow]
+    shadow*: Option[Shadow]
     constraintsHorizontal*: FidgetConstraint
     constraintsVertical*: FidgetConstraint
     layoutAlign*: LayoutAlign
@@ -388,6 +392,18 @@ proc defaultLineHeight*(fontSize: UICoord): UICoord =
 proc defaultLineHeight*(ts: TextStyle): UICoord =
   result = defaultLineHeight(ts.fontSize)
 
+proc init*(tp: typedesc[Stroke], weight: float32|UICoord, color: string, alpha = 1.0): Stroke =
+  ## Sets stroke/border color.
+  result.color = parseHtmlColor(color)
+  result.color.a = alpha
+  result.weight = weight.float32
+
+proc init*(tp: typedesc[Stroke], weight: float32|UICoord, color: Color, alpha = 1.0): Stroke =
+  ## Sets stroke/border color.
+  result.color = color
+  result.color.a = alpha
+  result.weight = weight.float32
+
 proc newUId*(): NodeUID =
   # Returns next numerical unique id.
   inc lastUId
@@ -427,14 +443,14 @@ proc x*(mouse: Mouse): UICoord = mouse.pos.descaled.x
 proc y*(mouse: Mouse): UICoord = mouse.pos.descaled.x
 
 proc setNodePath*(node: Node) =
-  node.idPath = ""
+  node.idPath.setLen(nodeStack.len())
+  # node.idPath.setLen(nodeStack.len() + 1)
+  # node.idPath[^1] = node.id
   for i, g in nodeStack:
-    if i != 0:
-      node.idPath.add "."
-    if g.id != "":
-      node.idPath.add g.id
+    if g.id == Atom(0):
+      node.idPath[i] = Atom(g.diffIndex)
     else:
-      node.idPath.add $g.diffIndex
+      node.idPath[i] = g.id
 
 proc dumpTree*(node: Node, indent = "") =
 
@@ -488,7 +504,7 @@ proc resetToDefault*(node: Node)=
   node.drawable = false
   node.cursorColor = clearColor
   node.highlightColor = clearColor
-  node.shadows = @[]
+  node.shadow = Shadow.none()
   node.gridTemplate = nil
   node.gridItem = nil
   node.constraintsHorizontal = cMin
@@ -511,7 +527,7 @@ proc setupRoot*() =
   if root == nil:
     root = Node()
     root.kind = nkRoot
-    root.id = "root"
+    root.id = atom"root"
     root.uid = newUId()
     root.zlevel = ZLevelDefault
     root.cursorColor = rgba(0, 0, 0, 255).color
