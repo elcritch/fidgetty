@@ -47,8 +47,8 @@ proc chooseNimApp*() =
   useState[AppStatus](self)
 
   setTitle(fmt"Fidget Animated Progress Example")
-  textStyle theme
-  fill palette.background.lighten(0.02)
+  textStyle theme.textStyle
+  fill theme.background.lighten(0.02)
   strokeWeight 1
 
   font "IBM Plex Sans", 16, 200, 0, hCenter, vCenter
@@ -78,19 +78,19 @@ proc chooseNimApp*() =
     # draw debug lines
     # gridTemplateDebugLines true
 
-    Theme(infoPalette({txtHighlight, bgDarken})):
-      rectangle "banner":
-        fill palette.background
-        cornerRadius 1'em
-        gridColumn "outer-l" // "outer-r"
-        gridRow "top" // "middle"
-        # echo "banner: box: ", current.box.repr
-        text "header":
-          font "IBM Plex Sans", 32, 200, 0, hCenter, vCenter
-          size 100'pp, 100'pp
-          fill palette.text
-          characters "Choose Nim!"
-          textAutoResize tsHeight
+    # Theme(infoPalette({txtHighlight, bgDarken})):
+    rectangle "banner":
+      fill theme.background
+      cornerRadius 1'em
+      gridColumn "outer-l" // "outer-r"
+      gridRow "top" // "middle"
+      # echo "banner: box: ", current.box.repr
+      text "header":
+        font "IBM Plex Sans", 32, 200, 0, hCenter, vCenter
+        size 100'pp, 100'pp
+        fill theme.text
+        characters "Choose Nim!"
+        textAutoResize tsHeight
 
     frame "footer-box":
       font "IBM Plex Sans", 12, 200, 0, hCenter, vCenter
@@ -100,7 +100,7 @@ proc chooseNimApp*() =
       # echo "footer-box: box: ", current.box.repr
 
       rectangle "footer":
-        fill palette.background.lighten(0.03)
+        fill theme.background.lighten(0.03)
         cornerRadius 1'em
         clipContent true
         scrollBars true
@@ -114,7 +114,7 @@ proc chooseNimApp*() =
 
         text "footer-txt":
           size 100'pp, 100'pp
-          fill palette.text
+          fill theme.text
           textAutoResize tsHeight
           size 100'pp, self.output.len().float * lineHeight()
           if self.updateLines == 1:
@@ -129,7 +129,7 @@ proc chooseNimApp*() =
       gridColumn "outer-l" // "outer-r"
       gridRow "middle" // "footer"
       # some color stuff
-      fill palette.background
+      fill theme.background
 
       frame "options":
         # centeredXY 90'pw, 90'ph
@@ -166,14 +166,14 @@ proc chooseNimApp*() =
           height 6'em
           gridColumn 2 // 5
           gridRow 3 // 10
-          fill palette.background
+          fill theme.background
 
         text "info":
           font "IBM Plex Sans", 14, 200, 0, hCenter, vCenter
           height 6'em
           gridColumn 2 // 5
           gridRow 2 // 3
-          fill palette.text
+          fill theme.text
           characters """
           ChooseNimApp installs the Nim programming language from official downloads and sources, enabling you to easily switch between stable and development compilers.
           """
@@ -249,7 +249,7 @@ proc listVersions(self: AppStatus) {.async.} =
 startFidget(
   chooseNimApp,
   setup = 
-    setup(darkNimTheme),
+    darkNimTheme,
   w = 800,
   h = 600
 )
