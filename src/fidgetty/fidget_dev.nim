@@ -4,7 +4,8 @@ import math, strformat
 import unicode
 import cssgrid
 
-import fidget_dev/[commonutils, theming]
+import fidget_dev/commonutils
+import fidget_dev/theming
 
 export chroma, common, input
 export commonutils
