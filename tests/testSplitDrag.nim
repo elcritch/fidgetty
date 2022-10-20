@@ -84,7 +84,7 @@ proc drawMain() =
 startFidget(
   drawMain,
   setup = 
-    when defined(demoBulmaTheme): setup(bulmaTheme)
-    else: setup(grayTheme),
+    when defined(demoBulmaTheme): bulmaTheme
+    else: grayTheme,
   w=480, h=300
 )

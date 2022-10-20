@@ -50,7 +50,7 @@ proc drawMain() =
       gridTemplateRows repeat(3, csFixed(ch))
       justifyContent CxCenter
 
-      theme().outerStroke = Stroke.init(2, "#707070", 1.0)
+      # theme().outerStroke = Stroke.init(2, "#707070", 1.0)
 
       for i in 0..<self.cols * self.rows:
           TextInput:
@@ -63,10 +63,10 @@ proc drawMain() =
 
             rectangle "overlay":
               if state.editing:
-                stroke palette.highlight * 0.80
+                stroke theme.highlight * 0.80
                 strokeWeight 0.5'em
               if item.isActive:
-                highlight palette
+                highlight theme.highlight
           do -> ChangeEvent[string]:
             Changed(val):
               self.textInput[i] = val
@@ -77,4 +77,9 @@ proc drawMain() =
       # gridTemplateDebugLines true
       
 
-startFidget(drawMain, setup = setup(grayTheme), w = 640, h = 400)
+startFidget(
+  drawMain,
+  setup = 
+    when defined(demoBulmaTheme): bulmaTheme
+    else: grayTheme,
+  w = 640, h = 400)

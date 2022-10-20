@@ -34,7 +34,7 @@ proc exampleApp*() =
   ## 
   
   setTitle(fmt"Fidget  Progress Example")
-  textStyle theme
+  textStyle theme.textStyle
 
   box 1.Em, 1.Em, 100'vw - 2.Em, 100'vh - 2.Em
   font "IBM Plex Sans", 16, 200, 0, hCenter, vCenter
@@ -73,7 +73,7 @@ proc exampleApp*() =
 startFidget(
   exampleApp,
   setup = 
-    when defined(demoBulmaTheme): setup(bulmaTheme)
-    else: setup(grayTheme),
+    when defined(demoBulmaTheme): bulmaTheme
+    else: grayTheme,
   w=480, h=300
 )
