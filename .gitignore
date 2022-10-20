@@ -2,9 +2,8 @@ nimcache/
 nimblecache/
 htmldocs/
 /bin/
-/bin/
-/bin/
 examples/*
 !examples/*.nim
-src/*
-!src/*.nim
+*
+!/**/
+!*.*
