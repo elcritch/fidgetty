@@ -4,14 +4,9 @@ import cdecl/[atoms, crc32]
 import chroma
 
 import commonutils, common
-
-export atoms
+export atoms, commonutils, common
 
 type
-  Themer = proc()
-
-  Themes* = TableRef[Atom, ref Deque[Themer]]
-
   Palette* = object
     primary*: Color
     link*: Color
@@ -78,7 +73,7 @@ proc useThemeImpl(idPath: seq[Atom], extra: Atom) =
   runThemerIfFound(extra !& id !& idPath[^2]) # check parent
   for idx in countdown(idPath.len()-2, 0):
     # check skip matches
-    runThemerIfFound(extra !& id !& Atom(0xAAAAAAAA) !& idPath[idx])
+    runThemerIfFound(extra !& id !& atom".." !& idPath[idx])
   
   # check self
   runThemerIfFound(extra !& id)

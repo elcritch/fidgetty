@@ -5,6 +5,7 @@ import unicode
 import cssgrid
 
 import fidget_dev/commonutils
+from fidget_dev/commonimpl import mouseOverlapsNode, useStateImpl, withStateImpl
 import fidget_dev/theming
 
 export chroma, common, input
@@ -192,6 +193,43 @@ template blank*(): untyped =
 ## 
 ## These APIs provide the APIs for Fidget nodes.
 ## 
+
+template useState*[T: ref](vname: untyped) =
+  ## creates and caches a new state ref object
+  useStateImpl[T](common.current, vname)
+
+template useStateParent*[T: ref](vname: untyped) =
+  ## creates and caches a new state ref object
+  useStateImpl[T](common.parent, vname)
+
+template withState*[T: ref](tp: typedesc[T]): untyped =
+  ## creates and caches a new state ref object
+  withStateImpl(tp)
+
+proc add*[T, V](events: var Events[V], evt: T) =
+  if events.data.isNil:
+    events.data = newTable[TypeId, Variant]()
+  let key = T.getTypeId()
+  let res = events.data.mgetOrPut(key, newVariant(new seq[T])).get(ref seq[T])
+  res[].add(evt)
+
+proc `[]`*[T](events: Events[void], tp: typedesc[T]): seq[T] =
+  if events.data.isNil:
+    return @[]
+  let key = T.getTypeId()
+  result = events.data.pop(key)
+
+proc popEvents*[T, V](events: Events[V], vals: var seq[T]): bool =
+  # let a = getMonoTime()
+  if events.data.isNil:
+    return false
+  var res: Variant
+  result = events.data.pop(T.getTypeId(), res)
+  if result:
+    vals = res.get(ref seq[T])[]
+
+template dispatchEvent*(evt: typed) =
+  result.add(evt)
 
 ## ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ##             Node User Interactions
@@ -799,10 +837,6 @@ proc image*(name: string, color: Color) =
   ## Sets image fill.
   current.image.name = name
   current.image.color = color
-
-proc imageOf*(item: Node) =
-  ## Sets image fill.
-  current.image = item.image
 
 proc imageTransparency*(alpha: float32) =
   ## Sets image fill.

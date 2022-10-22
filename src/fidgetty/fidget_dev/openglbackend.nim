@@ -1,8 +1,10 @@
-import chroma, common, hashes, input, internal, opengl/base,
-    opengl/context, os, strformat, strutils, tables, times, typography,
-    unicode,
-    typography/svgfont, pixie
+import std/[hashes, os, strformat, strutils, tables, times]
 
+import chroma, typography, pixie
+import opengl/[base, context]
+import typography/svgfont
+
+import common, commonimpl, input, internal
 import patches/textboxes 
 import opengl/draw
 
@@ -251,30 +253,3 @@ proc setItem*(key, value: string) =
 proc getItem*(key: string): string =
   ## Gets a value into local storage or file.
   readFile(&"{key}.data")
-
-when not defined(emscripten) and not defined(fidgetNoAsync):
-  proc httpGetCb(future: Future[string]) =
-    refresh()
-
-  proc httpGet*(url: string): HttpCall =
-    if url notin httpCalls:
-      result = HttpCall()
-      var client = newAsyncHttpClient()
-      echo "new call"
-      result.future = client.getContent(url)
-      result.future.addCallback(httpGetCb)
-      httpCalls[url] = result
-      result.status = Loading
-    else:
-      result = httpCalls[url]
-
-    if result.status == Loading and result.future.finished:
-      result.status = Ready
-      try:
-        result.data = result.future.read()
-        result.json = parseJson(result.data)
-      except HttpRequestError:
-        echo getCurrentExceptionMsg()
-        result.status = Error
-
-    return

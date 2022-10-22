@@ -32,6 +32,9 @@ type
     w is ref
     ($typeof(w)).endswith("State")
 
+template to*[V, T](events: Events[T], v: typedesc[V]): Events[V] =
+  Events[V](events)
+
 proc matchEventsImpl(code: NimNode): NimNode =
   let hasOther = code.mapIt(it[0].repr).anyIt(it == "_")
   if not hasOther:

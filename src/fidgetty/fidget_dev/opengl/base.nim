@@ -1,6 +1,10 @@
 import ../commonutils
-import ../common, ../input, ../internal
+import ../common
+import ../commonimpl
+import ../input
+import ../internal
 import ../patches/textboxes 
+
 import chroma, pixie, opengl, os, perf,
     staticglfw, times, unicode, strformat
 import std/asyncdispatch

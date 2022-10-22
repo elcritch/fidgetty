@@ -5,7 +5,7 @@ import ../patches/textboxes
 import pixie, chroma
 
 import context, formatflippy
-import ../input, ../common
+import ../input, ../common, ../commonimpl
 import ../commonutils
 
 type
