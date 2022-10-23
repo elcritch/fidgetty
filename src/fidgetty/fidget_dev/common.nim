@@ -170,8 +170,8 @@ type
     resizeDone*: bool
     htmlDone*: bool
     scrollpane*: bool
-    themeCheck*: bool
-    themer*: Themer
+    themer*: tuple[name: Atom, cb: Themer]
+    themerExtra*: tuple[name: Atom, cb: Themer]
     rotation*: float32
     fill*: Color
     transparency*: float32
@@ -289,7 +289,7 @@ type
   GestureCapture* = EventsCapture[GestureEventFlags] 
 
   Themer* = proc()
-  Themes* = TableRef[Atom, ref Deque[Themer]]
+  Themes* = Deque[Table[Atom, Themer]]
 
 type
     MouseEvent* = object
@@ -473,8 +473,8 @@ proc resetToDefault*(node: Node)=
   node.rotation = 0
   # node.screenBox = rect(0,0,0,0)
   # node.offset = vec2(0, 0)
-  node.themeCheck = false
-  node.themer = nil
+  node.themer = (name: Atom(0), cb: nil)
+  node.themerExtra = (name: Atom(0), cb: nil)
   node.fill = clearColor
   node.transparency = 0
   node.stroke = Stroke(weight: 0, color: clearColor)

@@ -68,7 +68,7 @@ proc preNode(kind: NodeKind, id: Atom) =
   # when defined(fidgetNodePath):
   current.setNodePath()
 
-  useTheme()
+  useThemeImpl()
 
 proc postNode() =
   current.removeExtraChildren()

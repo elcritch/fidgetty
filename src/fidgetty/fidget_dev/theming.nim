@@ -36,7 +36,7 @@ type
 var
   palette*: Palette
   theme*: BasicTheme
-  themes: Themes = newTable[Atom, ref Deque[Themer]]()
+  themes: Themes = [initTable[Atom, Themer]()].toDeque
 
   noStroke* = Stroke.init(0.0'f32, "#000000", 0.0)
 
@@ -46,31 +46,27 @@ proc `..`*(a, b: Atom): Atom =
 proc `/`*(a, b: Atom): Atom =
   b !& a
 
-proc peekLast(themes: ref Deque[Themer]): Themer =
-  if themes.isNil: nil else: themes[].peekLast()
+proc pushTheme*() =
+  themes.addLast(themes.peekLast())
 
-proc `[]`*(themes: Themes, name: Atom): Themer =
-  themes.getOrDefault(name, nil).peekLast()
-
-proc push*(themes: Themes, name: Atom, theme: Themer) =
-  themes.mgetOrPut(name, new(ref Deque[Themer]))[].addLast(theme)
-
-proc pop*(themes: Themes, name: Atom) =
-  themes.mgetOrPut(name, new(ref Deque[Themer]))[].popLast()
+proc popTheme*() =
+  themes.popLast()
 
 template onTheme*(themes: Themes, name: Atom, blk: untyped) =
   if name in themes:
     `blk`
 
 proc findThemer(idPath: seq[Atom], extra: Atom): Themer =
-  
+  echo "findThemer:extra: ", $extra
   template runThemerIfFound(value: untyped) =
-    let themer = themes.getOrDefault(value, nil).peekLast()
-    if not themer.isNil:
-      return themer
+    result = themes.peekLast().getOrDefault(value, nil)
+    if not result.isNil:
+      echo "found: ", value,  " => ", repr result
+      return
 
   let id = idPath[^1]
   runThemerIfFound(extra !& id !& idPath[^2]) # check parent
+  # check paths
   for idx in countdown(idPath.len()-2, 0):
     # check skip matches
     runThemerIfFound(extra !& id !& atom".." !& idPath[idx])
@@ -81,24 +77,26 @@ proc findThemer(idPath: seq[Atom], extra: Atom): Themer =
   if extra != Atom(0):
     runThemerIfFound(extra)
 
-proc useThemeImpl(idPath: seq[Atom], extra: Atom) =
-  if not current.themeCheck:
-    current.themer = findThemer(idPath, extra)
-    current.themeCheck = true
+template useThemeImpl*() =
+  if current.themer.name != current.id:
+    current.themer.name = current.id
+    current.themer.cb = findThemer(current.idPath, Atom(0))
   
-  if not current.themer.isNil:
-    current.themer()
-  
-template useTheme*() =
-  useThemeImpl(current.idPath, Atom(0))
+  if not current.themer.cb.isNil:
+    current.themer.cb()
 
-template useTheme*(name: Atom) =
-  useThemeImpl(current.idPath, name)
+template themeExtra*(extra: Atom) =
+  if current.themerExtra.name != extra:
+    current.themerExtra.name = extra
+    current.themerExtra.cb = findThemer(current.idPath, extra)
+  
+  if not current.themerExtra.cb.isNil:
+    current.themerExtra.cb()
 
 template setTheme*(name: Atom, blk: untyped) =
   let themer = proc() =
     `blk`
-  themes.push(name, themer)
+  themes.peekLast()[name] = themer
 
 proc setFontStyle*(
   textStyle: var TextStyle,

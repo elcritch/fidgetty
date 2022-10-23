@@ -30,12 +30,12 @@ proc render*(
 
   if props.disabled:
     fill theme.disabled
-    useTheme atom"disabled"
+    themeExtra atom"disabled"
   else:
     if props.isActive:
-      useTheme atom"active"
+      themeExtra atom"active"
     onHover:
-      useTheme atom"hover"
+      themeExtra atom"hover"
     # onClick:
     #   useTheme atom"active"
     # dispatchMouseEvents()

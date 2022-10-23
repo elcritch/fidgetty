@@ -47,14 +47,15 @@ proc render*(
   rectangle "bar":
     gridArea 2 // 3, 2 // 3
 
+    echo "\n\npop button:"
     rectangle "button":
-      useTheme atom"active"
-      useTheme atom"pop"
+      themeExtra atom"pop"
       let sliderPos = self.dragger.position(props.value)
       if sliderPos.updated:
         dispatchEvent changed(self.dragger.value)
     
       box sliderPos.value, 0, parent.box.h, parent.box.h
+    echo "pop button done\n"
 
     rectangle "filling":
       # Draw the bar itself.
