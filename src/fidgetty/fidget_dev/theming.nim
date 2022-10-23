@@ -41,7 +41,7 @@ var
   noStroke* = Stroke.init(0.0'f32, "#000000", 0.0)
 
 proc `..`*(a, b: Atom): Atom =
-  b !& Atom(0xAAAAAAAA) !& a
+  b !& atom".." !& a
 
 proc `/`*(a, b: Atom): Atom =
   b !& a
@@ -62,12 +62,12 @@ template onTheme*(themes: Themes, name: Atom, blk: untyped) =
   if name in themes:
     `blk`
 
-proc useThemeImpl(idPath: seq[Atom], extra: Atom) =
+proc findThemer(idPath: seq[Atom], extra: Atom): Themer =
+  
   template runThemerIfFound(value: untyped) =
     let themer = themes.getOrDefault(value, nil).peekLast()
     if not themer.isNil:
-      themer()
-      return
+      return themer
 
   let id = idPath[^1]
   runThemerIfFound(extra !& id !& idPath[^2]) # check parent
@@ -80,8 +80,15 @@ proc useThemeImpl(idPath: seq[Atom], extra: Atom) =
   # check attribute if given
   if extra != Atom(0):
     runThemerIfFound(extra)
-  
 
+proc useThemeImpl(idPath: seq[Atom], extra: Atom) =
+  if not current.themeCheck:
+    current.themer = findThemer(idPath, extra)
+    current.themeCheck = true
+  
+  if not current.themer.isNil:
+    current.themer()
+  
 template useTheme*() =
   useThemeImpl(current.idPath, Atom(0))
 

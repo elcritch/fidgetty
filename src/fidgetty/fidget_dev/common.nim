@@ -170,8 +170,9 @@ type
     resizeDone*: bool
     htmlDone*: bool
     scrollpane*: bool
-    rotation*: float32
+    themeCheck*: bool
     themer*: Themer
+    rotation*: float32
     fill*: Color
     transparency*: float32
     stroke*: Stroke
@@ -472,6 +473,7 @@ proc resetToDefault*(node: Node)=
   node.rotation = 0
   # node.screenBox = rect(0,0,0,0)
   # node.offset = vec2(0, 0)
+  node.themeCheck = false
   node.themer = nil
   node.fill = clearColor
   node.transparency = 0
