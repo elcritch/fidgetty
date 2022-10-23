@@ -5,9 +5,12 @@ import unicode
 import cssgrid
 
 import fidget_dev/commonutils
-from fidget_dev/commonimpl import mouseOverlapsNode, useStateImpl, withStateImpl
+from fidget_dev/commonimpl import mouseOverlapsNode, useStateImpl, withStateImpl, atXY
 import fidget_dev/theming
 
+import std/asyncfutures
+
+export asyncfutures
 export chroma, common, input
 export commonutils
 export cssgrid
@@ -230,6 +233,10 @@ proc popEvents*[T, V](events: Events[V], vals: var seq[T]): bool =
 
 template dispatchEvent*(evt: typed) =
   result.add(evt)
+
+proc emptyFuture*(): Future[void] =
+  result = newFuture[void]()
+  result.complete()
 
 ## ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ##             Node User Interactions

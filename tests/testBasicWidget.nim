@@ -19,11 +19,11 @@ proc render*(
 ): Events[All]=
   clipContent true
   cornerRadius theme.cornerRadius
-  useTheme atom"button"
+  themeExtra atom"button"
   onHover:
-    useTheme atom"hover"
+    themeExtra atom"hover"
   onClick:
-    useTheme atom"clicked"
+    themeExtra atom"clicked"
     self.count.inc()
   text "counter button":
     boxSizeOf parent

@@ -20,9 +20,9 @@ proc render*(
 ): Events[All]=
   clipContent true
   onHover:
-    useTheme atom"hover"
+    themeExtra atom"hover"
   onHover:
-    useTheme atom"clicked"
+    themeExtra atom"clicked"
   onClick:
     dispatchMouseEvents()
 
@@ -38,7 +38,7 @@ proc exampleApp*() =
 
     ButtonEvt:
       id "button"
-      useTheme atom"button"
+      themeExtra atom"button"
       offset 4'em, 4'em
       size 10'em, 2'em
       text "text":

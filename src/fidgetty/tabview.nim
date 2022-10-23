@@ -1,7 +1,7 @@
 import widgets
 import behaviors/dragger
-import fidgetty/themes
-import fidgetty/[button]
+import themes
+import button
 
 export dragger
 
@@ -25,7 +25,7 @@ template tab*(name, blk: untyped) =
       # current.disableRender = state.currentTab != name.hash()
       gridRow "main" // "end"
       gridColumn "area"
-      useTheme atom"area"
+      themeExtra atom"area"
       `blk`
 
 proc new*(_: typedesc[TabViewProps]): TabViewProps =

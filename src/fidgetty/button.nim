@@ -37,5 +37,5 @@ proc render*(
     onHover:
       themeExtra atom"hover"
     # onClick:
-    #   useTheme atom"active"
+    #   themeExtra atom"active"
     # dispatchMouseEvents()
