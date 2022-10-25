@@ -57,11 +57,10 @@ template onTheme*(themes: Themes, name: Atom, blk: untyped) =
     `blk`
 
 proc findThemer(idPath: seq[Atom], extra: Atom): Themer =
-  echo "findThemer:extra: ", $extra
+  # echo "findThemer:extra: ", $extra
   template runThemerIfFound(value: untyped) =
     result = themes.peekLast().getOrDefault(value, nil)
     if not result.isNil:
-      echo "found: ", value,  " => ", repr result
       return
 
   let id = idPath[^1]

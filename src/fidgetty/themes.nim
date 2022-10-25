@@ -43,7 +43,6 @@ proc grayTheme*() =
     fill theme.highlight
   
   setTheme(atom"active"):
-    echo "ACTIVE: ", current.idPath
     fill theme.accent
   
   setTheme(atom"disabled"):
@@ -58,7 +57,6 @@ proc grayTheme*() =
     fill theme.text
   
   setTheme(atom"button"):
-    echo "BUTTON: ", current.idPath
     fill theme.foreground
     cornerRadius theme.cornerRadius
     stroke theme.innerStroke
@@ -75,7 +73,6 @@ proc grayTheme*() =
     stroke theme.outerStroke
 
   setTheme(atom"filling"):
-    echo "FILLING: ", current.idPath
     fill theme.accent.lighten(0.07) * 0.98
     cornerRadius theme.cornerRadius
     stroke theme.innerStroke
@@ -92,7 +89,6 @@ proc grayTheme*() =
     stroke Stroke.init(1.0'f32, "#707070", 0.12)
 
   setTheme(atom"button" / atom"pop"):
-    echo "POP: ", current.idPath
     fill theme.highlight
     stroke Stroke.init(1.0'f32, "#303030", 0.90)
 
