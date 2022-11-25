@@ -39,6 +39,7 @@ proc preNode(kind: NodeKind, id: Atom) =
     current = Node()
     current.id = id
     current.uid = newUId()
+    current.nIndex = parent.diffIndex
     parent.nodes.add(current)
     refresh()
   else:
