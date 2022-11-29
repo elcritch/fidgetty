@@ -1,0 +1,25 @@
+name: build
+
+on:
+  push:
+    paths-ignore:
+      - 'LICENSE'
+      - '*.md'
+    branches:
+      - master
+  pull_request:
+    paths-ignore:
+      - 'LICENSE'
+      - '*.md'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Setup Nim environment
+      # You may pin to the exact commit or the version.
+      # uses: jiro4989/setup-nim-action@5bbc93d889ba575ed95cde254faa197193690456
+      uses: jiro4989/setup-nim-action@v1.1.4
+      with:
+        # The Nim version to download (if necessary) and use. Example: 1.0.2
+        nim-version: "stable" # optional, default is stable
