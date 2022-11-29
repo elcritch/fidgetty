@@ -30,3 +30,4 @@ task test, "Run tests":
     if fl.startsWith("t") and fl.endsWith(".nim"):
       echo "tests: ", fl
       exec fmt"nim c {fl}"
+
