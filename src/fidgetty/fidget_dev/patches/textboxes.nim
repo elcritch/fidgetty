@@ -185,6 +185,11 @@ proc locationRect*[T](textBox: TextBox[T], loc: int): Rect =
     else:
       let g = layout[loc]
       result = g.selectRect
+  else:
+    # No characters, should be in the middle of the textbox,
+    # not on the left side on the border.
+    result.x = textbox.width / 2
+    result.y = (textbox.height / 2) - (textBox.font.lineHeight / 2)
   result.w = textBox.cursorWidth
   # result.h = min(textBox.font.size, textBox.font.lineHeight)
   let cusorHFactor = textBox.cursorFactors[1]
