@@ -6,7 +6,8 @@ on:
       - 'LICENSE'
       - '*.md'
     branches:
-      - master
+      - main
+      - devel
   pull_request:
     paths-ignore:
       - 'LICENSE'
