@@ -213,10 +213,21 @@ template withState*[T: ref](tp: typedesc[T]): untyped =
 proc add*(events: var Events, evt: Event) =
   # let key = evt.getTypeId()
   # let res = events.data.mgetOrPut(key, newVariant(new seq[T])).get(ref seq[T])
+  if events.isNil: events.new()
   events.data.add(evt)
 
-proc popEvents*[T: Event](events: var Events, vals: var seq[T]): bool =
+proc add*(events: var Events, evts: Events) =
+  # let key = evt.getTypeId()
+  # let res = events.data.mgetOrPut(key, newVariant(new seq[T])).get(ref seq[T])
+  if events.isNil: events.new()
+  if not evts.isNil:
+    events.data.add(evts.data)
+    evts.data.setLen(0)
+
+proc popEvents*[T: Event](events: Events, vals: var seq[T]): bool =
   var i = 0
+  if events.isNil:
+    return false
   while i < events.data.len():
     let item = events.data[i]
     if item of T:
@@ -1219,10 +1230,19 @@ type
     hPos: UICoord
     offLast: UICoord
 
-variants ScrollEvent:
-  ## variant case types for scroll events
-  ScrollTo(perc: float32)
-  ScrollPage(amount: float32)
+type
+  ScrollEventKinds* = enum
+    ## variant case types for scroll events
+    ScrollTo,
+    ScrollPage
+  ScrollEvent* = ref object of Event
+    ## variant case types for scroll events
+    case kind*: ScrollEventKinds
+    of ScrollTo:
+      perc*: float32
+    of ScrollPage:
+      amount*: float32
+
 
 proc scrollpane*(ispane: bool, scrollBars = true, hAlign = hRight, width = 0.68'em, setup: proc() = nil) =
   ## turn curent node into a scrollpane

@@ -26,7 +26,7 @@ proc preRender*(
 proc render*(
     props: ProgressBarProps,
     self: ProgressBarState,
-): Events[All] =
+): Events =
   ## Draw a progress bars 
 
   if props.label.len() > 0:

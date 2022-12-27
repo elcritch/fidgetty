@@ -39,7 +39,7 @@ type
   All* = distinct object
   # Events* = GenericEvents[void]
   Event* = ref object of RootObj
-  Events* = object
+  Events* = ref object of RootObj
     data*: seq[Event]
 
 

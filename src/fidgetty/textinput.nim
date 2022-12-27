@@ -60,7 +60,7 @@ proc new*(_: typedesc[TextInputProps]): TextInputProps =
 proc render*(
     props: TextInputProps,
     self: TextInputState,
-): Events[All]=
+): Events =
   # Draw a progress bars
   text "text":
     useState[TextBox[Node]](textbox)

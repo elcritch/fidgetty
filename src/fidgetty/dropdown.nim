@@ -31,7 +31,7 @@ proc new*(_: typedesc[DropdownProps]): DropdownProps =
 proc render*(
     props: DropdownProps,
     self: DropdownState
-): Events[ChangeEvent[int]]=
+): Events =
   ## dropdown widget 
   let
     cb = current.box

@@ -28,7 +28,7 @@ proc preRender*(
 proc render*(
     props: SliderProps,
     self: SliderState,
-): Events[All]=
+): Events =
   ## Draw a progress bars 
 
   behavior self.dragger

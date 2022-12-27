@@ -1,6 +1,6 @@
-import fidget_dev/commonutils
+import fidget_dev/common
 
-export commonutils
+export common
 
 type
   ChangeKind* = enum
@@ -8,7 +8,7 @@ type
     Changed
     ChangeError
   
-  ChangeEvent*[T] = object
+  ChangeEvent*[T] = ref object of Event
     case kind*: ChangeKind
     of Changed:
       value*: T

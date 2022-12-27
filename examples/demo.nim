@@ -64,7 +64,7 @@ proc testDemo() =
             label fmt"Evt Incr {self.count2:4d}"
             onClick:
               self.count2.inc()
-              self.evts.add IncrementBar(increment = 0.02)
+              self.evts.add AnimatedEvents(kind: IncrementBar, increment: 0.02)
               refresh()
           block:
             Checkbox:
@@ -87,14 +87,16 @@ proc testDemo() =
           label "Animate"
           onClick:
             self.count2.inc()
-            self.evts.add JumpToValue(target = 0.01)
+            # self.evts.add JumpToValue(target = 0.01)
+            self.evts.add AnimatedEvents(kind: JumpToValue, target: 0.01)
             refresh()
         
         Button:
           size 6'em, 2'em
           label "Cancel"
           onClick:
-            self.evts.add CancelJump()
+            # self.evts.add CancelJump()
+            self.evts.add AnimatedEvents(kind: CancelJump)
             refresh()
         
         Dropdown:
@@ -124,7 +126,7 @@ proc testDemo() =
         items dropItems
         selected self.dropIndexes
         itemsVisible 4
-        triggers self.evts.to(ScrollEvent)
+        triggers self.evts
         size 60'vw, 2'em
       finally:
         # instead of `do -> ValueChange` we can
@@ -142,7 +144,7 @@ proc testDemo() =
         box 0, 0, 55.0'pp, 1.5'em
       do -> ChangeEvent[float32]:
         Changed(val):
-          self.evts.add ScrollTo(val)
+          self.evts.add ScrollEvent(kind: ScrollTo, perc: val)
           self.scrollValue = val
           refresh()
       

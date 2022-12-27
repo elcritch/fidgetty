@@ -6,13 +6,23 @@ import progressbar
 
 loadFont("IBM Plex Sans", "IBMPlexSans-Regular.ttf")
 
-variants AnimatedEventsObj:
-  IncrementBar(increment: float)
-  JumpToValue(target: float)
-  CancelJump
-
 type
-  AnimatedEvents = ref AnimatedEventsObj
+  AnimatedEventKinds* = enum
+    IncrementBar,
+    JumpToValue,
+    CancelJump
+  AnimatedEvents* = ref object of Event
+    case kind*: AnimatedEventKinds
+    of IncrementBar:
+      increment*: float
+    of JumpToValue:
+      target*: float
+    of CancelJump:
+      discard
+
+# proc IncrementBar*(increment: float): auto = AnimatedEvents(kind: IncrementBar, increment: increment)
+# proc JumpToValue*(target: float): auto = AnimatedEvents(kind: JumpToValue, target: target)
+# proc CancelJump*(): auto = AnimatedEvents(kind: CancelJump)
 
 fidgetty AnimatedProgress:
   properties:
@@ -56,7 +66,7 @@ proc render*(
     props: AnimatedProgressProps,
     self: AnimatedProgressState
 ): Events =
-  let events = props.triggers
+  var events = props.triggers
 
   var nextTarget = 0.0
   processEvents(AnimatedEvents):

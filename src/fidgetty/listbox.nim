@@ -8,7 +8,7 @@ fidgetty Listbox:
     items: seq[string]
     selected: int
     itemsVisible: int
-    triggers: Events[ScrollEvent]
+    triggers: Events
   state:
     showScrollBars: bool
 
@@ -22,7 +22,7 @@ proc new*(_: typedesc[ListboxProps]): ListboxProps =
 proc render*(
     props: ListboxProps,
     self:  ListboxState
-): Events[ChangeEvent[int]] =
+): Events =
   ## listbox widget 
   let events = props.triggers
 
