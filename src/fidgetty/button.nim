@@ -16,7 +16,7 @@ proc new*(_: typedesc[ButtonProps]): ButtonProps =
 proc render*(
     props: ButtonProps,
     self: ButtonState
-): Events[All]=
+): Events =
   # button widget!
   # onTheme 
   clipContent true

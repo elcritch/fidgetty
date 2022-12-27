@@ -21,7 +21,7 @@ type
     dropIndexes: int
     dropName: string
     textInput: string
-    evts: Events[All]
+    evts: Events
 
 var self = DemoApp.new()
 

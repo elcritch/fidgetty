@@ -210,27 +210,24 @@ template withState*[T: ref](tp: typedesc[T]): untyped =
   ## creates and caches a new state ref object
   withStateImpl(tp)
 
-proc add*[T, V](events: var Events[V], evt: T) =
-  if events.data.isNil:
-    events.data = newTable[TypeId, Variant]()
-  let key = T.getTypeId()
-  let res = events.data.mgetOrPut(key, newVariant(new seq[T])).get(ref seq[T])
-  res[].add(evt)
+proc add*(events: var Events, evt: Event) =
+  # let key = evt.getTypeId()
+  # let res = events.data.mgetOrPut(key, newVariant(new seq[T])).get(ref seq[T])
+  events.data.add(evt)
 
-proc `[]`*[T](events: Events[void], tp: typedesc[T]): seq[T] =
-  if events.data.isNil:
-    return @[]
-  let key = T.getTypeId()
-  result = events.data.pop(key)
+proc popEvents*[T: Event](events: var Events, vals: var seq[T]): bool =
+  var i = 0
+  while i < events.data.len():
+    let item = events.data[i]
+    if item of T:
+      vals.add(item.T)
+      events.data.del(i)
+      result = true
+    i.inc()
 
-proc popEvents*[T, V](events: Events[V], vals: var seq[T]): bool =
-  # let a = getMonoTime()
-  if events.data.isNil:
-    return false
-  var res: Variant
-  result = events.data.pop(T.getTypeId(), res)
-  if result:
-    vals = res.get(ref seq[T])[]
+proc `[]`*[T](events: Events, tp: typedesc[T]): seq[T] =
+  ## return events of type T
+  events.popEvents(result)
 
 template dispatchEvent*(evt: typed) =
   result.add(evt)

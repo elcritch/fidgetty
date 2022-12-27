@@ -32,9 +32,6 @@ type
     w is ref
     ($typeof(w)).endswith("State")
 
-template to*[V, T](events: Events[T], v: typedesc[V]): Events[V] =
-  Events[V](events)
-
 proc matchEventsImpl(code: NimNode): NimNode =
   let hasOther = code.mapIt(it[0].repr).anyIt(it == "_")
   if not hasOther:
@@ -44,9 +41,11 @@ proc matchEventsImpl(code: NimNode): NimNode =
     )
   result = nnkCommand.newTree(
     ident "match",
-    ident "evt",
+    nnkBracketExpr.newTree(ident "evt"),
     code
   )
+  echo "matchEvents: "
+  echo result.repr
 
 proc processEventsImpl(tp, body: NimNode): NimNode =
   let code = body
@@ -112,10 +111,10 @@ macro fidgetty*(name, blk: untyped) =
           useState[`propsTypeId`](item)
           useState[`stateTypeId`](state)
           item.preRender(state)
-          var events {.inject, used.}: Events[All]
+          var events {.inject, used.}: Events
           `setters`
           code
-          events = item.render(state).to(All)
+          events = item.render(state)
           doBlocks(handlers)
   # echo "result:\n", repr result
 

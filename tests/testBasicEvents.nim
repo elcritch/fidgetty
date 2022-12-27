@@ -17,7 +17,7 @@ proc new*(_: typedesc[ButtonEvtProps]): ButtonEvtProps =
 proc render*(
     props: ButtonEvtProps,
     self: ButtonEvtState
-): Events[All]=
+): Events =
   clipContent true
   onHover:
     themeExtra atom"hover"

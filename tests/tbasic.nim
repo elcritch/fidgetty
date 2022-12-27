@@ -1,6 +1,9 @@
 
 import fidgetty
 import fidgetty/button
+import fidgetty/fidget_dev/common
+
+import patty
 
 loadFont("IBM Plex Sans", "IBMPlexSans-Regular.ttf")
 
@@ -13,6 +16,33 @@ proc exampleApp*() =
       cornerRadius 1'em
       fill "#dedede"
 
+import macros
+
+static:
+  echo lispRepr(quote do:
+    let m = 1
+    let x = m[]
+  )
+
+expandMacros:
+  proc test() =
+    let evt = MouseEvent(kind: evClick)
+    match evt[]:
+      evClick:
+        echo "ev clicks"
+      _:
+        echo "other"
+        discard
+
+  # let evt = Shape(kind: Circle, r: 3.0)
+  # match evt[]:
+  #   Circle():
+  #     echo "ev click"
+  #   _:
+  #     echo "other"
+  #     discard
+
+test()
 
 startFidget(
   exampleApp,

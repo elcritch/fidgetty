@@ -6,6 +6,8 @@ import macroutils
 type
   WidgetArgs* = (string, string, NimNode)
 
+  Widget* {.inheritable.} = object
+
   Property* = object
     name*: string
     label*: string
@@ -100,7 +102,7 @@ proc makeType*(name: string, body: NimNode): NimNode =
   result = newStmtList()
   let tpName = ident(name)
   var tp = quote do:
-    type `tpName`* = ref object
+    type `tpName`* = ref object of Widget
       a: int
   var rec = newNimNode(nnkRecList)
   for pd, pv in propTypes:

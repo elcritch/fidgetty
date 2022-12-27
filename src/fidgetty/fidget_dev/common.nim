@@ -38,8 +38,9 @@ else:
 type
   All* = distinct object
   # Events* = GenericEvents[void]
-  Events*[T] = object
-    data*: TableRef[TypeId, Variant]
+  Event* = ref object of RootObj
+  Events* = object
+    data*: seq[Event]
 
 
 type
@@ -208,7 +209,7 @@ type
     textLayoutWidth*: UICoord
     ## Can the text be selected.
     userStates*: Table[int, Variant]
-    userEvents*: Events[All]
+    userEvents*: Events
     points*: seq[Position]
 
   
@@ -292,7 +293,7 @@ type
   Themes* = Deque[Table[Atom, Themer]]
 
 type
-    MouseEvent* = object
+    MouseEvent* = ref object of Event
       case kind*: MouseEventType
       of evClick: discard
       of evClickOut: discard
@@ -302,13 +303,13 @@ type
       of evPress: discard
       of evRelease: discard
 
-    KeyboardEvent* = object
+    KeyboardEvent* = ref object of Event
       case kind*: KeyboardEventType
       of evKeyboardInput: discard
       of evKeyboardFocus: discard
       of evKeyboardFocusOut: discard
 
-    GestureEvent* = object
+    GestureEvent* = ref object of Event
       case kind*: GestureEventType
       of evScroll: discard
       of evDrag: discard
