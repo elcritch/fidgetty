@@ -77,6 +77,12 @@ macro doBlocks*(blks: varargs[untyped]) =
 macro fidgetty*(name, blk: untyped) =
   # echo "BLK: ", treeRepr blk
   let
+    baseType = name
+    name =
+      if name.kind == nnkBracketExpr:
+        name[0]
+      else:
+        name
     simpleName = name.strVal.toLowerAscii()
     procName = name.strVal.capitalizeAscii()
     propsTypeName = procName & "Props"
@@ -87,19 +93,36 @@ macro fidgetty*(name, blk: untyped) =
   for idx, attr in blk.attributes():
     case attr.name:
     of "properties":
-      let wType = propsTypeName.makeType(attr.code)
+      let wType = propsTypeName.makeType(attr.code, baseType)
       # echo "WTYPE:arg: ", repr wType
       setters = makeSetters("test", attr.code)
       result.add wType
     of "state":
-      let wType = stateTypeName.makeType(attr.code)
+      let wType = stateTypeName.makeType(attr.code, baseType)
       # echo "WTYPE:prop: ", repr wType
       result.add wType
   
   let
     procId = ident procName
-    propsTypeId = ident propsTypeName
-    stateTypeId = ident stateTypeName
+    propsTypeId =
+      if baseType.kind == nnkBracketExpr:
+        let newInst = nnkBracketExpr.newTree(ident propsTypeName)
+        for i, x in baseType[1..^1]:
+          for y in x[0..^2]:
+            newInst.add y
+        newInst
+      else:
+        ident propsTypeName
+
+    stateTypeId =
+      if baseType.kind == nnkBracketExpr:
+        let newInst = nnkBracketExpr.newTree(ident stateTypeName)
+        for i, x in baseType[1..^1]:
+          for y in x[0..^2]:
+            newInst.add y
+        newInst
+      else:
+        ident stateTypeName
   
   result.add quote do:
     template `procId`*(code: untyped, handlers: varargs[untyped]) =
@@ -114,6 +137,13 @@ macro fidgetty*(name, blk: untyped) =
           code
           events = item.render(state).to(All)
           doBlocks(handlers)
+
+  if baseType.kind == nnkBracketExpr: # Add generic parameters to the template
+    result[^1][2] = nnkGenericParams.newTree()
+    for i in 1..<baseType.len:
+      let genParam = baseType[i]
+      result[^1][2].add nnkIdentDefs.newTree(genParam[0..^2] & @[genParam[^1], newEmptyNode()])
+
   # echo "result:\n", repr result
 
 template dispatchMouseEvents*(): untyped =
