@@ -79,7 +79,7 @@ iterator propertyNames*(params: NimNode): (int, Property) =
       var code = item[1]
       yield (idx, Property(name: name, label: "", argtype: code))
 
-proc makeType*(name: string, body: NimNode): NimNode =
+proc makeType*(name: string, body, baseType: NimNode): NimNode =
   var propDefs = newTable[string, NimNode]()
   var propTypes = newTable[string, NimNode]()
 
@@ -106,6 +106,17 @@ proc makeType*(name: string, body: NimNode): NimNode =
   for pd, pv in propTypes:
     let pdfield = nnkPostfix.newTree(ident("*"), ident(pd)) 
     rec.add newIdentDefs(pdfield, pv)
+
+  if baseType != nil and baseType.kind == nnkBracketExpr: # Replace generics if we have a generic type
+    tp[0][1] = nnkGenericParams.newNimNode()
+    for x in 1 ..< baseType.len:
+      let def = baseType[x]
+      case def[1].kind
+      of nnkEmpty:
+        tp[0][1].add nnkIdentDefs.newTree(def[0], newEmptyNode(), newEmptyNode())
+      else:
+        tp[0][1].add nnkIdentDefs.newTree(def[0], def[1], newEmptyNode())
+
   tp[0][^1][0][^1] = rec
   result.add tp
 

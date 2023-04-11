@@ -2,7 +2,7 @@ import std/strformat
 
 import fidgetty
 import fidgetty/themes
-import fidgetty/[button, dropdown, checkbox]
+import fidgetty/[button, dropdown, checkbox, togglegroup]
 import fidgetty/[animatedProgress]
 import fidgetty/[slider]
 import fidgetty/[listbox]
@@ -158,6 +158,15 @@ proc testDemo() =
         label &"{self.textInput}"
         disabled true
         size 60'vw, 2'em
+
+      type Cards = enum
+        Spades, Clubs, Hearts, Diamonds
+
+      ToggleGroup[Cards]:
+        defaultVal Clubs
+      do -> ChangeEvent[Cards]:
+        Changed(val):
+          echo "Your favourite card is: ", val, "? That's awful!"
 
 startFidget(
   testDemo,
