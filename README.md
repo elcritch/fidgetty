@@ -1,5 +1,7 @@
 # Fidgetty
 
+NOTE: Checkout [Figuro](https://github.com/elcritch/figuro) the successor to Fidgetty 
+
 Widget library built using a fork of [Fidget](https://github.com/elcritch/fidget) written in pure Nim and OpenGL rendered.
 
 Demo application in `example/demo.nim`:
